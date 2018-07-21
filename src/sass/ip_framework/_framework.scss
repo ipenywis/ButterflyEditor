@@ -1,0 +1,127 @@
+*,
+*:before,
+*:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+//Overwrite any othe Style
+body {
+    .flex-parent {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        /* align items   Main Axis */
+        align-items: stretch;
+        /* align items in Cross Axis */
+        align-content: stretch;
+        /* Extra space in Cross Axis */
+    }
+    .flex-container-horz {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        /* align items in Main Axis */
+        align-items: stretch;
+        /* align items in Cross Axis */
+        align-content: stretch;
+        /* Extra space in Cross Axis */
+    }
+    .flex-container-vert {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        /* align items in Main Axis */
+        align-items: stretch;
+        /* align items in Cross Axis */
+        align-content: stretch;
+        /* Extra space in Cross Axis */
+    }
+    .flex-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stetsh;
+        align-content: stretsh;
+    }
+    .flex-grow {
+        flex: 1;
+    }
+    .flex-grow-2 {
+        flex: 2;
+    }
+    .flex-grow-3 {
+        flex: 3;
+    }
+    .flex-grow-4 {
+        flex: 4;
+    }
+    .flex-grow-6 {
+        flex: 6;
+    }
+    #item1 {
+        background-color: rgba(200, 10, 10, 0.5);
+    }
+    #item2 {
+        background-color: rgba(10, 200, 10, 0.5);
+    }
+    .flexbox-item.header {
+        background: rgba(255, 0, 0, 0.1);
+    }
+    .flexbox-item.footer {
+        background: rgba(0, 255, 0, 0.1);
+    }
+    .flexbox-item.content {
+        background: rgba(0, 0, 255, 0.1);
+    }
+    .flexbox-item {
+        padding: 8px;
+    }
+    .centered-container {
+        padding: 25px;
+    }
+    .space-btw-vert {
+        justify-content: space-between;
+    }
+    //Margin
+    .ip-heading-margin {
+        margin-top: 25px;
+        margin-bottom: 15px;
+    }
+    .ip-margin-bottom {
+        margin-bottom: 20px;
+    }
+    .ip-margin-top {
+        margin-top: 20px;
+    }
+    .ip-small-icon-margin {
+        margin-left: 6px;
+        margin-right: 5px;
+    }
+    .ip-muted-text {
+        margin-top: 5px;
+        color: #5c7080;
+        font-size: 12px;
+    }
+    //ICON SIZE
+    .ip-icon-small {
+        font-size: 12px;
+    }
+    .ip-icon-meduim {
+        font-size: 16px;
+    }
+    .ip-icon-large {
+        font-size: 22px;
+    }
+}

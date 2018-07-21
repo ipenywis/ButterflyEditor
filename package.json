@@ -1,0 +1,40 @@
+{
+    "name": "deep-draft",
+    "version": "0.0.1",
+    "description": "Full Rich Text Editor Easy, Flexible and Elegent",
+    "main": "app.ts",
+    "scripts": {
+        "test": "echo \"Test Test!\"",
+        "watch": "webpack --watch",
+        "dev": "webpack"
+    },
+    "keywords": [
+        "CMS",
+        "Rich Text Editor"
+    ],
+    "author": "Islem Penywis",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/draft-js": "^0.10.23",
+        "@types/lodash": "^4.14.111",
+        "@types/react": "^16.4.6",
+        "@types/react-dom": "^16.0.6",
+        "awesome-typescript-loader": "^5.2.0",
+        "extract-text-webpack-plugin": "^4.0.0-beta.0",
+        "sass-loader": "^7.0.3",
+        "source-map-loader": "^0.2.3",
+        "style-loader": "^0.21.0",
+        "typescript": "^2.9.2",
+        "webpack": "^4.16.0",
+        "webpack-cli": "^3.0.8"
+    },
+    "dependencies": {
+        "@blueprintjs/core": "^3.0.1",
+        "draft-js": "^0.10.5",
+        "draftjs-to-html": "^0.8.4",
+        "lodash": "^4.17.10",
+        "react": "^16.4.1",
+        "react-dom": "^16.4.1",
+        "react-icons-kit": "^1.1.5"
+    }
+}

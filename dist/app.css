@@ -1,0 +1,213 @@
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box; }
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0; }
+
+body .flex-parent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* align items   Main Axis */
+  align-items: stretch;
+  /* align items in Cross Axis */
+  align-content: stretch;
+  /* Extra space in Cross Axis */ }
+
+body .flex-container-horz {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* align items in Main Axis */
+  align-items: stretch;
+  /* align items in Cross Axis */
+  align-content: stretch;
+  /* Extra space in Cross Axis */ }
+
+body .flex-container-vert {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* align items in Main Axis */
+  align-items: stretch;
+  /* align items in Cross Axis */
+  align-content: stretch;
+  /* Extra space in Cross Axis */ }
+
+body .flex-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stetsh;
+  align-content: stretsh; }
+
+body .flex-grow {
+  flex: 1; }
+
+body .flex-grow-2 {
+  flex: 2; }
+
+body .flex-grow-3 {
+  flex: 3; }
+
+body .flex-grow-4 {
+  flex: 4; }
+
+body .flex-grow-6 {
+  flex: 6; }
+
+body #item1 {
+  background-color: rgba(200, 10, 10, 0.5); }
+
+body #item2 {
+  background-color: rgba(10, 200, 10, 0.5); }
+
+body .flexbox-item.header {
+  background: rgba(255, 0, 0, 0.1); }
+
+body .flexbox-item.footer {
+  background: rgba(0, 255, 0, 0.1); }
+
+body .flexbox-item.content {
+  background: rgba(0, 0, 255, 0.1); }
+
+body .flexbox-item {
+  padding: 8px; }
+
+body .centered-container {
+  padding: 25px; }
+
+body .space-btw-vert {
+  justify-content: space-between; }
+
+body .ip-heading-margin {
+  margin-top: 25px;
+  margin-bottom: 15px; }
+
+body .ip-margin-bottom {
+  margin-bottom: 20px; }
+
+body .ip-margin-top {
+  margin-top: 20px; }
+
+body .ip-small-icon-margin {
+  margin-left: 6px;
+  margin-right: 5px; }
+
+body .ip-muted-text {
+  margin-top: 5px;
+  color: #5c7080;
+  font-size: 12px; }
+
+body .ip-icon-small {
+  font-size: 12px; }
+
+body .ip-icon-meduim {
+  font-size: 16px; }
+
+body .ip-icon-large {
+  font-size: 22px; }
+
+* {
+  box-sizing: border-box; }
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 800px;
+  max-width: 1100px;
+  width: 1100px; }
+
+.toolbar {
+  width: 100%;
+  height: auto;
+  padding: 9px 9px 0px 9px;
+  background-color: #42576b;
+  color: #fff;
+  font-family: Oxygen, sans-serif;
+  margin-bottom: 9px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; }
+
+.draft {
+  width: 100%;
+  min-height: 360px;
+  padding: 10px;
+  border: 1px solid rgba(50, 68, 86, 0.62);
+  box-shadow: 0px 0px 15px 0px rgba(15, 15, 15, 0.3); }
+  .draft .draft-container {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background-color: #ecf0f1; }
+
+.t-group {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  margin-right: 11px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(138, 140, 146, 0.81); }
+
+.t-item {
+  display: flex;
+  width: auto;
+  height: 30px;
+  padding: 5px;
+  background-color: #323b4a;
+  box-shadow: 4px 1px 15px 1px rgba(15, 15, 15, 0.2), 0px 0.3px 0px 0px #bbbbbb inset;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid rgba(187, 187, 187, 0.16);
+  border-radius: 1px;
+  filter: brightness(119%);
+  cursor: pointer;
+  /*&:hover {
+        background-color: #ecf0f1;
+        color: #3b4658;
+        //border-right: 1px solid #3b4658;
+    }*/ }
+  .t-item:last-child {
+    border-right: 0; }
+  .t-item.toggle {
+    background-color: #ecf0f1;
+    color: #3b4658;
+    box-shadow: 0px 0px 4px 0.6px rgba(15, 15, 15, 0.44) inset; }
+
+.t-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin-right: 7px; */
+  padding: 4px; }
+
+/* Toolbar Drop Down */
+.t-dropDown {
+  min-width: 5em;
+  max-width: 6em;
+  max-height: 32px;
+  background-color: #3b4658;
+  color: #fff;
+  font-size: 14px;
+  margin-right: 12px;
+  padding: 3px; }
+  .t-dropDown .dropDown-item {
+    font-size: 12px; }
+
+/*# sourceMappingURL=app.css.map*/
