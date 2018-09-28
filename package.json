@@ -15,12 +15,16 @@
     "author": "Islem Penywis",
     "license": "ISC",
     "devDependencies": {
+        "@types/color": "^3.0.0",
         "@types/draft-js": "^0.10.23",
         "@types/lodash": "^4.14.111",
         "@types/react": "^16.4.6",
         "@types/react-dom": "^16.0.6",
         "awesome-typescript-loader": "^5.2.0",
+        "css-loader": "^1.0.0",
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
+        "file-loader": "^2.0.0",
+        "node-sass": "^4.9.2",
         "sass-loader": "^7.0.3",
         "source-map-loader": "^0.2.3",
         "style-loader": "^0.21.0",
@@ -29,12 +33,24 @@
         "webpack-cli": "^3.0.8"
     },
     "dependencies": {
-        "@blueprintjs/core": "^3.0.1",
+        "@blueprintjs/core": "^3.5.1",
+        "color": "^3.0.0",
+        "consolidated-events": "^2.0.2",
         "draft-js": "^0.10.5",
+        "draft-js-custom-styles": "^2.0.4",
+        "draft-js-export-html": "^1.2.0",
+        "draft-js-raw-content-state": "^1.2.7",
         "draftjs-to-html": "^0.8.4",
+        "draftjs-utils": "^0.9.4",
+        "events": "^3.0.0",
+        "html-to-draftjs": "^1.4.0",
+        "immutable": "^3.8.2",
         "lodash": "^4.17.10",
         "react": "^16.4.1",
+        "react-click-outside": "github:tj/react-click-outside",
         "react-dom": "^16.4.1",
-        "react-icons-kit": "^1.1.5"
+        "react-icons-kit": "^1.1.5",
+        "react-outside-click-handler": "^1.2.2",
+        "react-transition-group": "^2.4.0"
     }
 }

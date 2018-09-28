@@ -1,0 +1,87 @@
+//Color Picker Canvas
+#color-picker {
+  border: 2px solid rgba(15, 15, 15, 0.29);
+  box-shadow: 0px 0px 20px 3px rgba(15, 15, 15, 0.25);
+}
+
+.color-picker-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  .info {
+    margin-left: 2em;
+
+    .preview {
+      width: 50px;
+      height: 50px;
+      border-radius: 100%;
+      box-shadow: 0px 0px 10px 0px rgba(15, 15, 15, 0.2);
+      display: flex;
+      margin: auto;
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .type {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .item {
+    .title {
+      font-size: 15px;
+      margin-right: 1em;
+    }
+  }
+
+  .opacity-control {
+  }
+
+  .current-color {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    input {
+      width: 5em;
+    }
+  }
+
+  .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 13px;
+    background: #2e3a46;
+    outline: none;
+    /* opacity: 0.7; */
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+    margin-top: 5px;
+    margin-bottom: 13px;
+  }
+
+  .slider:hover {
+    opacity: 1;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 13px;
+    height: 14px;
+    //background: #4caf50;
+    background: #fff;
+    cursor: pointer;
+    border: 1px solid #2e3a46;
+  }
+
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4caf50;
+    cursor: pointer;
+  }
+}
