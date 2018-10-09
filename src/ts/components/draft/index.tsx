@@ -24,6 +24,13 @@ import { bold, caretDown } from "react-icons-kit/fa/";
 
 import { SafeWrapper } from "../common";
 
+//Draftjs Details
+import {
+  getCursorStart,
+  getCursorNumSelection,
+  getNumCharacters
+} from "./details";
+
 //Style Map
 import createStyle from "../toolBar/inlineStyle";
 import { EventEmitter } from "events";
@@ -34,8 +41,12 @@ import { stateToHTML } from "draft-js-export-html";
 //HTML to ContentBlock
 import HtmlToDraft from "html-to-draftjs";
 
+//Custom Draftjs Export HTML Options
+import exportOptions from "./decorators/exportOptions";
+
 export interface DraftProps {
   appState?: AppState;
+  isEditorResizable?: boolean;
 
   setAppState?: (newState: any, callback?: () => void) => void;
 
@@ -59,6 +70,10 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   state: DraftState;
   editor: Editor;
   draftEditor: HTMLDivElement;
+
+  static defaultProps = {
+    isEditorResizable: true
+  };
 
   constructor(props: DraftProps) {
     super(props);
@@ -118,12 +133,9 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     let height = e.clientY - currentHeight;
 
     this.draftEditor.style.height = height + "px";
-
-    console.log("Height: ", height, currentHeight);
   }
 
   onResizeMouseDown(e: React.MouseEvent) {
-    console.log("DOWN", e.currentTarget as HTMLElement);
     this.setState({
       isResizeMouseDown: true,
       mouseOffsetY: (e.currentTarget as HTMLElement).offsetTop - e.clientY
@@ -132,8 +144,8 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
 
   onResizeMouseMove(e: React.MouseEvent) {
     e.preventDefault();
-    if (this.state.isResizeMouseDown) {
-      console.log("MOVING");
+    //Mouse is Down and Editor is Resizble
+    if (this.state.isResizeMouseDown && this.props.isEditorResizable) {
       console.log(e.clientX, e.clientY);
       const currentHeight: number = parseInt(
         this.draftEditor.style.height.slice(
@@ -145,14 +157,16 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
       let height = e.clientY + this.state.mouseOffsetY;
 
       this.draftEditor.style.height = height + "px";
-
-      console.log("Height: ", height, currentHeight);
     }
   }
 
   onResizeMouseUp() {
-    console.log("UP");
     this.setState({ isResizeMouseDown: false });
+  }
+
+  setEditorHeight(newHeight: string) {
+    //Set Editor's height
+    this.draftEditor.style.height = newHeight;
   }
 
   onEditorFocus() {
@@ -160,7 +174,6 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   }
 
   onEditorBlur() {
-    this.props.emit("EditorBlur");
     this.props.setAppState({ editorHasFocus: false });
   }
 
@@ -183,7 +196,8 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     const currentInlineStyles = createStyle.exporter(appState.editorState);
     //Convert it to plain HTML with inline styles
     const htmlCode = stateToHTML(appState.editorState.getCurrentContent(), {
-      inlineStyles: currentInlineStyles
+      inlineStyles: currentInlineStyles,
+      entityStyleFn: exportOptions.entityStyleFn
     });
 
     return (
@@ -205,7 +219,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
                 onChange={this.updateDraftEditor.bind(this)}
                 onFocus={this.onEditorFocus.bind(this)}
                 onBlur={this.onEditorBlur.bind(this)}
-                placeholder="Explore You Way In..."
+                placeholder="Explore Your Way In..."
               />
             </div>
           )}
@@ -222,8 +236,20 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
           )}
         </div>
         <div className="draft-details">
-          <div className="num-charachters">50</div>
-          <div className="current-selected">Div</div>
+          <div style={{ marginLeft: "5px" }}>
+            Col {getCursorStart(appState.editorState)}
+          </div>
+          <div style={{ marginLeft: "16px" }}>
+            Selected{" "}
+            {getCursorNumSelection(appState.editorState)
+              ? getCursorNumSelection(appState.editorState)
+              : 0}
+          </div>
+          <div style={{ marginLeft: "17px" }}>
+            {getNumCharacters(appState.editorState) > 1
+              ? getNumCharacters(appState.editorState) + " Chars"
+              : getNumCharacters(appState.editorState) + " Char"}
+          </div>
         </div>
         <span
           className="draft-resizer"
@@ -236,3 +262,4 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     );
   }
 }
+//TODO: Add line counter for Details

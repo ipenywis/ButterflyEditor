@@ -174,8 +174,10 @@ export default class Controls extends React.Component<ControlsProps> {
       .getBlockForKey(selection.getStartKey())
       .getType();
 
+    const combined = [...this.props.inlineStyles, ...this.props.blockTypes];
+
     return (
-      <div className="flex-container-horz">
+      <div className="flex-container-horz" style={{ marginRight: "15px" }}>
         <RenderInlineStyles
           inlineStyles={this.props.inlineStyles}
           itemGroups={styleItemGroups}

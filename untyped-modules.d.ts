@@ -1,3 +1,5 @@
+/* This file fakes the declaration of modules that doens't have a @types either included or on the typescript repository it's just a hack around */
+
 //React Icons Kit
 declare module "react-icons-kit";
 declare module "react-icons-kit/*/";
@@ -23,3 +25,12 @@ declare module "react-click-outside";
 
 //Consolidated Events Listeners
 declare module "consolidated-events";
+
+//Prism Code Highlighter
+declare module "prismjs";
+
+//Prism Draftjs Decorators
+declare module "draft-js-prism";
+
+//Draftjs Decorators Combiners
+declare module "draft-js-multidecorators";

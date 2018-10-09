@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+//BlurprintJS Overwriting
+.bp3-portal {
+  z-index: 99;
+}
+
 /* DraftEditor Defaults */
 //DraftEditor Placeholder
 .public-DraftEditorPlaceholder-root {
@@ -27,9 +32,10 @@
 .editor-container {
   display: flex;
   flex-direction: column;
-  min-width: 800px;
+  //min-width: 800px;
+  //max-width: 1100px;
   max-width: 1100px;
-  width: 1100px;
+  overflow: hidden;
 }
 
 .toolbar {
@@ -43,6 +49,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  position: relative;
 }
 
 .draft {
@@ -98,6 +105,8 @@
   display: flex;
   flex-direction: row;
   width: auto;
+  min-height: 33px;
+  max-height: 35px;
   margin-right: 11px;
   margin-bottom: 15px;
   border: 1px solid rgba(138, 140, 146, 0.81);
@@ -234,7 +243,9 @@
 
   .popup-container {
     min-width: 34em;
+    max-width: 40em;
     min-height: 26em;
+    max-height: 40em;
     background-color: #fff;
     color: #565858;
     padding: 14px;
@@ -266,6 +277,19 @@
   }
 }
 
+//Popup Close btn
+.popup-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  color: rgba(15, 15, 15, 0.4);
+  transition: color, 150ms ease-in-out;
+  cursor: pointer;
+  &:hover {
+    color: rgba(15, 15, 15, 0.8);
+  }
+}
+
 .inline-popup {
   position: absolute;
   z-index: 99;
@@ -274,9 +298,9 @@
   top: 50px;
   left: -8px;
   min-width: 18em;
-  min-height: 15em;
+  max-height: 18em;
+  //min-height: 17em;
   width: 100%;
-  height: 100%;
   display: flex;
   border-radius: 4px;
   justify-content: center;
@@ -363,5 +387,21 @@
       outline: 0;
       border: 0;
     }
+  }
+}
+
+//Toolbar Expand Icon
+.expand-editor {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  /* border: 1px solid rgba(255, 255, 255, 0.5); */
+  padding: 2px;
+  /* background-color: #3b4658; */
+  color: #bcc5c7;
+  transition: color, 120ms ease-in-out;
+  cursor: pointer;
+  &:hover {
+    color: #fff;
   }
 }

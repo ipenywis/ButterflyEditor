@@ -73,6 +73,7 @@ export default class ColorPicker extends Plugin<
   private colorChangeTOUT: number;
   //Popup
   popup: Popup;
+  container: HTMLDivElement;
 
   //Loop Interval
   interval: number | NodeJS.Timer;
@@ -260,7 +261,10 @@ export default class ColorPicker extends Plugin<
     */
 
     let container = (
-      <div className="container" onMouseDown={e => this.props.editor.blur()}>
+      <div
+        onMouseDown={e => this.props.editor.blur()}
+        ref={container => (this.container = container)}
+      >
         <div className="color-picker-container">
           <canvas id="color-picker" ref={canvas => (this.canvas = canvas)} />
           <div className="info">
@@ -326,6 +330,7 @@ export default class ColorPicker extends Plugin<
         editor={this.props.editor}
         on={this.props.on}
         emit={this.props.emit}
+        popupContainerStyle={{ width: "auto", height: "auto" }}
       />
     );
   }
@@ -377,6 +382,8 @@ class Picker {
     //Map Alpha property to the class of nothing and
     //Build the Canvas
     this.build();
+    this.pickerCirlce;
+    this.target.parentElement.offsetLeft;
   }
 
   mapAlpha(v: number): number {
@@ -499,26 +506,31 @@ class Picker {
 
   private listenForEvents() {
     let isMouseDown = false;
+    //NOTE: getBoundingClientRect is used to get window's relative target element's offsets
     const onMouseDown = (e: MouseEvent) => {
       if (
         this.checkCurrentElm(
           this.pickerCirlce,
-          e.clientX - this.target.offsetLeft,
-          e.clientY - this.target.offsetTop
+          e.clientX - this.target.getBoundingClientRect().left,
+          e.clientY - this.target.getBoundingClientRect().top
         )
       ) {
         isMouseDown = true;
       } else {
         //Not on Circle Picker but on the Color Picker canvas then choose the clicked spot
-        this.pickerCirlce.x = e.clientX - this.target.offsetLeft;
-        this.pickerCirlce.y = e.clientY - this.target.offsetTop;
+        this.pickerCirlce.x =
+          e.clientX - this.target.getBoundingClientRect().left;
+        this.pickerCirlce.y =
+          e.clientY - this.target.getBoundingClientRect().top;
       }
     };
 
     const onMouseMove = (e: MouseEvent) => {
       if (isMouseDown) {
-        this.pickerCirlce.x = e.clientX - this.target.offsetLeft;
-        this.pickerCirlce.y = e.clientY - this.target.offsetTop;
+        this.pickerCirlce.x =
+          e.clientX - this.target.getBoundingClientRect().left;
+        this.pickerCirlce.y =
+          e.clientY - this.target.getBoundingClientRect().top;
       }
     };
 

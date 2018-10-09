@@ -2,6 +2,9 @@ let ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 
 let path = require("path");
 
+//Monaco Code Editor Plugin
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+
 //Webpack Extract Text Plugin
 let ExtractText = new ExtractTextWebpackPlugin("app.css");
 
@@ -67,11 +70,23 @@ let config = {
             }
           }
         ]
+      },
+      {
+        test: /\.(svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+              outputPath: "svgs/"
+            }
+          }
+        ]
       }
     ]
   },
 
-  plugins: [ExtractText]
+  plugins: [ExtractText, new MonacoWebpackPlugin()]
 };
 
 //Export Config

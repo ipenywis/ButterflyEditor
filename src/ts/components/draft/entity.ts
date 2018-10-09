@@ -2,7 +2,8 @@ import {
   EditorState,
   ContentState,
   Modifier,
-  DraftEntityMutability
+  DraftEntityMutability,
+  AtomicBlockUtils
 } from "draft-js";
 
 import RichUtils from "../toolBar/richUtils";
@@ -27,6 +28,7 @@ export const getLastEntityKey = (editorState: EditorState): string => {
  * @param data
  * @returns EditorState
  */
+
 export const applyEntity = (
   editorState: EditorState,
   type: string,
@@ -51,9 +53,44 @@ export const applyEntity = (
     editorState.getSelection(),
     entityKey
   );*/
+
+  /* return EditorState.set(editorState, {
+    currentContent: contentStateWithAppliedEntity
+  });*/
+
   return RichUtils.toggleLink(
     editorStateWithEntity,
     editorStateWithEntity.getSelection(),
     entityKey
+  );
+};
+
+export const applyAtomicEntity = (
+  editorState: EditorState,
+  type: string,
+  mutability: DraftEntityMutability,
+  data: EntityData
+): EditorState => {
+  const currentContent = editorState.getCurrentContent();
+  //Create Entity
+  const contentStateWithCreatedEntity: ContentState = currentContent.createEntity(
+    type,
+    mutability,
+    data
+  );
+  //Get current Entity's Key
+  const entityKey: string = contentStateWithCreatedEntity.getLastCreatedEntityKey();
+  /* Atomic Line used to insert entities that does not require selection */
+
+  //New Atomic Line
+  let newEditorState = AtomicBlockUtils.insertAtomicBlock(
+    editorState,
+    entityKey,
+    " "
+  );
+  //Force Selection after current cursor block
+  return EditorState.forceSelection(
+    newEditorState,
+    newEditorState.getCurrentContent().getSelectionAfter()
   );
 };

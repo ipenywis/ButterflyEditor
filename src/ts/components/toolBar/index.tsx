@@ -25,7 +25,7 @@ import {
   textHeight,
   paragraph,
   code,
-  chain
+  expand
 } from "react-icons-kit/fa/";
 
 import { ToolItem, defaultToolItems } from "./toolConfig";
@@ -40,6 +40,10 @@ import { fontSizesStyle, fontFamiliesStyle } from "../customStyles";
 import ColorPicker from "../../plugins/colorPicker/colorPicker";
 //Link Plugin
 import Link from "../../plugins/link";
+//Anchor Plugin
+import Anchor from "../../plugins/anchor";
+//Code Editor Plugin
+import CodeEditor from "../../plugins/codeEditor";
 
 import createStyle, { ICreateStyle, IStyle, customStyles } from "./inlineStyle";
 import { EventEmitter } from "events";
@@ -58,6 +62,7 @@ export interface ToolBarProps {
     handler: (appState?: AppState, ...args: any[]) => void
   ) => EventEmitter;
   emit?: (eventName: string, ...args: any[]) => boolean;
+  expandEditor: () => void;
 }
 
 export interface ToolBarState {}
@@ -260,10 +265,37 @@ export default class ToolBar extends React.Component<ToolBarProps> {
       },
       {
         groupID: 5,
-        icon: <Icon icon={bold} />,
         popup: {
           standAlone: (
             <Link
+              updateEditorState={this.updateEditorState.bind(this)}
+              editorState={this.props.appState.editorState}
+              editor={this.props.appState.editor}
+              on={this.props.on}
+              emit={this.props.emit}
+            />
+          )
+        }
+      },
+      {
+        groupID: 5,
+        popup: {
+          standAlone: (
+            <Anchor
+              updateEditorState={this.updateEditorState.bind(this)}
+              editorState={this.props.appState.editorState}
+              editor={this.props.appState.editor}
+              on={this.props.on}
+              emit={this.props.emit}
+            />
+          )
+        }
+      },
+      {
+        groupID: 5,
+        popup: {
+          standAlone: (
+            <CodeEditor
               updateEditorState={this.updateEditorState.bind(this)}
               editorState={this.props.appState.editorState}
               editor={this.props.appState.editor}
@@ -350,6 +382,9 @@ export default class ToolBar extends React.Component<ToolBarProps> {
           on={this.props.on}
           emit={this.props.emit}
         />
+        <span className="expand-editor" onClick={this.props.expandEditor}>
+          <Icon icon={expand} size={15} />
+        </span>
       </div>
     );
   }

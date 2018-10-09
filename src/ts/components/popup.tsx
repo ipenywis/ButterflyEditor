@@ -2,6 +2,7 @@ import * as React from "react";
 
 //Icon
 import { Icon } from "react-icons-kit";
+import { close } from "react-icons-kit/fa/";
 
 //Safe Wrapper
 import { SafeWrapper } from "./common";
@@ -26,17 +27,21 @@ import ClickOutsideHandler from "../clickOutsideHandler";
 export interface PopupProps {
   label?: string;
   icon?: typeof Icon | Object;
-
+  canOutsideClose?: boolean;
   isInline?: boolean;
 
   header?: string;
   container?: React.ReactElement<any>;
   footer?: React.ReactElement<any> | React.ReactElement<any>[];
 
+  popupContainerStyle?: Partial<React.CSSProperties>;
+  containerStyle?: Partial<React.CSSProperties>;
+
   onOpen?: () => void;
   didOpen?: () => void;
 
   onClose?: () => void;
+  onCloseCross?: () => void;
 
   editorState: EditorState;
   updateEditorState: (newEditorState: EditorState) => void;
@@ -59,12 +64,15 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
   state: PopupState;
   popup: HTMLDivElement;
   toggleBtn: HTMLDivElement;
+  //Close Button
+  closeBtn: HTMLSpanElement;
 
   eventEmitter: EventEmitter;
 
   //Default Props
   static defaultProps = {
     isInline: true,
+    canOutsideClose: true,
     header: "Test Popup",
     container: <div>Nothing is in the Popup</div>,
     footer: <div>Control Button Should Go Here</div>
@@ -144,7 +152,18 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
   }
 
   render() {
-    const { isInline, icon, label, header, container, footer } = this.props;
+    const {
+      isInline,
+      icon,
+      label,
+      header,
+      container,
+      footer,
+      containerStyle,
+      popupContainerStyle,
+      canOutsideClose,
+      onCloseCross
+    } = this.props;
     const { isOpen } = this.state;
     //Check for Icon type
     if (!React.isValidElement(icon)) {
@@ -160,28 +179,46 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
         <div
           className={"t-item " + (isOpen ? "toggle" : "")}
           onMouseDown={() => this.setState({ isOpen: true })}
-          //onClick={this.togglePopup.bind(this)}
         >
           {icon && <div className="t-icon">{icon}</div>}
         </div>
         {isOpen && (
           <div className={isInline ? "inline-popup" : "popup"}>
             <ClickOutsideHandler
-              onOutsideClick={this.closePopup.bind(this)}
+              onOutsideClick={canOutsideClose && this.closePopup.bind(this)}
               style={
                 isInline
                   ? { width: "100%", height: "100%", display: "flex" }
-                  : {}
+                  : {
+                      width: "auto",
+                      height: "auto",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      position: "relative"
+                    }
               }
             >
               <div
                 className="popup-container"
                 ref={popup => (this.popup = popup)}
+                style={popupContainerStyle}
               >
                 <div className="header">{header}</div>
-                <div className="container">{container}</div>
+                <div className="container" style={containerStyle}>
+                  {container}
+                </div>
                 <div className="footer">{footer}</div>
               </div>
+              <span
+                className="popup-close"
+                ref={closeBtn => (this.closeBtn = closeBtn)}
+                onClick={
+                  onCloseCross ? onCloseCross : this.closePopup.bind(this)
+                }
+              >
+                <Icon icon={close} size={20} />
+              </span>
             </ClickOutsideHandler>
             <div className="popup-tail-shadow" />
             <div className="popup-tail-glow" />

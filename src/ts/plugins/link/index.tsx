@@ -15,7 +15,13 @@ import { Icon } from "react-icons-kit";
 import { link } from "react-icons-kit/fa/";
 
 //Blueprint
-import { FormGroup, InputGroup, Intent, AnchorButton } from "@blueprintjs/core";
+import {
+  FormGroup,
+  InputGroup,
+  Intent,
+  AnchorButton,
+  Checkbox
+} from "@blueprintjs/core";
 
 //Link Style
 import "./style.scss";
@@ -42,17 +48,22 @@ export interface LinkProps {
 interface LinkState {
   url: string;
   error: string;
+  openNewTab: boolean;
 }
 
 export default class Link extends React.Component<LinkProps, LinkState> {
   popup: Popup;
   linkInput: HTMLInputElement;
 
+  //Entity Type
+  static LINK_TYPE = "LINK";
+
   constructor(props: LinkProps) {
     super(props);
     this.state = {
       url: null,
-      error: null
+      error: null,
+      openNewTab: false
     };
   }
 
@@ -70,9 +81,9 @@ export default class Link extends React.Component<LinkProps, LinkState> {
 
   onLinkSubmit() {
     //Validate Link
-    const { url } = this.state;
+    const { url, openNewTab } = this.state;
     //let linkRegex = /(https?:?\/?\/?)?(\w+\.+\w+)/;
-    let linkRegex = /^(https?:\/\/)?([\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+)$/;
+    let linkRegex = /(https?:\/\/)?([\w.-]+(?:\.[\w\.-]+)+[\w\-\.%_~:/?#[\]@!\$&'\(\)\*\+,;=.]+)/;
     let finalURL = "";
     if (!url) {
       this.setError("Please Enter a Valid URL");
@@ -88,7 +99,7 @@ export default class Link extends React.Component<LinkProps, LinkState> {
           this.props.editorState,
           "LINK",
           "MUTABLE",
-          { url: finalURL }
+          { url: finalURL, target: openNewTab ? "_blank" : null }
         );
         this.props.updateEditorState(newEditorState);
         //Clear Errors if there is any!
@@ -121,7 +132,6 @@ export default class Link extends React.Component<LinkProps, LinkState> {
 
   getCurrentTextLink(): string {
     const { editorState } = this.props;
-    const contentState = editorState.getCurrentContent();
     //Cursor start & offset keys
     const startKey = editorState.getSelection().getStartKey();
     const startOffset = editorState.getSelection().getStartOffset();
@@ -134,6 +144,8 @@ export default class Link extends React.Component<LinkProps, LinkState> {
     if (linkKey) {
       //Get Link Entity With Entity's Key
       const linkInstance = editorState.getCurrentContent().getEntity(linkKey);
+      //Make sure it's a Link Entity
+      if (linkInstance.getType() != Link.LINK_TYPE) return null;
       //Grab & Return Link URL
       if (linkInstance.getData()) return linkInstance.getData().url;
     }
@@ -148,6 +160,10 @@ export default class Link extends React.Component<LinkProps, LinkState> {
   onPopupOpen() {
     //Auto focus on Link Input (timeout to 0 to make sure it focuses)
     setTimeout(() => this.linkInput.focus(), 0);
+  }
+
+  handleOpenNewTabChange(e: React.MouseEvent<HTMLInputElement>) {
+    this.setState({ openNewTab: e.currentTarget.checked });
   }
 
   render() {
@@ -169,7 +185,7 @@ export default class Link extends React.Component<LinkProps, LinkState> {
     const icon = <Icon icon={link} />;
     console.warn("State: ", this.state);
     //Header
-    const header = "Manage Link";
+    const header = current == "link" ? "Set Link" : "Manage Link";
     //Container
     const container = (
       <div className="inner-container">
@@ -190,6 +206,11 @@ export default class Link extends React.Component<LinkProps, LinkState> {
             inputRef={input => (this.linkInput = input)}
           />
         </FormGroup>
+        <Checkbox
+          checked={this.state.openNewTab}
+          onChange={this.handleOpenNewTabChange.bind(this)}
+          label="Open in New Tab"
+        />
       </div>
     );
 
