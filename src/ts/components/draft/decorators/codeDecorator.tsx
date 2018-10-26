@@ -121,7 +121,8 @@ class CodeDecorator {
       //syntax: is the current language to apply highlight to for ex: javascript
       //tokens: returned by prism tokenize which is an object holding different text parts have type and current code type of it
 
-      var syntax = getSyntax(block) || "javascript";
+      //TODO: Fix this HARD Coded Code (For LANGUAGE Syntax)
+      var syntax = "javascript";
 
       // Allow for no syntax highlighting
       if (syntax == null) {

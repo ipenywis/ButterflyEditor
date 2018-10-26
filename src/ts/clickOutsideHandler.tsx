@@ -1,11 +1,18 @@
+/* Register an Event on Children Elements so when clicked outside you can close the children or do what ever you would like with you event callback */
+
 import * as React from "react";
 
 import { addEventListener } from "consolidated-events";
+
+//Lodash
+import { includes } from "lodash";
 
 interface OutsideClickHandlerProps {
   disabled?: boolean;
   useCapture?: boolean;
   style?: React.CSSProperties;
+  //Discard an Elements (Don't include it on the event when clicking on it)
+  discaredElmentsClassNames?: string[];
 
   onOutsideClick: (e?: React.MouseEvent) => void;
 }
@@ -55,6 +62,7 @@ export default class OutsideClickHandler extends React.Component<
   }
 
   componentWillUnmount() {
+    //Remove Event Listeners
     this.removeEventListeners();
   }
 
@@ -62,11 +70,49 @@ export default class OutsideClickHandler extends React.Component<
   // descendant tree, even when dragged. This should also get triggered on
   // touch devices.
   onMouseDown(e: React.MouseEvent) {
-    const { useCapture } = this.props;
+    const { useCapture, discaredElmentsClassNames } = this.props;
+    //Check if the element is being mentioned as discared from the event
+    /*let isDiscaredElement = false;
+    let isDiscaredElementWithID = false;
+    //Check Elements Array
+    isDiscaredElement =
+      discaredElements && includes(discaredElements, e.target as Node);
+    //Check ELements with Ids Array
+    isDiscaredElementWithID =
+      discaredElementsIds &&
+      includes(discaredElementsIds, (e.target as HTMLElement).id);
+
+    console.log(
+      "TCL: onMouseDown -> isDiscaredElementWithID",
+      isDiscaredElementWithID,
+      e.currentTarget,
+      e.target
+    );*/
+
+    let isDiscaredElement = false;
+    //Loop on Discared ClassNames
+    for (const className of discaredElmentsClassNames) {
+      //Check if className matches any target's classNames
+      const targetClassNames = (e.target as HTMLElement).classList;
+      console.log(
+        "TCL: onMouseDown -> targetClassNames",
+        targetClassNames,
+        "Current Target:",
+        (e.currentTarget as HTMLElement).classList,
+        "ClassNAME: ",
+        className
+      );
+      //See if current className is included on the target element
+      if (includes(targetClassNames, className)) {
+        isDiscaredElement = true;
+        console.log("TCL: onMouseDown -> isDiscaredElement", isDiscaredElement);
+        break; ///< stop! we found it
+      }
+    }
 
     const isDescendantOfRoot =
       this.childNode && this.childNode.contains(e.target as Node);
-    if (!isDescendantOfRoot) {
+    if (!isDescendantOfRoot && !isDiscaredElement) {
       this.removeMouseUp = addEventListener(
         document,
         "mouseup",
@@ -80,14 +126,28 @@ export default class OutsideClickHandler extends React.Component<
   // descendant tree, even when dragged. This should also get triggered on
   // touch devices.
   onMouseUp(e: React.MouseEvent) {
-    const { onOutsideClick } = this.props;
+    const { onOutsideClick, discaredElmentsClassNames } = this.props;
+
+    let isDiscaredElement = false;
+    //Loop on Discared ClassNames
+    for (const className of discaredElmentsClassNames) {
+      //Check if className matches any target's classNames
+      const targetClassNames = (e.target as HTMLElement).classList;
+      console.log("TCL: onMouseUp -> targetClassNames", targetClassNames);
+      //See if current className is included on the target element
+      if (includes(targetClassNames, className)) {
+        console.log("TCL: onMouseUp -> targetClassNames", targetClassNames);
+        isDiscaredElement = true;
+        break; ///< stop! we found it
+      }
+    }
 
     const isDescendantOfRoot =
       this.childNode && this.childNode.contains(e.target as Node);
     if (this.removeMouseUp) this.removeMouseUp();
     this.removeMouseUp = null;
 
-    if (!isDescendantOfRoot) {
+    if (!isDescendantOfRoot && !isDiscaredElement) {
       onOutsideClick(e);
     }
   }

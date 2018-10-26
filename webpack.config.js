@@ -18,7 +18,7 @@ let config = {
     libraryTarget: "umd",
     umdNamedDefine: true
   },
-  devtool: "source-map",
+  //devtool: "source-map",
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
   },
@@ -40,11 +40,11 @@ let config = {
           plugins: ["transform-class-properties", "transform-decorators-legacy"]
         }
       },
-      {
+      /*{
         enforce: "pre",
         test: /\.js$/,
         loader: "source-map-loader"
-      },
+      },*/
       {
         test: /\.scss$/,
         use: ExtractTextWebpackPlugin.extract({

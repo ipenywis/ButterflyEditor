@@ -42,7 +42,9 @@ export default class Store extends React.Component {
 
     //Main App State (Default State) (Initialize EditorState with Decorators)
     this.state = {
-      editorState: EditorState.createEmpty(Decorators),
+      editorState: EditorState.createEmpty(
+        Decorators(this.emit.bind(this), this.on.bind(this))
+      ),
       editor: null,
       editorHasFocus: false,
       showDraftHTML: false,
@@ -83,7 +85,7 @@ export default class Store extends React.Component {
     if (listenerAlreadyRegistered) return this.eventEmitter;
 
     //Pass it to the Event Emitter On Handler if it doesn't exist
-    return this.eventEmitter.on(eventName, handler);
+    return this.eventEmitter.on(eventName, args => handler(this.state, args));
   }
 
   //Set Global App State

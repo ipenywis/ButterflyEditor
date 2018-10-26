@@ -26,6 +26,7 @@ export interface DropDownProps {
 
   activeItems?: string[];
 
+  isItemActive?: (label: string) => boolean;
   onChange?: (blockLabel: string) => void;
   //onSelect?: (e : React.MouseEvent < any >, selected : string) => void;
 }
@@ -83,7 +84,11 @@ export default class DropDown extends React.Component<DropDownProps> {
     const { icon, activeItems } = this.props;
 
     //Check if item is active (use item label to check for the current item it's active)
-    const isActive = (label: string) => {
+    const isActive = (label: string, alise?: string) => {
+      //If defined use provided callback for deciding weather the current item is active or not
+      if (this.props.isItemActive) return this.props.isItemActive(label);
+      //Using alise when label doesn't match the currently active block's type for ex: H5 != header-five
+      if (alise) return _.includes(activeItems, alise);
       let active = false;
       //Use label as value to check for current style (for ex: fontSize: 53px)
       let matchRegx = new RegExp(`${label},?-?_?.?`);
@@ -144,24 +149,27 @@ export default class DropDown extends React.Component<DropDownProps> {
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {this.state.isOpen && (
                   <div className="btn-dropdown-container ip-scrollbar">
-                    {React.Children.map(this.props.children, (child, idx) => {
-                      if (child)
-                        return (
-                          <div
-                            className={
-                              "dropDown-item " +
-                              (isActive(child.toString()) ? "toggle" : "")
-                            }
-                            key={idx}
-                            onMouseDown={e => {
-                              e.preventDefault();
-                              this.props.onChange(child.toString());
-                            }}
-                          >
-                            {child}
-                          </div>
-                        );
-                    })}
+                    {React.Children.map(
+                      this.props.children,
+                      (child: any, idx) => {
+                        if (child)
+                          return (
+                            <div
+                              className={
+                                "dropDown-item " +
+                                (isActive(child.toString()) ? "toggle" : "")
+                              }
+                              key={idx}
+                              onMouseDown={e => {
+                                e.preventDefault();
+                                this.props.onChange(child.toString());
+                              }}
+                            >
+                              {child}
+                            </div>
+                          );
+                      }
+                    )}
                   </div>
                 )}
               </div>

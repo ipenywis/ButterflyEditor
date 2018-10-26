@@ -50,6 +50,7 @@ import { EventEmitter } from "events";
 
 //Rich Utils [EXTENDED]
 import RichUtils from "./richUtils";
+import ImageUploader from "../../plugins/imageUploader";
 
 export interface ToolBarProps {
   appState?: AppState;
@@ -312,6 +313,29 @@ export default class ToolBar extends React.Component<ToolBarProps> {
      * Other IDs are regular item groups
      */
     let blockTypes: BlockType[] = [
+      {
+        groupID: 5,
+        popup: {
+          standAlone: (
+            <ImageUploader
+              updateEditorState={this.updateEditorState.bind(this)}
+              editorState={this.props.appState.editorState}
+              editor={this.props.appState.editor}
+              on={this.props.on}
+              emit={this.props.emit}
+              onFileUpload={file => {
+                return new Promise((rs, rj) => {
+                  //TEMP only for testing it works as a server uploading Technique (Just For Visualazation)
+                  setTimeout(
+                    () => rj(`File Uploaded ${file.name} Successfully`),
+                    2000
+                  );
+                });
+              }}
+            />
+          )
+        }
+      },
       {
         label: "Header",
         icon: <Icon icon={paragraph} />,

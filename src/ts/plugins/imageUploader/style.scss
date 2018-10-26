@@ -1,0 +1,199 @@
+.inner-container {
+  padding: 12px;
+
+  .sub-header {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 7px;
+  }
+
+  .draggable-container {
+    min-width: 40em;
+    max-width: 45em;
+    min-height: 20em;
+    max-height: 18em;
+    background-color: rgba(147, 148, 148, 0.23);
+    padding: 6px;
+    border-radius: 4px;
+    border: 2px dashed rgba(95, 92, 92, 0.2);
+    font-size: 14px;
+    display: flex;
+    margin-bottom: 7px;
+    position: relative;
+    overflow: hidden;
+
+    #file-uploader-input {
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      position: absolute;
+      color: transparent;
+      opacity: 0;
+    }
+
+    .files-preview-container {
+      display: flex;
+      width: 100%;
+      height: fit-content;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      z-index: 99;
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex-shrink: 0;
+      padding: 5px;
+      .file {
+        width: 5em;
+        height: 58px;
+        background-color: rgba(101, 97, 97, 0.34);
+        position: relative;
+        margin-left: 8px;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        box-shadow: 0px 0px 14px 3px rgba(15, 15, 15, 0.2);
+        flex-shrink: 0;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+        .container {
+          display: flex;
+          position: absolute;
+          flex-direction: column;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          padding: 0;
+          transition: background, 160ms ease-in-out;
+          &:hover {
+            background-color: rgba(154, 151, 151, 0.29);
+            .remove-btn {
+              visibility: visible;
+            }
+          }
+          .remove-btn {
+            color: #ca4240;
+            width: fit-content;
+            position: absolute;
+            right: -7px;
+            top: -7px;
+            z-index: 99;
+            cursor: pointer;
+            visibility: hidden;
+          }
+          .progress-bar {
+            position: absolute;
+            width: 53px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-self: center;
+          }
+        }
+      }
+    }
+
+    .helper-text {
+      position: absolute;
+      display: flex;
+      justify-self: center;
+      align-self: center;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #797676;
+    }
+
+    .file-uploader-browse {
+      position: absolute;
+      display: flex;
+      justify-self: center;
+      align-self: center;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: fit-content;
+      height: fit-content;
+    }
+  }
+  //File Browser
+  .file-browser-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    min-height: 22em;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    .container {
+      display: flex;
+      flex-direction: row;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      .file-preview {
+        display: flex;
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        margin-right: 8px;
+        margin-bottom: 18px;
+        box-shadow: 0px 0px 10px 1px rgba(15, 15, 15, 0.2);
+        cursor: pointer;
+        transition: filter, 200ms ease-in-out;
+        //Show Options with SASS HOVER
+        &:hover {
+          filter: contrast(70%) brightness(70%);
+          .options {
+            visibility: visible;
+            opacity: 1;
+            bottom: 0px;
+          }
+        }
+        .options {
+          opacity: 0;
+          visibility: hidden;
+          display: flex;
+          position: absolute;
+          bottom: -10px; ///< For Animation
+          width: 100%;
+          height: 19px;
+          justify-content: flex-end;
+          background-color: rgba(212, 207, 207, 0.7);
+          box-shadow: 0px 0px 9px 0px rgba(15, 15, 15, 0.25);
+          border-top: 1px solid rgba(15, 15, 15, 0.7);
+          transition-property: bottom, opacity;
+          transition: 200ms ease-in-out;
+          .option {
+            color: #5a5757d7;
+            display: flex;
+            cursor: pointer;
+            transition: color, 100ms ease-in-out;
+            &:hover {
+              color: #696666cb;
+            }
+          }
+        }
+
+        .img-preview {
+          img {
+            width: 6em;
+            height: 5.7em;
+            border-radius: 4px;
+            border: 1px solid rgba(15, 15, 15, 0.19);
+          }
+        }
+      }
+    }
+  }
+}
+
+.footer-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}

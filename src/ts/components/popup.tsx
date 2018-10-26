@@ -36,6 +36,8 @@ export interface PopupProps {
 
   popupContainerStyle?: Partial<React.CSSProperties>;
   containerStyle?: Partial<React.CSSProperties>;
+  //Outside Click Discared Elements from Closing Popup (Exceptions)
+  outsideClkDiscaredElem?: string[];
 
   onOpen?: () => void;
   didOpen?: () => void;
@@ -138,6 +140,15 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
     );*/
   }
 
+  openPopup() {
+    if (!this.state.isOpen && this.props.onOpen) {
+      //Run OnOpen for first time for initialization
+      this.props.onOpen();
+    }
+    //Show Popup and Say that it did Open
+    this.setState({ isOpen: true });
+  }
+
   closePopup() {
     this.setState({ isOpen: false, didOpen: false });
     this.props.onClose ? this.props.onClose() : null;
@@ -146,7 +157,9 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
   componentDidUpdate() {
     //Updated and the Popup isOpen?
     if (this.state.isOpen && !this.state.didOpen && this.props.didOpen) {
+      //Run Callback
       this.props.didOpen();
+      //Set DidOpen
       this.setState({ didOpen: true });
     }
   }
@@ -162,7 +175,8 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
       containerStyle,
       popupContainerStyle,
       canOutsideClose,
-      onCloseCross
+      onCloseCross,
+      outsideClkDiscaredElem
     } = this.props;
     const { isOpen } = this.state;
     //Check for Icon type
@@ -186,6 +200,7 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
           <div className={isInline ? "inline-popup" : "popup"}>
             <ClickOutsideHandler
               onOutsideClick={canOutsideClose && this.closePopup.bind(this)}
+              discaredElmentsClassNames={outsideClkDiscaredElem}
               style={
                 isInline
                   ? { width: "100%", height: "100%", display: "flex" }

@@ -19,16 +19,20 @@ import * as monaco from "monaco-editor";
 
 //Style
 import "./style.scss";
+//Blueprint
 import {
   AnchorButton,
   Intent,
   Popover,
   Position,
-  PopoverInteractionKind
+  PopoverInteractionKind,
+  MenuItem
 } from "@blueprintjs/core";
+//Blueprint Select
+import { Select, ItemRenderer, ItemPredicate } from "@blueprintjs/select";
 
 //Entity
-import { applyEntity, applyAtomicEntity } from "../../components/draft/entity";
+import { applyAtomicEntity } from "../../components/draft/entity";
 
 interface CodeEditorProps {
   editorState: EditorState;
@@ -44,9 +48,43 @@ interface CodeEditorProps {
 }
 
 interface CodeEditorState {
+  allowDiscardNoWarning: boolean;
   isWarningOpen: boolean;
   preventSubmit: boolean;
+  defaultEditorValue: string;
+  currentlanguage: string;
 }
+
+//Monaco Programming Language Type Abstract
+type MonacoLanguage = monaco.languages.ILanguageExtensionPoint;
+
+//Monaco Programming Languages Select Renderer
+const LanguagesRenderer: ItemRenderer<MonacoLanguage> = (
+  language,
+  { handleClick, modifiers }
+) => {
+  /*if (!(modifiers as any).filtered) {
+    return null;
+  }*/
+  return (
+    <MenuItem
+      active={modifiers.active}
+      key={language.id}
+      label={language.aliases[0]}
+      text={language.id}
+      onClick={handleClick}
+    />
+  );
+};
+
+//Monaco Languages Predicte Filter
+const filterLanguages: ItemPredicate<MonacoLanguage> = (query, language) => {
+  //Tell if the query string exists in the languages Array (Search Using Language ID or Most Releavent Aliase)
+  return (
+    language.aliases[0].toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
+    language.id.toLowerCase().indexOf(query.toLowerCase()) >= 0
+  );
+};
 
 export default class CodeEditor extends React.Component<
   CodeEditorProps,
@@ -62,19 +100,24 @@ export default class CodeEditor extends React.Component<
   constructor(props: CodeEditorProps) {
     super(props);
     this.state = {
+      allowDiscardNoWarning: true,
       isWarningOpen: false,
-      preventSubmit: false
+      preventSubmit: true,
+      defaultEditorValue: null,
+      currentlanguage: "javascript" ///< Javascript by default
     };
   }
 
   onOpen() {
+    const { defaultEditorValue, currentlanguage } = this.state;
     //Create and Add Monaco Editor to #code-editor Container
-    this.codeEditor = monaco.editor.create(this.editor, {
-      value: ["function x() {", '\tconsole.log("Hello world!");', "}"].join(
+    /*SAMPLE VALUE: ["function x() {", '\tconsole.log("Hello world!");', "}"].join(
         "\n"
-      ),
-      language: "javascript",
-      theme: "vs-dark"
+        )*/
+    this.codeEditor = monaco.editor.create(this.editor, {
+      value: defaultEditorValue,
+      theme: "vs-dark",
+      language: currentlanguage
     });
     //Register Code Editor Specific Events
     this.codeEditor.onDidChangeModelContent(modal => {
@@ -83,9 +126,18 @@ export default class CodeEditor extends React.Component<
         !this.codeEditor.getValue() ||
         this.codeEditor.getValue().trim() == ""
       )
-        this.setState({ preventSubmit: true });
-      else this.setState({ preventSubmit: false });
+        this.setState({ preventSubmit: true, allowDiscardNoWarning: true });
+      else
+        this.setState({ preventSubmit: false, allowDiscardNoWarning: false });
     });
+  }
+
+  //Open Code Editor with Code to Edit
+  OpenWithCode(codeText: string) {
+    //Set Default Editor's Code Text Value
+    this.setState({ defaultEditorValue: codeText });
+    //Open Current CodeEditor's Popup
+    this.popup.openPopup();
   }
 
   //Submitting Code Snippet to Editor
@@ -99,7 +151,10 @@ export default class CodeEditor extends React.Component<
       "CODE_SNIPPET",
       "MUTABLE",
       {
-        code: this.codeEditor.getValue()
+        code: this.codeEditor.getValue(),
+        language: this.state.currentlanguage
+          ? this.state.currentlanguage
+          : "javascript"
       }
     );
     console.log("VALUE: ", this.codeEditor.getValue());
@@ -116,8 +171,34 @@ export default class CodeEditor extends React.Component<
     //if (e.key == "Enter") this.onCodeSnippetAdd();
   }
 
+  updateCurrentLanguage(language: MonacoLanguage) {
+    //Update Monaco Editor Model
+    monaco.editor.setModelLanguage(this.codeEditor.getModel(), language.id);
+    //Update State
+    this.setState({ currentlanguage: language.id });
+  }
+
+  componentWillMount() {
+    //Listen For Code Editing Event from a Code Snippet Decorator
+    let events = this.props.on("EditCode", (appState, codeText) => {
+      //Open Popup WITH CODE
+      this.OpenWithCode(codeText[0]);
+    });
+  }
+
+  onDiscardCode() {
+    //Show Warning before Discard or just exist
+    if (!this.state.allowDiscardNoWarning)
+      this.setState({ isWarningOpen: true });
+    else {
+      this.setState({ isWarningOpen: true });
+      this.popup.closePopup();
+    }
+  }
+
   render() {
     const { editorState, updateEditorState, editor, on, emit } = this.props;
+    const { currentlanguage } = this.state;
 
     let popupInline = false;
 
@@ -127,9 +208,27 @@ export default class CodeEditor extends React.Component<
     //Header
     const header = "Code Editor";
 
+    //Available Code Editor Programming Languages
+    const LanguagesSelect = Select.ofType<MonacoLanguage>();
+    const monacoLanguages = monaco.languages.getLanguages();
+
     //Container
     const container = (
       <div onKeyPress={this.handleKeyPress.bind(this)}>
+        <div className="language-select-container">
+          <LanguagesSelect
+            items={monacoLanguages}
+            itemPredicate={filterLanguages}
+            itemRenderer={LanguagesRenderer}
+            noResults={<MenuItem disabled={true} text="No results." />}
+            onItemSelect={this.updateCurrentLanguage.bind(this)}
+          >
+            <AnchorButton
+              text={currentlanguage}
+              rightIcon={"double-caret-vertical"}
+            />
+          </LanguagesSelect>
+        </div>
         <div
           id="code-editor"
           style={{
@@ -160,7 +259,7 @@ export default class CodeEditor extends React.Component<
           <AnchorButton
             className="btn"
             intent={Intent.DANGER}
-            onClick={() => this.setState({ isWarningOpen: true })}
+            onClick={this.onDiscardCode.bind(this)}
           >
             Discard
           </AnchorButton>

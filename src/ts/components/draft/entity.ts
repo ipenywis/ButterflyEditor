@@ -21,7 +21,7 @@ export const getLastEntityKey = (editorState: EditorState): string => {
 }
 */
 /**
- * Create & Apply Entity To current EditorState
+ * Create & Apply Entity To current EditorState (Apply to Selected Text only!)
  * @param editorState
  * @param type
  * @param mutability
@@ -64,6 +64,14 @@ export const applyEntity = (
     entityKey
   );
 };
+
+/**
+ * Create and Apply an Atomic Entity (No Selection needed, no focus, it inserts a new line after the entity and force editor focus)
+ * @param editorState
+ * @param type
+ * @param mutability
+ * @param data
+ */
 
 export const applyAtomicEntity = (
   editorState: EditorState,

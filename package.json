@@ -16,8 +16,10 @@
     "license": "ISC",
     "devDependencies": {
         "@types/color": "^3.0.0",
+        "@types/crypto-js": "^3.1.43",
         "@types/draft-js": "^0.10.23",
         "@types/lodash": "^4.14.111",
+        "@types/prop-types": "^15.5.6",
         "@types/react": "^16.4.6",
         "@types/react-dom": "^16.0.6",
         "awesome-typescript-loader": "^5.2.0",
@@ -35,8 +37,11 @@
     },
     "dependencies": {
         "@blueprintjs/core": "^3.5.1",
+        "@blueprintjs/select": "^3.2.0",
+        "axios": "^0.18.0",
         "color": "^3.0.0",
         "consolidated-events": "^2.0.2",
+        "crypto-js": "^3.1.9-1",
         "draft-js": "^0.10.5",
         "draft-js-custom-styles": "^2.0.4",
         "draft-js-export-html": "^1.2.0",
