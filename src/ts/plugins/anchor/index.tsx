@@ -28,6 +28,9 @@ interface AnchorProps {
   editor: Editor;
   updateEditorState: (newEditorState: EditorState) => void;
 
+  //is anchor disabled
+  isDisabled?: boolean;
+
   //Events
   on?: (
     eventName: string,
@@ -149,7 +152,14 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
   }
 
   render() {
-    const { on, emit, editorState, editor, updateEditorState } = this.props;
+    const {
+      on,
+      emit,
+      editorState,
+      editor,
+      updateEditorState,
+      isDisabled
+    } = this.props;
     const { error } = this.state;
 
     let current = "anchor";
@@ -216,6 +226,7 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
     return (
       <Popup
         icon={icon}
+        isDisabled={isDisabled}
         editorState={editorState}
         updateEditorState={updateEditorState}
         editor={editor}

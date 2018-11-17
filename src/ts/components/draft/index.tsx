@@ -1,26 +1,14 @@
+/* DRAFT: TEXT EDITOR CORE */
+
 import * as React from "react";
 
-/* DRAFT: TEXT EDITOR */
-
 //Draftjs
-import {
-  Editor,
-  EditorState,
-  RichUtils,
-  Modifier,
-  SelectionState,
-  ContentBlock,
-  ContentState
-} from "draft-js";
+import { Editor, EditorState, DefaultDraftBlockRenderMap } from "draft-js";
 
 import { AppState } from "../../store";
 
-import { getSelectedBlock } from "draftjs-utils";
-
-import { isLastBlock, insertBlock } from "../common";
-
 import { Icon } from "react-icons-kit";
-import { bold, caretDown } from "react-icons-kit/fa/";
+import { caretDown } from "react-icons-kit/fa/";
 
 import { SafeWrapper } from "../common";
 
@@ -32,17 +20,26 @@ import {
 } from "./details";
 
 //Style Map
-import createStyle from "../toolBar/inlineStyle";
+import createStyle, { getCSSPropertyOfStyle } from "../toolBar/inlineStyle";
 import { EventEmitter } from "events";
 
 //State to HTML
 import { stateToHTML } from "draft-js-export-html";
-
-//HTML to ContentBlock
-import HtmlToDraft from "html-to-draftjs";
+//HTML to State
+import { stateFromHTML } from "draft-js-import-html";
+//const me = require("../../../../../draft-js-utils/packages");
 
 //Custom Draftjs Export HTML Options
-import exportOptions from "./decorators/exportOptions";
+import exportOptions from "./exportOptions";
+//Custom Import Options
+import importOptions, { customBlockRenderMap } from "./importOptions";
+
+import { has, get } from "lodash";
+
+import * as Immutable from "immutable";
+
+//TODO: Temp
+import Decorators from "./decorators";
 
 export interface DraftProps {
   appState?: AppState;
@@ -91,11 +88,6 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
 
   componentDidMount() {
     //Choose weather to add new line at the End (So You could add more text after inserting a block or a style).
-    console.log(
-      "Editor: ",
-      this.editor,
-      document.querySelector("[data-contents=true]")
-    );
     //Draft Childs Container (The Sub Container of all text and blocks get typed on the draft editor)
     let container = document.querySelector("[data-contents=true]");
     //Insert New Line After Last Item on the List (Last Children on the Container)
@@ -123,7 +115,6 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   }
 
   onResizeEditor(e: React.MouseEvent) {
-    console.log(e.clientX, e.clientY);
     const currentHeight: number = parseInt(
       this.draftEditor.style.height.slice(
         0,
@@ -146,14 +137,12 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     e.preventDefault();
     //Mouse is Down and Editor is Resizble
     if (this.state.isResizeMouseDown && this.props.isEditorResizable) {
-      console.log(e.clientX, e.clientY);
       const currentHeight: number = parseInt(
         this.draftEditor.style.height.slice(
           0,
           this.draftEditor.style.height.indexOf("px")
         )
       );
-      console.log(this.state.mouseOffsetY);
       let height = e.clientY + this.state.mouseOffsetY;
 
       this.draftEditor.style.height = height + "px";
@@ -176,54 +165,62 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   onEditorBlur() {
     this.props.setAppState({ editorHasFocus: false });
   }
-
+  //HTML Text Area (Insertion or Update) (Convert HTML to EditorState)
   onHTMLEditorChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    //Converting HTML to Draftjs
-    const { contentBlocks, entityMap } = HtmlToDraft(e.target.value);
-    const contentState = ContentState.createFromBlockArray(
-      contentBlocks,
-      entityMap
+    //convert EditorState to HTML using Editor Custom Styles and Entities
+    const contentState = stateFromHTML(e.target.value, {
+      customInlineFn: (element, inlineCreators) =>
+        importOptions(element as HTMLElement, inlineCreators)
+    });
+
+    // Make sure to create EditorState from Content using the Default Decorators
+    // (Otherwise you will get no HTML to State conversion with no errors).
+    const newEditorState = EditorState.createWithContent(
+      contentState,
+      Decorators(this.props.emit, this.props.on)
     );
-    const editorState = EditorState.createWithContent(contentState);
-    //Apply New EditorState with New HTMl
-    this.updateDraftEditor(editorState);
+    //Apply New EditorState with New HTML
+    this.updateDraftEditor(newEditorState);
   }
 
   render() {
     //Quick Extract
-    let { appState, setAppState } = this.props;
+    let { appState } = this.props;
     //Get Inlines style for blocks
     const currentInlineStyles = createStyle.exporter(appState.editorState);
+    //ContentState
+    const contentState = appState.editorState.getCurrentContent();
     //Convert it to plain HTML with inline styles
-    const htmlCode = stateToHTML(appState.editorState.getCurrentContent(), {
+    const htmlCode = stateToHTML(contentState, {
       inlineStyles: currentInlineStyles,
-      entityStyleFn: exportOptions.entityStyleFn
+      entityStyleFn: exportOptions.entityStyleFn,
+      blockRenderers: exportOptions.blockRenderers(contentState)
     });
 
     return (
       <SafeWrapper style={{ position: "relative", flexDirection: "column" }}>
         <div
           className="draft ip-scrollbar-v2"
-          onClick={() =>
-            !this.props.appState.showDraftHTML && this.editor.focus()
-          }
+          onClick={() => !appState.showDraftHTML && this.editor.focus()}
           style={{ height: this.state.height }}
           ref={draft => (this.draftEditor = draft)}
         >
-          {!this.props.appState.showDraftHTML && (
-            <div className="draft-container">
+          {!appState.showDraftHTML && (
+            <div id="main-draft-container" className="draft-container">
               <Editor
                 customStyleFn={createStyle.customStyleFn}
+                blockRenderMap={customBlockRenderMap}
                 editorState={appState.editorState}
                 ref={editor => (this.editor = editor)}
                 onChange={this.updateDraftEditor.bind(this)}
                 onFocus={this.onEditorFocus.bind(this)}
                 onBlur={this.onEditorBlur.bind(this)}
                 placeholder="Explore Your Way In..."
+                spellCheck={true}
               />
             </div>
           )}
-          {this.props.appState.showDraftHTML && (
+          {appState.showDraftHTML && (
             <div className="draft-html-container">
               <textarea
                 name="draftHtml"
@@ -250,6 +247,9 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
               ? getNumCharacters(appState.editorState) + " Chars"
               : getNumCharacters(appState.editorState) + " Char"}
           </div>
+          {appState.showDraftHTML && (
+            <div style={{ marginLeft: "17px" }}>(HTML View)</div>
+          )}
         </div>
         <span
           className="draft-resizer"

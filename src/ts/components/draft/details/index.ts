@@ -1,24 +1,11 @@
 import { EditorState, ContentBlock } from "draft-js";
 
-/* Get Detailed Details about the Draftjs Text: Current Block Type, Style, Selected Text cursor Position, Current Cursor Position...  */
+// Get Detailed Details about the Draftjs Text: Current Block Type,
+// Style, Selected Text cursor Position, Current Cursor Position, Characters Count
 
 export const getCursorStart = (editorState: EditorState): number => {
   const currentSelection = editorState.getSelection();
-
   return currentSelection.getStartOffset();
-
-  /*const startKey = currentSelection.getStartKey();
-  console.log("TCL: startKey", startKey);
-  const endKey = currentSelection.getEndKey();
-  console.log("TCL: startOffset", startOffset);
-  const anchorOffset = currentSelection.getAnchorOffset();
-  console.log("TCL: anchorOffset", anchorOffset);
-  const anchorKey = currentSelection.getAnchorKey();
-  console.log("TCL: anchorKey", anchorKey);
-  console.log("TCL: endKey", endKey);
-  console.log("TCL: endOffset", endOffset);
-  const selectionSize = currentSelection.size;
-  console.log("TCL: selectionSize", selectionSize);*/
 };
 
 export const getCursorNumSelection = (editorState: EditorState): number => {

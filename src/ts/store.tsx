@@ -10,13 +10,10 @@ import Popup from "./components/popup";
 //Event Emitter
 import { EventEmitter } from "events";
 
-import * as _ from "lodash";
-import { THUMBS_DOWN } from "@blueprintjs/icons/lib/esm/generated/iconNames";
-
 //Decorators on the Fly
 import Decorators from "./components/draft/decorators";
 
-//Shared State Between Childrens
+//Shared State Between Childrens (Like Redux/Flux App Store)
 export interface AppState {
   editorState: EditorState;
   editor: Editor;
@@ -26,9 +23,6 @@ export interface AppState {
 }
 
 export interface AppProps {}
-
-//Special Store Type (Event Emitter & React Component merged)
-type Flux = React.Component | EventEmitter;
 
 export default class Store extends React.Component {
   state: AppState;
@@ -100,9 +94,6 @@ export default class Store extends React.Component {
   componentWillUpdate() {}
 
   render() {
-    //Debugging
-    console.warn("Currently active items: ", this.state.activeItems);
-
     return (
       <div className="main-container">
         {React.Children.map(this.props.children, (child, idx) => {

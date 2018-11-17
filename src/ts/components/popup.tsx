@@ -39,6 +39,9 @@ export interface PopupProps {
   //Outside Click Discared Elements from Closing Popup (Exceptions)
   outsideClkDiscaredElem?: string[];
 
+  //Is Popup Disabled
+  isDisabled?: boolean;
+
   onOpen?: () => void;
   didOpen?: () => void;
 
@@ -168,7 +171,7 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
     const {
       isInline,
       icon,
-      label,
+      isDisabled,
       header,
       container,
       footer,
@@ -181,7 +184,7 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
     const { isOpen } = this.state;
     //Check for Icon type
     if (!React.isValidElement(icon)) {
-      console.error("Popup Icon is Invalid");
+      console.error("Editor Popup Icon is Invalid");
     }
     return (
       <SafeWrapper
@@ -191,55 +194,58 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
         }}
       >
         <div
-          className={"t-item " + (isOpen ? "toggle" : "")}
-          onMouseDown={() => this.setState({ isOpen: true })}
+          className={
+            "t-item " + (isDisabled ? "disabled" : isOpen ? "toggle" : "")
+          }
+          onMouseDown={() => this.setState({ isOpen: !isDisabled })}
         >
           {icon && <div className="t-icon">{icon}</div>}
         </div>
-        {isOpen && (
-          <div className={isInline ? "inline-popup" : "popup"}>
-            <ClickOutsideHandler
-              onOutsideClick={canOutsideClose && this.closePopup.bind(this)}
-              discaredElmentsClassNames={outsideClkDiscaredElem}
-              style={
-                isInline
-                  ? { width: "100%", height: "100%", display: "flex" }
-                  : {
-                      width: "auto",
-                      height: "auto",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      position: "relative"
-                    }
-              }
-            >
-              <div
-                className="popup-container"
-                ref={popup => (this.popup = popup)}
-                style={popupContainerStyle}
-              >
-                <div className="header">{header}</div>
-                <div className="container" style={containerStyle}>
-                  {container}
-                </div>
-                <div className="footer">{footer}</div>
-              </div>
-              <span
-                className="popup-close"
-                ref={closeBtn => (this.closeBtn = closeBtn)}
-                onClick={
-                  onCloseCross ? onCloseCross : this.closePopup.bind(this)
+        {!isDisabled &&
+          isOpen && (
+            <div className={isInline ? "inline-popup" : "popup"}>
+              <ClickOutsideHandler
+                onOutsideClick={canOutsideClose && this.closePopup.bind(this)}
+                discaredElmentsClassNames={outsideClkDiscaredElem}
+                style={
+                  isInline
+                    ? { width: "100%", height: "100%", display: "flex" }
+                    : {
+                        width: "auto",
+                        height: "auto",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        position: "relative"
+                      }
                 }
               >
-                <Icon icon={close} size={20} />
-              </span>
-            </ClickOutsideHandler>
-            <div className="popup-tail-shadow" />
-            <div className="popup-tail-glow" />
-            <div className="popup-tail" />
-          </div>
-        )}
+                <div
+                  className="popup-container"
+                  ref={popup => (this.popup = popup)}
+                  style={popupContainerStyle}
+                >
+                  <div className="header">{header}</div>
+                  <div className="container" style={containerStyle}>
+                    {container}
+                  </div>
+                  <div className="footer">{footer}</div>
+                </div>
+                <span
+                  className="popup-close"
+                  ref={closeBtn => (this.closeBtn = closeBtn)}
+                  onClick={
+                    onCloseCross ? onCloseCross : this.closePopup.bind(this)
+                  }
+                >
+                  <Icon icon={close} size={20} />
+                </span>
+              </ClickOutsideHandler>
+              <div className="popup-tail-shadow" />
+              <div className="popup-tail-glow" />
+              <div className="popup-tail" />
+            </div>
+          )}
       </SafeWrapper>
     );
   }

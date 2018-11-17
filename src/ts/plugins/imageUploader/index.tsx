@@ -46,6 +46,8 @@ import SimpleLoader from "../../components/loaders/simpleLoader";
 
 //Apply Entity
 import { applyAtomicEntity } from "../../components/draft/entity";
+import { validateURL } from "../../utils";
+import { addEntityImportRule } from "../../components/draft/importOptions";
 
 interface ImageUploaderProps {
   editorState: EditorState;
@@ -54,7 +56,14 @@ interface ImageUploaderProps {
   //Gets Called for Each File to Upload on the Queue (PROMISE tells if completed)
   onFileUpload: (file: IImage) => Promise<string>;
 
+  //Weather to use the Builtin Image Browser (For Uploaded Images) (but this still needs support for image uploading, URL generation and Image Placement)
+  //TODO: Allow users to add custom Image Browsers
+  //TODO: Provide an API for interacting with the ImageBrowser
+  //For Now just ignore this Feature till it's updated and tested
   useImageBrowser?: boolean;
+
+  //is ImageUploader Disabled
+  isDisabled?: boolean;
 
   //Events
   on?: (
@@ -86,7 +95,7 @@ export default class ImageUploader extends React.Component<
   imageReader: ImageReader;
 
   static defaultProps = {
-    useImageBrowser: true
+    useImageBrowser: false
   };
 
   constructor(props: ImageUploaderProps) {
@@ -113,6 +122,14 @@ export default class ImageUploader extends React.Component<
     this.setState({ error: null });
   }
 
+  startLoading() {
+    this.setState({ isImageLoading: true });
+  }
+
+  stopLoading() {
+    this.setState({ isImageLoading: false });
+  }
+
   onPopupOpen() {}
 
   hidePopup() {
@@ -124,24 +141,30 @@ export default class ImageUploader extends React.Component<
     this.setState({
       isAdvancedActive: false,
       currentAdvancedTab: "browser",
-      error: null
+      error: null,
+      imgURL: null,
+      isImageLoading: false,
+      imgWidth: 120,
+      imgHeight: 100
     });
   }
 
   onAdvancedUploaderClick() {
-    toaster.show({ message: "Testing", className: "toast" });
     this.setState({ isAdvancedActive: true });
   }
 
   handleKeyPress(e: React.KeyboardEvent) {
-    //if (e.key == "Enter") this.onImageUpload();
+    if (e.key == "Enter") this.onURLImagePlace();
   }
 
   onImageURLChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ imgURL: e.target.value });
   }
 
-  async onURLImagePlace() {
+  //Create and Places and Image as a Base64 Image Encoded Data as <img src={base64DATA}/>
+  //Use this method only when you have a server that is capable of receiving your base64 image data, uploading it and then providing you with the Target Image URL
+  //Do not try to use base64 data directlly into image, since it will compromize the experience and makes the editor lagging and non-responding
+  async onURLImagePlaceBase64() {
     const { editorState, updateEditorState } = this.props;
     const { imgURL, imgWidth, imgHeight } = this.state;
     //Start Loading
@@ -172,8 +195,60 @@ export default class ImageUploader extends React.Component<
     }
   }
 
+  //Creates and Places an img with URL <img src={url}/>
+  onURLImagePlace() {
+    const { editorState, updateEditorState } = this.props;
+    const { imgURL, imgWidth, imgHeight } = this.state;
+    //Validate URL
+    if (!validateURL(imgURL)) return this.showError("Invalid Link(URL)");
+    //Start Loading State
+    this.setState({ isImageLoading: true });
+    let img = new Image();
+    img.src = imgURL;
+    //Wait for image loading
+    img.onload = () => {
+      //Image (From URL)
+      const image = ImageReader.createFromURL(imgURL, imgWidth, imgHeight);
+      //Apply IMAGE Entity
+      const newEditorState = applyAtomicEntity(
+        editorState,
+        "IMAGE",
+        "MUTABLE",
+        image
+      );
+      //Update Editor State
+      updateEditorState(newEditorState);
+      //Stop Loading
+      this.stopLoading();
+      //Hide Popup
+      this.hidePopup();
+    };
+    img.onabort = img.onerror = () => {
+      //Stop Loading
+      this.stopLoading();
+      //Show Error
+      this.showError("Cannot Load Image from URL, Please Try Again!");
+    };
+  }
+
+  componentWillMount() {
+    //Add Import Rules (for importing <img /> into Editor)
+    addEntityImportRule(
+      "IMAGE",
+      element => {
+        return element.tagName === "IMG";
+      },
+      element => {
+        return {
+          URL: element.getAttribute("src")
+        };
+      }
+    );
+  }
+
   render() {
     const {
+      isDisabled,
       on,
       emit,
       editorState,
@@ -199,7 +274,10 @@ export default class ImageUploader extends React.Component<
     const inlineHeader = "Image Uploader";
     //Container
     const inlineContainer = (
-      <div className="inner-container">
+      <div
+        className="inner-container"
+        onKeyPress={this.handleKeyPress.bind(this)}
+      >
         <FormGroup
           helperText={error ? error : "Make sure Image URL is Valid"}
           label="Embed Image From URL"
@@ -279,14 +357,6 @@ export default class ImageUploader extends React.Component<
         />
       </div>
     );
-    /*
-    const tempFiles: IImage[] = [
-      {
-        name: "Simple Image",
-        type: IImageType.,
-        data: ""
-      }
-    ];*/
 
     const imageBrowser = (
       <div className="inner-container">
@@ -338,6 +408,7 @@ export default class ImageUploader extends React.Component<
       <Popup
         canOutsideClose={isInline}
         isInline={isInline}
+        isDisabled={isDisabled}
         icon={icon}
         editorState={editorState}
         updateEditorState={updateEditorState}
@@ -356,16 +427,7 @@ export default class ImageUploader extends React.Component<
   }
 }
 
-//LOAD Image into File Object from URL
-const loadImage = (file: IImage, URL: string) => {
-  let img = new Image();
-  img.src = "";
-  let fileReader = new FileReader();
-  //let file = new Blob()
-
-  //fileReader.readAsDataURL();
-};
-
+//Toaster Notification
 let toaster: IToaster;
 toaster = Toaster.create({ position: Position.TOP });
 
@@ -483,8 +545,14 @@ class DraggableUploader extends React.Component<
   public uploadFiles() {
     const { loadedFiles } = this.state;
     const { onFileUpload } = this.props;
+    //Make sure there is at least one image to upload
+    if (!loadedFiles || loadedFiles === [])
+      return toaster.show({
+        message: "Please Choose Images First to Upload them!",
+        intent: Intent.WARNING
+      });
     //Upload Loaded Files
-    loadedFiles.map((file, idx) => {
+    loadedFiles.map(file => {
       //Make the File in the Uploading State
       let newFile = this.updateLoadedFile(file, {
         ...file,

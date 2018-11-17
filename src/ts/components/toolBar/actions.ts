@@ -1,3 +1,5 @@
+/* CURRENTLY_NOT_NEEDED
+
 import * as React from "react";
 
 import { AppState } from "../../store";
@@ -32,3 +34,5 @@ export function toggleBoldStyle(
   );
   setAppState({ editorState: newEditorState });
 }
+
+*/

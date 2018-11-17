@@ -38,7 +38,7 @@ const fonts = [
   { name: "Permanent Marker", style: "Permanent Marker, cursive" },
   { name: "Courgette", style: "Courgette, cursive" }
 ];
-
+//Generate FontFamillies Object
 let fontFamiliesStyle: any = [];
 for (const font of fonts) {
   fontFamiliesStyle.push({

@@ -87,11 +87,13 @@ export enum IImageType {
 
 type ImageData = string | Blob | ArrayBuffer;
 
+//Either Data or URL properties should be presented
 export interface IImage {
   name: string;
   type: IImageType;
-  size: number;
-  data: ImageData;
+  size?: number;
+  data?: ImageData;
+  URL?: string;
   isLoading?: boolean;
   width?: number;
   height?: number;
@@ -212,6 +214,40 @@ export default class ImageReader {
         };base64, ` + data;
     }
     return base64Data;
+  }
+
+  static createFromURL(URL: string, width?: number, height?: number): IImage {
+    return {
+      name: ImageReader.getImageNameFromURL(URL),
+      type: IImageType.PNG,
+      URL: URL,
+      width,
+      height
+    };
+  }
+
+  /**
+   * Tries to get the name of the image from a provided URL(Link)
+   * It simply tries to get characters after the last slash
+   * And appends the current Date DD-MM-YY
+   * @param URL
+   */
+  static getImageNameFromURL(URL: string): string {
+    const currentDate: Date = new Date();
+    const currentDateStr =
+      currentDate.getDate() +
+      "-" +
+      (currentDate.getMonth() + 1) +
+      "-" +
+      currentDate.getFullYear() +
+      "_" +
+      currentDate.getHours() +
+      ":" +
+      currentDate.getMinutes();
+    if (!URL || URL === "") return currentDateStr;
+    //Get last text after last URL forward slash
+    const name = URL.substr(URL.lastIndexOf("/") + 1);
+    return name + " " + currentDate;
   }
 
   getBinaryData(): string {
@@ -374,6 +410,7 @@ export default class ImageReader {
    * @param file
    */
   readFromFile(file: File): Promise<IImage> {
+    //TODO: Implement File Image Reading using FileReader
     return new Promise((rs, rj) => {});
   }
 }

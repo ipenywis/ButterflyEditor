@@ -6,7 +6,14 @@ import Popup from "../../components/popup";
 import { Icon } from "react-icons-kit";
 import { terminal } from "react-icons-kit/fa/";
 
-import { Editor, EditorState, SelectionState } from "draft-js";
+import {
+  Editor,
+  EditorState,
+  SelectionState,
+  Entity,
+  ContentState,
+  Modifier
+} from "draft-js";
 
 //Appstate
 import { AppState } from "../../store";
@@ -16,6 +23,7 @@ import { EventEmitter } from "events";
 
 //Monaco Microsoft VSCode Code Editor
 import * as monaco from "monaco-editor";
+//const monaco = require("monaco-editor/min/vs/editor/editor.main.js");
 
 //Style
 import "./style.scss";
@@ -32,12 +40,25 @@ import {
 import { Select, ItemRenderer, ItemPredicate } from "@blueprintjs/select";
 
 //Entity
-import { applyAtomicEntity } from "../../components/draft/entity";
+import {
+  applyAtomicEntity,
+  mergeEntityData
+} from "../../components/draft/entity";
+
+//Decorators
+import Decorators from "../../components/draft/decorators";
+
+//Prism Code Highlighter
+import * as Prism from "prismjs";
+import { addEntityImportRule } from "../../components/draft/importOptions";
 
 interface CodeEditorProps {
   editorState: EditorState;
   editor: Editor;
   updateEditorState: (newEditorState: EditorState) => void;
+
+  //is CodeEditor Disabled
+  isDisabled?: boolean;
 
   //Events
   on?: (
@@ -53,13 +74,15 @@ interface CodeEditorState {
   preventSubmit: boolean;
   defaultEditorValue: string;
   currentlanguage: string;
+  isEditMode: boolean;
+  codeEditorEntityKey: string; ///< Keep track of the Entity Key of the current Code Snippet Instance which to be changed/updated
 }
 
 //Monaco Programming Language Type Abstract
 type MonacoLanguage = monaco.languages.ILanguageExtensionPoint;
 
 //Monaco Programming Languages Select Renderer
-const LanguagesRenderer: ItemRenderer<MonacoLanguage> = (
+const LanguagesRenderer: ItemRenderer<string> = (
   language,
   { handleClick, modifiers }
 ) => {
@@ -69,21 +92,24 @@ const LanguagesRenderer: ItemRenderer<MonacoLanguage> = (
   return (
     <MenuItem
       active={modifiers.active}
-      key={language.id}
-      label={language.aliases[0]}
-      text={language.id}
+      key={language}
+      label={language}
+      text={language}
       onClick={handleClick}
     />
   );
 };
 
 //Monaco Languages Predicte Filter
-const filterLanguages: ItemPredicate<MonacoLanguage> = (query, language) => {
+const filterLanguages: ItemPredicate<string> = (query, language) => {
   //Tell if the query string exists in the languages Array (Search Using Language ID or Most Releavent Aliase)
-  return (
+  //If using Monaco Editor Supported Languages (use Monacolanguage) but for now we only need
+  //the supported Prism languages (which could be highlighted)
+  /*return (
     language.aliases[0].toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
     language.id.toLowerCase().indexOf(query.toLowerCase()) >= 0
-  );
+  );*/
+  return language.toLowerCase().indexOf(query.toLowerCase()) >= 0;
 };
 
 export default class CodeEditor extends React.Component<
@@ -104,7 +130,9 @@ export default class CodeEditor extends React.Component<
       isWarningOpen: false,
       preventSubmit: true,
       defaultEditorValue: null,
-      currentlanguage: "javascript" ///< Javascript by default
+      currentlanguage: "javascript", ///< Javascript by default
+      isEditMode: false,
+      codeEditorEntityKey: null
     };
   }
 
@@ -132,10 +160,14 @@ export default class CodeEditor extends React.Component<
     });
   }
 
-  //Open Code Editor with Code to Edit
-  OpenWithCode(codeText: string) {
+  //Open Code Editor with Code to Edit & Current Code Snippet Entity Key for Updating Entity Data
+  OpenWithCode(entityKey: string, codeText: string) {
     //Set Default Editor's Code Text Value
-    this.setState({ defaultEditorValue: codeText });
+    this.setState({
+      defaultEditorValue: codeText,
+      isEditMode: true,
+      codeEditorEntityKey: entityKey
+    });
     //Open Current CodeEditor's Popup
     this.popup.openPopup();
   }
@@ -146,6 +178,7 @@ export default class CodeEditor extends React.Component<
     //Validate Code (NotEmpty)
     if (!this.codeEditor.getValue() || this.codeEditor.getValue().trim() == "")
       return;
+    //TODO: Display Errors using toasts
     let newEditorState = applyAtomicEntity(
       editorState,
       "CODE_SNIPPET",
@@ -157,12 +190,31 @@ export default class CodeEditor extends React.Component<
           : "javascript"
       }
     );
-    console.log("VALUE: ", this.codeEditor.getValue());
-    //this.props.editor.focus();
     //Update Editor State
     updateEditorState(newEditorState);
 
     //Close Editor Popup
+    this.popup.closePopup();
+  }
+
+  //Update Code Snippet (when edit a snippet code)
+  onCodeSnippetUpdate() {
+    //const newEntityInstance = Entity.mergeData("je", { data: "nme" });
+    const { editorState, updateEditorState } = this.props;
+    const { codeEditorEntityKey, currentlanguage } = this.state;
+    //Update Entity data by merging it
+    const newEditorState = mergeEntityData(
+      editorState,
+      Decorators(this.props.emit, this.props.on),
+      codeEditorEntityKey,
+      {
+        code: this.codeEditor.getValue(),
+        language: currentlanguage ? currentlanguage : "javascript"
+      }
+    );
+    //Update Editor State
+    updateEditorState(newEditorState);
+    //Close Code Editor Popup
     this.popup.closePopup();
   }
 
@@ -171,19 +223,41 @@ export default class CodeEditor extends React.Component<
     //if (e.key == "Enter") this.onCodeSnippetAdd();
   }
 
-  updateCurrentLanguage(language: MonacoLanguage) {
+  updateCurrentLanguage(language: string) {
     //Update Monaco Editor Model
-    monaco.editor.setModelLanguage(this.codeEditor.getModel(), language.id);
+    monaco.editor.setModelLanguage(this.codeEditor.getModel(), language);
     //Update State
-    this.setState({ currentlanguage: language.id });
+    this.setState({ currentlanguage: language });
   }
 
   componentWillMount() {
     //Listen For Code Editing Event from a Code Snippet Decorator
-    let events = this.props.on("EditCode", (appState, codeText) => {
+    this.props.on("EditCode", (appState, data) => {
       //Open Popup WITH CODE
-      this.OpenWithCode(codeText[0]);
+      this.OpenWithCode(data[0], data[1]);
     });
+
+    //Add Code Snippet Import Rule (for importing pre code from HTML)
+    addEntityImportRule(
+      "CODE_SNIPPET",
+      element => {
+        return element.tagName === "PRE" || element.tagName === "CODE";
+      },
+      element => {
+        if (element.tagName === "CODE") {
+          let codeTextArr = [...element.children].map(child => {
+            if (child) return child.textContent;
+          });
+          //Return Concatenated String
+          return {
+            code: codeTextArr.join(""),
+            language: "javascript", ///< NOTE: Temporary, only for testing purposes
+            isImportedCode: true
+          };
+        }
+        return null;
+      }
+    );
   }
 
   onDiscardCode() {
@@ -197,8 +271,15 @@ export default class CodeEditor extends React.Component<
   }
 
   render() {
-    const { editorState, updateEditorState, editor, on, emit } = this.props;
-    const { currentlanguage } = this.state;
+    const {
+      isDisabled,
+      editorState,
+      updateEditorState,
+      editor,
+      on,
+      emit
+    } = this.props;
+    const { currentlanguage, isEditMode } = this.state;
 
     let popupInline = false;
 
@@ -209,15 +290,17 @@ export default class CodeEditor extends React.Component<
     const header = "Code Editor";
 
     //Available Code Editor Programming Languages
-    const LanguagesSelect = Select.ofType<MonacoLanguage>();
+    const LanguagesSelect = Select.ofType<string>();
     const monacoLanguages = monaco.languages.getLanguages();
+    //Only show the supported languages by the prism code highlighter (at least for now!)
+    const prismSupportedLanguages: string[] = Object.keys(Prism.languages);
 
     //Container
     const container = (
       <div onKeyPress={this.handleKeyPress.bind(this)}>
         <div className="language-select-container">
           <LanguagesSelect
-            items={monacoLanguages}
+            items={prismSupportedLanguages}
             itemPredicate={filterLanguages}
             itemRenderer={LanguagesRenderer}
             noResults={<MenuItem disabled={true} text="No results." />}
@@ -245,10 +328,14 @@ export default class CodeEditor extends React.Component<
       <div className="footer-container">
         <AnchorButton
           className="btn"
-          text="Add Snippet"
+          text={isEditMode ? "Update Snippet" : "Add Snippet"}
           intent={Intent.SUCCESS}
           disabled={this.state.preventSubmit}
-          onClick={this.onCodeSnippetAdd.bind(this)}
+          onClick={
+            isEditMode
+              ? this.onCodeSnippetUpdate.bind(this)
+              : this.onCodeSnippetAdd.bind(this)
+          }
         />
         <Popover
           interactionKind={PopoverInteractionKind.CLICK}
@@ -321,6 +408,7 @@ export default class CodeEditor extends React.Component<
     return (
       <Popup
         isInline={popupInline}
+        isDisabled={isDisabled}
         canOutsideClose={false}
         icon={icon}
         editorState={editorState}

@@ -37,6 +37,9 @@ export interface LinkProps {
   editor: Editor;
   updateEditorState: (newEditorState: EditorState) => void;
 
+  //is Link Disabled
+  isDisabled?: boolean;
+
   //Events
   on?: (
     eventName: string,
@@ -167,7 +170,14 @@ export default class Link extends React.Component<LinkProps, LinkState> {
   }
 
   render() {
-    const { editorState, updateEditorState, editor, on, emit } = this.props;
+    const {
+      isDisabled,
+      editorState,
+      updateEditorState,
+      editor,
+      on,
+      emit
+    } = this.props;
     const { error } = this.state;
 
     let current = "link";
@@ -242,6 +252,7 @@ export default class Link extends React.Component<LinkProps, LinkState> {
     return (
       <Popup
         icon={icon}
+        isDisabled={isDisabled}
         editorState={editorState}
         updateEditorState={updateEditorState}
         editor={editor}

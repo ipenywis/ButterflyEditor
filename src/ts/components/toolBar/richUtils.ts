@@ -13,7 +13,6 @@ class RichUtilsExtended {
       .getCurrentContent()
       .getBlockForKey(selection.getStartKey())
       .get("key");
-    console.warn("KEY: ", currentBlockKey);
     //const matchRegx = /\w+-?\d+?-?\d+?/;
     const currentBlock = document.querySelector(
       `[data-offset-key^='${currentBlockKey}']`

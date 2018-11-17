@@ -1,17 +1,4 @@
-import {
-  RichUtils,
-  convertToRaw,
-  EditorState,
-  ContentState,
-  SelectionState,
-  Modifier
-} from "draft-js";
-
-/*interface IStyleMap {
-  fontSize: {
-    fontSize: 
-  }
-}*/
+import { RichUtils, EditorState, SelectionState, Modifier } from "draft-js";
 
 //DEFAULT Custom Inline Style Map
 export let defaultStyleMap: any = {
@@ -62,7 +49,7 @@ export function toggleInlineStyle(
   return nextEditorState;
 }
 
-//Available Custom Inline Styles
+//Available Custom Inline Styles (all the listed styles in here are capabale of applying)
 export let customStyles = [
   "font-family",
   "font-size",
@@ -131,9 +118,26 @@ export const getStringValue = (styles: ICreateStyle["styles"]): string[] => {
       converted.push(`CUSTOM_${prop.toUpperCase()}_${styles[prop]}`);
     }
   }
-  //It has only 1 element, then return the element instead of an array [DISABLED]
-  //if (converted.length == 1) return converted[0];
   return converted;
+};
+
+/**
+ * Gets a CSS String Representation of a Style Property
+ * (ex: fontSize ==> font-size)
+ */
+export const getCSSPropertyOfStyle = (style: string): string => {
+  //Validate it
+  if (!style) return null;
+  //Make sure that Style property is not already parsed
+  if (style.indexOf("-") !== -1) return style;
+  //Regex for Parsing & Matching a Style
+  const CSSStyleMatchRegex = /([a-z]+)([A-Z]?\w+)?/;
+  let match = CSSStyleMatchRegex.exec(style);
+  if (!match || match === []) return null;
+  //returns the two part of a style (ex: FontSize ==> font & Size)
+  return (
+    match[1].toLowerCase() + (match[2] ? ("-" + match[2].toLowerCase()) : "")
+  );
 };
 
 //Custom Styles

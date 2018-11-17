@@ -25,6 +25,7 @@ import { AppState } from "../../../store";
 import { EventEmitter } from "events";
 //Image Type
 import ImageReader, { IImage } from "../../../utils/imageReader";
+import { renderCodeWithPrismJSX } from "./codeHighlighter";
 
 //Export a Function with Emit & On Dependecies for Easilly Emitting and Listening for Editor Events
 export default function(
@@ -113,36 +114,62 @@ export default function(
   };
 
   const CodeEditorDecoratorComp = (props: any) => {
-    const { code, language } = props.contentState
+    const { code, language, isImportedCode } = props.contentState
       .getEntity(props.entityKey)
       .getData();
-
-    //Line of Code Renderer (using Prism classes and tokens)
-    const renderToken = (token: any) => {
-      return (
-        <span className={"prism-token token " + token.type}>
-          {token.content || token}
-        </span>
-      );
-    };
-    //Tokenize the Code using Prism
-    const tokens: any[] = Prism.tokenize(code, Prism.languages["language"]);
-
+    let highlightedCode: React.ReactElement<any> = null;
+    let codeLines: string[] = null;
+    //Tokenize the Code using Prism or Simply don't use Code Highlighter if language is invalid or doesn't exist in the support list
+    if (
+      language &&
+      language !== "" &&
+      language !== "plaintext" &&
+      Prism.languages[language]
+    )
+      //HighlightedCode using Prism
+      //NOTE: isImportedCode is useless
+      highlightedCode = renderCodeWithPrismJSX(code, language, true);
+    else codeLines = (code as string).split("/n");
     //Handlers
     const onEditBtnClick = () => {
       //Emit an CodeEdit Event where the CodeEditor is already listening for when the component mounts
-      emit("EditCode", code);
+      //Pass current Code Snippet Entity key for Changing Data
+      emit("EditCode", props.entityKey, code);
     };
 
+    console.log(
+      "RENDERING ENTITY CODE DECORATOR: ",
+      code,
+      language,
+      isImportedCode
+    );
+
+    //NOTE: isImportedCode tells us if the code has been imported & converted from HTML
+    //(since draftjs already applies it's own wrapping for code elements), adds pre wrapper for code (so no need to rendering it twice)
+
+    //Render tokens with colors if available otherwise if the language is not supportd
+    //or simply using a plaintext then just render code lines
     return (
       <div className="code-container">
-        <pre>
-          <code>
-            {tokens.map((token, idx) => {
-              return renderToken(token);
-            })}
-          </code>
-        </pre>
+        {highlightedCode}
+        {codeLines &&
+          !highlightedCode &&
+          codeLines.map((code, idx) => {
+            if (!isImportedCode)
+              return (
+                <pre>
+                  <code>
+                    <span key={idx}>{code}</span>
+                  </code>
+                </pre>
+              );
+            else
+              return (
+                <code>
+                  <span key={idx}>{code}</span>
+                </code>
+              );
+          })}
         <span className="edit-btn" onClick={onEditBtnClick}>
           <Icon icon={pencil} size={13} />
         </span>
@@ -156,7 +183,6 @@ export default function(
     callback: (start: number, end: number) => void,
     contentState: ContentState
   ) => {
-    console.log("Finding IMAGE");
     contentBlock.findEntityRanges(character => {
       const entityKey = character.getEntity();
       return (
@@ -167,25 +193,35 @@ export default function(
   };
 
   const ImageDecoratorComp = (props: any) => {
+    console.log("In the IMAGE ENTITY COMPONENT RENDERER");
     const image: IImage = props.contentState
       .getEntity(props.entityKey)
       .getData();
     //Normalize width and height
     const width = image.width ? image.width + "px" : "120px";
-    const height = image.height ? image.height + "px" : "100";
+    const height = image.height ? image.height + "px" : "100px";
     //Convert IImageType to string representation
-    const imgStrType: string = ImageReader.convertTypeToStr(image.type);
+    //const imgStrType: string = ImageReader.convertTypeToStr(image.type);
+    console.log("Received Image: ", image);
+    //If Image URL presents (Use URL instead of Base64 Data, for performance Reasons)
+    let compatibleImgDataOrURL = null;
+    if (image.URL) {
+      compatibleImgDataOrURL = image.URL;
+    } else if (image.data) {
+      //Check & convert Image Data if not Compatible with Web APIs (does the base64 encoded image data has pre-delimiter (data:image/png))
+      //We only need the start portion of the string, for optimizing the Regex test we only get 30 chars
+      compatibleImgDataOrURL = ImageReader.convertToValidBase64Data(
+        image.data.toString()
+      );
+    }
 
-    //Check & convert Image Data if not Compatible with Web APIs (does the base64 encoded image data has pre-delimiter (data:image/png))
-    //We only need the start portion of the string, for optimizing the Regex test we only get 30 chars
-    let compatibleImgData = ImageReader.convertToValidBase64Data(
-      image.data.toString()
-    );
+    //Do not Render IMAGE if data or URL is not valid
+    if (!compatibleImgDataOrURL) return null;
 
     return (
       <span style={{ width, height, display: "inline-flex" }}>
         <img
-          src={compatibleImgData}
+          src={compatibleImgDataOrURL}
           style={{ width: "100%", height: "100%" }}
         />
       </span>

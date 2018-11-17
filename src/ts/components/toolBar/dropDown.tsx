@@ -25,6 +25,10 @@ export interface DropDownProps {
   editorState: EditorState; ///< Temp
 
   activeItems?: string[];
+  disabledItems?: string[];
+
+  //is DropDown Disabled
+  isDisabled?: boolean;
 
   isItemActive?: (label: string) => boolean;
   onChange?: (blockLabel: string) => void;
@@ -39,7 +43,8 @@ export default class DropDown extends React.Component<DropDownProps> {
   state: DropDownState;
   public static defaultProps = {
     container: "select",
-    outsideClickCanClose: true
+    outsideClickCanClose: true,
+    isDisabled: false
   };
 
   dropDownBtn: HTMLButtonElement;
@@ -52,14 +57,17 @@ export default class DropDown extends React.Component<DropDownProps> {
   }
 
   toggleDropDown(e: MouseEvent) {
+    const { isDisabled } = this.props;
     e.preventDefault(); ///< Prevent Default Behavior
     //Change the Current State (Regarding to the Previous One)
     this.setState((prevState: DropDownState) => ({
-      isOpen: !prevState.isOpen
+      isOpen: !prevState.isOpen && !isDisabled
     }));
   }
 
   render() {
+    const { isDisabled } = this.props;
+
     //Container by default is select
     let renderContainer = "select";
     if (this.props.container) renderContainer = this.props.container;
@@ -81,7 +89,7 @@ export default class DropDown extends React.Component<DropDownProps> {
     )
       return null;
 
-    const { icon, activeItems } = this.props;
+    const { icon, activeItems, disabledItems } = this.props;
 
     //Check if item is active (use item label to check for the current item it's active)
     const isActive = (label: string, alise?: string) => {
@@ -93,7 +101,7 @@ export default class DropDown extends React.Component<DropDownProps> {
       //Use label as value to check for current style (for ex: fontSize: 53px)
       let matchRegx = new RegExp(`${label},?-?_?.?`);
       for (const item of activeItems) {
-        console.warn("Match regex: ", matchRegx, item);
+        console.log("Match active items regex: ", label, item, matchRegx);
         if (matchRegx.test(item)) {
           active = true;
           break;
@@ -107,7 +115,7 @@ export default class DropDown extends React.Component<DropDownProps> {
         {/*SELECT*/}
         {renderContainer == "select" && (
           <select
-            className={this.props.className}
+            className={this.props.className + (isDisabled ? " disabled" : "")}
             defaultValue="Header"
             onChange={onSelectChange}
           >
@@ -135,7 +143,11 @@ export default class DropDown extends React.Component<DropDownProps> {
             }
           >
             <button
-              className={"btn-dropdown " + this.props.className}
+              className={
+                "btn-dropDown " +
+                this.props.className +
+                (isDisabled ? " disabled" : "")
+              }
               style={{ width: "50px", justifyContent: "space-between" }}
               ref={btn => (this.dropDownBtn = btn)}
               onClick={this.toggleDropDown.bind(this)}
@@ -148,7 +160,7 @@ export default class DropDown extends React.Component<DropDownProps> {
               </span>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {this.state.isOpen && (
-                  <div className="btn-dropdown-container ip-scrollbar">
+                  <div className="btn-dropDown-container ip-scrollbar">
                     {React.Children.map(
                       this.props.children,
                       (child: any, idx) => {

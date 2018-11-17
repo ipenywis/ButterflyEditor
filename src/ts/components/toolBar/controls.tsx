@@ -10,20 +10,10 @@ import { EditorState, RichUtils } from "draft-js";
 import DropDown from "./dropDown";
 
 //Popup
-import Popup from "../popup";
+import Popup, { PopupProps } from "../popup";
 
 //Icons
 import { Icon } from "react-icons-kit";
-import {
-  bold,
-  italic,
-  underline,
-  alignCenter,
-  alignLeft,
-  alignRight,
-  alignJustify
-} from "react-icons-kit/fa/";
-import { ToolBarState } from ".";
 
 import { SafeWrapper, insertBlock } from "../common";
 
@@ -34,8 +24,8 @@ import createStyle, {
   IStyle,
   getStringValue
 } from "./inlineStyle";
-import Editor from "../../editor";
 import { EventEmitter } from "events";
+import { EDITOR_TOOLBAR_LABELS } from "./common";
 
 //DropDown Item
 export interface ToolbarDropDownItem {
@@ -202,15 +192,6 @@ export default class Controls extends React.Component<ControlsProps> {
           on={this.props.on}
           emit={this.props.emit}
         />
-
-        {/*<RenderBlockTypes
-          blockTypes={this.props.blockTypes}
-          itemGroups={blockItemGroups}
-          currentBlockType={currentBlockType}
-          toggleBlock={this.toggleBlock.bind(this)}
-          inDropDown={false}
-          appState={this.props.appState}
-        />*/}
       </div>
     );
   }
@@ -291,6 +272,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
   let onSelectActive: boolean = false;
   //Apply Button Toggle
   const onButtonToggle = (styleLabel: string, customStyle?: string) => {
+    //Toggle Active (For buttons that doesn't have styles or block types (for ex: popups))
     toggleActive(styleLabel);
     //Find Item by Label
     let item: ToolbarItem;
@@ -298,14 +280,15 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
       if (it.label == styleLabel) item = it;
     });
     //Check if DropDown Item does have a Custom Style to be Applied or a onSelect Method to Run otherwise just run a default style application
-    /** Application Order (Which to be applied First)
+    /** Priority Order (Which to be applied First)
      * OnSelect
      * customStyle
      * type
      */
     if (item.onSelect) {
+      //TODO: onSelect is not fully support (No active state is implemented yet!)
       //Call OnSelect func passing it current item label
-      onSelectActive = item.onSelect(item.label);
+      onSelectActive = item.onSelect(item.label); ///< BAD Code
     } else if (item.customStyles) {
       //Get Final State by Looping and Applying all item styles using (Reduce) to apply new changes to prev applied editor state
       let newEditorState: EditorState = Object.keys(item.customStyles).reduce(
@@ -317,7 +300,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
         },
         editorState
       );
-      //Update With the Final Editor State
+      //Update With the Final Editor State (reduce method returns one final editorState with all the applied styles)
       props.updateEditorState(newEditorState);
     } else {
       //Get Default Registered Style Using label
@@ -393,43 +376,52 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
     }
   };
   //Make currently active items ready for DropDown
-    const dropDownActiveStyles: string[] = [];
-    inlineStyles.map(block => {
-      //console.log(block.label, block.type, )
-      if (block.dropDown) {
-        block.dropDown.items.map(dpItem => {
-          //Temp Styles Arr
-          let arr = [...currentStyle.values()];
-          //Always use it's label since DropDown is does the checking on the label only
-          if (_.includes(arr, dpItem.label))
-            dropDownActiveStyles.push(dpItem.label);
-          if (_.includes(arr, dpItem.type))
-            dropDownActiveStyles.push(dpItem.label);
-        });
-      }
-    });
+  const dropDownActiveStyles: string[] = [];
+  inlineStyles.map(block => {
+    //console.log(block.label, block.type, )
+    if (block.dropDown) {
+      block.dropDown.items.map(dpItem => {
+        //Temp Styles Arr
+        let arr = [...currentStyle.values()];
+        //Always use it's label since DropDown is does the checking on the label only
+        if (_.includes(arr, dpItem.label))
+          dropDownActiveStyles.push(dpItem.label);
+        if (_.includes(arr, dpItem.type))
+          dropDownActiveStyles.push(dpItem.label);
+      });
+    }
+  });
+
+  //Tells if current Item is disabled (inline item)
+  const isDisabled = (item: ToolbarItem): boolean => {
+    //NOTE: All items has to be disabled if the showHTML mode is enabled (no editing when the HTML View is active)
+    //TODO: Add other cases where specific editor items could be disabled
+    return appState.showDraftHTML && item.label !== EDITOR_TOOLBAR_LABELS.HTML;
+  };
 
   return (
     <SafeWrapper>
       {itemGroups.map((groupID, gidx) => {
         return (
-          <SafeWrapper>
+          <SafeWrapper key={gidx}>
             {inlineStyles.map((item, idx) => {
               if (item.groupID == groupID && !item.popup && item.dropDown)
                 return (
                   <DropDown
-                    className="t-dropDown"
+                    className={"t-dropDown"}
+                    isDisabled={isDisabled(item)}
                     onChange={val => onDropDownChange(val)}
                     container={container}
                     icon={item.icon}
                     editorState={props.appState.editorState}
                     activeItems={dropDownActiveStyles}
+                    key={idx}
                   >
                     {item.groupID == groupID &&
                       item.dropDown.items.map((dropItem, dIdx) => {
                         if (dropItem.icon)
                           return (
-                            <SafeWrapper>
+                            <SafeWrapper key={dIdx}>
                               {dropItem.icon} <span>{dropItem.label}</span>
                             </SafeWrapper>
                           );
@@ -441,7 +433,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
             })}
 
             {
-              <TGroupWrapper>
+              <TGroupWrapper key={gidx}>
                 {inlineStyles.map((item, idx) => {
                   if (
                     item.groupID == groupID &&
@@ -452,6 +444,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
                     return (
                       <Popup
                         isInline={item.popup.isInline}
+                        isDisabled={isDisabled(item)}
                         label={item.label}
                         icon={item.icon}
                         header={item.popup.header}
@@ -470,19 +463,32 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
                     !item.dropDown &&
                     item.popup.standAlone
                   ) {
-                    return item.popup.standAlone;
+                    //Clone Popup Element overwritting the IsDisabled by checking it on current toolbar item
+                    return React.cloneElement<PopupProps>(
+                      item.popup.standAlone,
+                      { isDisabled: isDisabled(item) }
+                    );
                   } else return null;
                 })}
               </TGroupWrapper>
             }
-            <TGroupWrapper>
+            <TGroupWrapper key={gidx}>
               {inlineStyles.map((item, idx) => {
                 if (item.groupID == groupID && !item.dropDown && !item.popup) {
                   return (
                     <div
-                      className={"t-item " + (isActive(item) ? "toggle" : "")}
-                      key={item.label}
+                      className={
+                        "t-item " +
+                        (isDisabled(item)
+                          ? "disabled"
+                          : isActive(item)
+                            ? "toggle"
+                            : "")
+                      }
+                      key={item.label || idx}
                       onMouseDown={e => {
+                        //Do not Apply Style when disabled
+                        if (isDisabled(item)) return;
                         e.preventDefault();
                         onButtonToggle(item.label);
                       }}
@@ -500,96 +506,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
   );
 };
 
-/*
-
-
- <SafeWrapper>
-      {itemGroups.map((groupID, gidx) => {
-        return (
-          <SafeWrapper>
-            {inlineStyles.map((item, idx) => {
-              if (item.groupID == groupID && !item.popup && item.dropDown)
-                return (
-                  <DropDown
-                    className="t-dropDown"
-                    onChange={val => onDropDownChange(val)}
-                    container={container}
-                    icon={item.icon}
-                    editorState={props.appState.editorState}
-                  >
-                    {item.groupID == groupID &&
-                      item.dropDown.items.map((dropItem, dIdx) => {
-                        if (dropItem.icon)
-                          return (
-                            <SafeWrapper>
-                              {dropItem.icon} <span>{dropItem.label}</span>
-                            </SafeWrapper>
-                          );
-                        else return dropItem.label;
-                      })}
-                  </DropDown>
-                );
-              else return null;
-            })}
-            <TGroupWrapper>
-              {inlineStyles.map((item, idx) => {
-                if (
-                  item.groupID == groupID &&
-                  item.popup &&
-                  !item.dropDown &&
-                  !item.popup.standAlone
-                )
-                  return (
-                    <Popup
-                      isInline={item.popup.isInline}
-                      label={item.label}
-                      icon={item.icon}
-                      header={item.popup.header}
-                      container={item.popup.container}
-                      footer={item.popup.footer}
-                      updateEditorState={props.updateEditorState}
-                      editorState={props.appState.editorState}
-                      editor={props.appState.editor}
-                      on={on}
-                      emit={emit}
-                    />
-                  );
-                else if (
-                  item.groupID == groupID &&
-                  item.popup &&
-                  !item.dropDown &&
-                  item.popup.standAlone
-                ) {
-                  return item.popup.standAlone;
-                } else return null;
-              })}
-            </TGroupWrapper>
-            <TGroupWrapper>
-              {inlineStyles.map((item, idx) => {
-                if (item.groupID == groupID && !item.dropDown && !item.popup) {
-                  return (
-                    <div
-                      className={"t-item " + (isActive(item) ? "toggle" : "")}
-                      key={item.label}
-                      onMouseDown={e => {
-                        e.preventDefault();
-                        onButtonToggle(item.label);
-                      }}
-                    >
-                      <div className="t-icon">{item.icon}</div>
-                    </div>
-                  );
-                } else return null;
-              })}
-            </TGroupWrapper>
-          </SafeWrapper>
-        );
-      })}
-    </SafeWrapper>
-
-
-
-*/
+//TODO: make only One Renderer for InlineStyles & BlockTypes (They both Share 90% of the same code) (VERY_BAD)
 
 //Block Styles
 interface BlockTypesProps {
@@ -764,11 +681,7 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
     //console.log(block.label, block.type, )
     if (block.dropDown) {
       block.dropDown.items.map(dpItem => {
-        console.log("Drop Down block items: ", dpItem.label, dpItem.type);
         let arr = [...currentBlockType.values()];
-        /*currentBlockType.forEach((val: string) =>
-          console.log("CuRRENG BLOCK TYPE: ", val)
-        );*/
         if (_.includes(arr, dpItem.label))
           dropDownActiveStyles.push(dpItem.label);
         if (_.includes(arr, dpItem.type))
@@ -776,6 +689,13 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
       });
     }
   });
+
+  //Tells if current Item is disabled (inline item, dropdown)
+  const isDisabled = (item: ToolbarItem): boolean => {
+    //NOTE: All items has to be disabled if the showHTML mode is enabled (no editing when the HTML View is active)
+    //TODO: Add other cases where specific editor items could be disabled
+    return appState.showDraftHTML && item.label !== EDITOR_TOOLBAR_LABELS.HTML;
+  };
 
   return (
     <SafeWrapper>
@@ -786,18 +706,20 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
               if (item.groupID == groupID && !item.popup && item.dropDown)
                 return (
                   <DropDown
-                    className="t-dropDown"
+                    className={"t-dropDown"}
+                    isDisabled={isDisabled(item)}
                     onChange={val => onDropDownChange(val)}
                     container={container}
                     icon={item.icon}
-                    editorState={props.appState.editorState}
+                    editorState={appState.editorState}
                     activeItems={dropDownActiveStyles}
+                    key={idx}
                   >
                     {item.groupID == groupID &&
                       item.dropDown.items.map((dropItem, dIdx) => {
                         if (dropItem.icon) {
                           return (
-                            <SafeWrapper>
+                            <SafeWrapper key={dIdx}>
                               {dropItem.icon} <span>{dropItem.label}</span>
                             </SafeWrapper>
                           );
@@ -820,6 +742,7 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
                     return (
                       <Popup
                         isInline={item.popup.isInline}
+                        isDisabled={isDisabled(item)}
                         label={item.label}
                         icon={item.icon}
                         header={item.popup.header}
@@ -830,6 +753,7 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
                         editor={props.appState.editor}
                         on={on}
                         emit={emit}
+                        key={idx}
                       />
                     );
                   else if (
@@ -838,7 +762,11 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
                     !item.dropDown &&
                     item.popup.standAlone
                   ) {
-                    return item.popup.standAlone;
+                    //Clone Popup Element overwritting the IsDisabled by checking it on current toolbar item
+                    return React.cloneElement<PopupProps>(
+                      item.popup.standAlone,
+                      { isDisabled: isDisabled(item) }
+                    );
                   } else return null;
                 })}
               </TGroupWrapper>
@@ -848,14 +776,25 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
                 if (item.groupID == groupID && !item.dropDown && !item.popup) {
                   return (
                     <div
-                      className={"t-item " + (isActive(item) ? "toggle" : "")}
-                      key={item.label}
+                      className={
+                        "t-item " +
+                        (isDisabled(item)
+                          ? "disabled"
+                          : isActive(item)
+                            ? "toggle"
+                            : "")
+                      }
+                      key={item.label || idx}
                       onMouseDown={e => {
+                        //Do not Apply Style when disabled
+                        if (isDisabled(item)) return;
                         e.preventDefault();
                         onButtonToggle(item.label);
                       }}
                     >
-                      <div className="t-icon">{item.icon}</div>
+                      <div className="t-icon" key={idx}>
+                        {item.icon}
+                      </div>
                     </div>
                   );
                 } else return null;
@@ -867,126 +806,3 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
     </SafeWrapper>
   );
 };
-
-/*
-//Block Types Renderer
-let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
-  let {
-    blockTypes,
-    currentBlockType,
-    itemGroups,
-    inDropDown,
-    toggleBlock
-  } = props;
-
-  //Target Render Container
-  const container = "button";
-
-  //Convert Label to a block type
-  let getTypeFromLabel = (label: string): string => {
-    let type = null;
-    //Loop on All Items
-    blockTypes.map(item => {
-      //If the item is a DropDown then Go Deep by finding it's items and check label
-      if (item.dropDown) {
-        item.dropDown.items.map(it => {
-          if (it.label == label) type = it.type;
-        });
-      } else {
-        //Otherwise, a normal item then just check and return type
-        if (item.label == label) type = item.type;
-      }
-    });
-    //Return FINAL RESULT
-    return type;
-  };
-
-  let onDropDownChange = (blockLabel: string) => {
-    //Get Current Type (ex: H3 => header-there)
-    let blockType = getTypeFromLabel(blockLabel);
-    //; ///< Logging
-    toggleBlock(blockType);
-  };
-
-  return (
-    <div
-      style={{
-        display: "flex"
-      }}
-    >
-      {itemGroups.map((groupID, gidx) => {
-        return (
-          <SafeWrapper>
-            {blockTypes.map((item, idx) => {
-              if (item.dropDown)
-                return (
-                  <DropDown
-                    className="t-dropDown"
-                    onChange={onDropDownChange}
-                    container={container}
-                    icon={item.icon}
-                    editorState={props.appState.editorState}
-                  >
-                    {item.groupID == groupID &&
-                      item.dropDown.items.map((dropItem, dIdx) => {
-                        if (dropItem.icon)
-                          return (
-                            <SafeWrapper key={dIdx}>
-                              {dropItem.icon} <span>{dropItem.label}</span>
-                            </SafeWrapper>
-                          );
-                        else return dropItem.label;
-                      })}
-                  </DropDown>
-                );
-            })}
-
-            <div className="t-group" key={gidx}>
-              {blockTypes.map((item, idx) => {
-                if (item.group  ID == groupID && !item.dropDown) {
-                  return (
-                    <div
-                      className={
-                        "t-item " +
-                        (currentBlockType == item.type ? "toggle" : "")
-                      }
-                      key={item.label}
-                      onMouseDown={e => {
-                        e.preventDefault();
-                        toggleBlock(item.type);
-                      }}
-                    >
-                      <div className="t-icon">{item.icon}</div>
-                    </div>
-                  );
-                }
-              })}
-            </div>
-          </SafeWrapper>
-        );
-      })}
-    </div>
-  );
-};
-
-*/
-
-/*
-
-          return <div className="t-dropDown" key={gidx}>
-            {blockTypes.map((item, idx) => {
-              if (item.groupID == groupID)
-                return <div className="t-dropDown-item" key={item.label}>{item.icon
-                    ? item.icon
-                    : item.label}</div>
-            })}
-          </div>
-
-*/
-
-//Default Props
-/*RenderBlockTypes.defaultProps = {
-  inDropDown: true
-};*/
-
-//WAN PASS: 03121947 WAN USER: 036637038

@@ -6,12 +6,6 @@ import { AppState } from "./store";
 import Draft from "./components/draft";
 import ToolBar from "./components/toolBar";
 
-import {
-  Editor as ED,
-  EditorState as EDS,
-  RichUtils,
-  Modifier
-} from "draft-js";
 import { EventEmitter } from "events";
 
 export interface EditorProps {

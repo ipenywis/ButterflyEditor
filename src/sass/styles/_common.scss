@@ -1,3 +1,11 @@
+//Hyper Link
+a {
+  &:focus {
+    outline: none;
+    border: 0;
+  }
+}
+
 //Block Quote Custom Style
 .draft {
   blockquote {
