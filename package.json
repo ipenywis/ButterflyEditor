@@ -25,6 +25,7 @@
     "@types/react-dom": "^16.0.6",
     "@types/react-test-renderer": "^16.0.3",
     "awesome-typescript-loader": "^5.2.0",
+    "babel-jest": "^23.6.0",
     "create-react-app": "^2.1.1",
     "css-loader": "^1.0.0",
     "enzyme": "^3.7.0",
@@ -72,6 +73,7 @@
     "react-click-outside": "github:tj/react-click-outside",
     "react-dom": "^16.4.1",
     "react-icons-kit": "^1.1.5",
+    "react-monaco-editor": "^0.21.0",
     "react-outside-click-handler": "^1.2.2",
     "react-transition-group": "^2.4.0"
   }

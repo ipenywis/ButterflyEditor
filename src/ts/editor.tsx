@@ -8,8 +8,14 @@ import ToolBar from "./components/toolBar";
 
 import { EventEmitter } from "events";
 
+//Editor Config
+import { EditorConfig, DEFAULT_CONFIG } from "./editorConfig";
+
 export interface EditorProps {
   appState?: AppState;
+
+  //Editor Configuration (Optional)
+  config?: EditorConfig;
 
   setAppState?: (newState: any, callback?: () => void) => void;
   setAppStateClb?: (callback: (prevState: AppState) => void) => void;
@@ -29,7 +35,11 @@ export interface EditorState {
 export default class Editor extends React.Component<EditorProps, EditorState> {
   state: EditorState;
   editorContainer: HTMLDivElement;
-  draft: Draft;
+  private draft: Draft;
+
+  static defaultProps = {
+    config: DEFAULT_CONFIG
+  };
 
   constructor(props: EditorProps) {
     super(props);
@@ -79,8 +89,16 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
     });
   }
 
+  public getHTML() {
+    return this.draft.getHTML();
+  }
+
+  //TODO: Add MARKUP Export Support
+
   //TODO: Add Default Editor Startup Styles and Block Types
   render() {
+    const { config } = this.props;
+
     return (
       <div
         className="editor-container"
@@ -96,7 +114,10 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
         />
         <Draft
           appState={this.props.appState}
-          isEditorResizable={this.state.isEditorResizable}
+          isEditorResizable={
+            this.state.isEditorResizable && config.allowEditorFullExpand
+          }
+          allowHTMLExport={config.allowHTMLExport}
           setAppState={this.props.setAppState}
           on={this.props.on}
           emit={this.props.emit}

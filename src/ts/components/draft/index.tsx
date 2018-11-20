@@ -44,6 +44,7 @@ import Decorators from "./decorators";
 export interface DraftProps {
   appState?: AppState;
   isEditorResizable?: boolean;
+  allowHTMLExport?: boolean;
 
   setAppState?: (newState: any, callback?: () => void) => void;
 
@@ -61,6 +62,8 @@ export interface DraftState {
 
   isResizeMouseDown: boolean;
   mouseOffsetY: number;
+
+  html: string;
 }
 
 export default class Draft extends React.Component<DraftProps, DraftState> {
@@ -69,7 +72,8 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   draftEditor: HTMLDivElement;
 
   static defaultProps = {
-    isEditorResizable: true
+    isEditorResizable: true,
+    allowHTMLExport: true
   };
 
   constructor(props: DraftProps) {
@@ -77,7 +81,8 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     this.state = {
       height: 150,
       isResizeMouseDown: false,
-      mouseOffsetY: 0
+      mouseOffsetY: 0,
+      html: ""
     };
   }
 
@@ -183,19 +188,39 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     this.updateDraftEditor(newEditorState);
   }
 
-  render() {
-    //Quick Extract
-    let { appState } = this.props;
+  public getHTML(): string {
+    //Make sure that HTML Exporting is Allowed!
+    return this.props.allowHTMLExport
+      ? this.exportHTML()
+      : "HTML EXPORT IS DISABLED!";
+  }
+
+  private exportHTML(): string {
+    //export HTML into State
+    const { appState } = this.props;
+    const { editorState } = appState;
+    //Current Content
+    const contentState = editorState.getCurrentContent();
     //Get Inlines style for blocks
     const currentInlineStyles = createStyle.exporter(appState.editorState);
-    //ContentState
-    const contentState = appState.editorState.getCurrentContent();
-    //Convert it to plain HTML with inline styles
-    const htmlCode = stateToHTML(contentState, {
+    const html: string = stateToHTML(contentState, {
       inlineStyles: currentInlineStyles,
       entityStyleFn: exportOptions.entityStyleFn,
       blockRenderers: exportOptions.blockRenderers(contentState)
     });
+    //Update State
+    this.setState({ html });
+
+    return html;
+  }
+
+  render() {
+    //Quick Extract
+    const { appState } = this.props;
+    //export HTML into State
+    const html = appState.showDraftHTML ? this.getHTML() : "<p></p>";
+
+    console.log("HTML FROM DRAFT COMPONENT: ", html);
 
     return (
       <SafeWrapper style={{ position: "relative", flexDirection: "column" }}>
@@ -226,7 +251,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
                 name="draftHtml"
                 id="draftHtml"
                 className="ip-scrollbar-v2"
-                defaultValue={htmlCode}
+                defaultValue={html}
                 onChange={this.onHTMLEditorChange.bind(this)}
               />
             </div>

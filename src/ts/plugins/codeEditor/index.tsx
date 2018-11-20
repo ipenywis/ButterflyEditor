@@ -6,24 +6,13 @@ import Popup from "../../components/popup";
 import { Icon } from "react-icons-kit";
 import { terminal } from "react-icons-kit/fa/";
 
-import {
-  Editor,
-  EditorState,
-  SelectionState,
-  Entity,
-  ContentState,
-  Modifier
-} from "draft-js";
+import { Editor, EditorState } from "draft-js";
 
 //Appstate
 import { AppState } from "../../store";
 
 //Events
 import { EventEmitter } from "events";
-
-//Monaco Microsoft VSCode Code Editor
-import * as monaco from "monaco-editor";
-//const monaco = require("monaco-editor/min/vs/editor/editor.main.js");
 
 //Style
 import "./style.scss";
@@ -52,6 +41,16 @@ import Decorators from "../../components/draft/decorators";
 import * as Prism from "prismjs";
 import { addEntityImportRule } from "../../components/draft/importOptions";
 
+//Monaco
+/*import {
+  languages as MONACO_LANGUAGES,
+  editor as MONACO_EDITOR
+} from "monaco-editor";
+*/
+import * as MONACO from "monaco-editor";
+//React Monaco Editor Comp
+import MonacoEditor from "react-monaco-editor";
+
 interface CodeEditorProps {
   editorState: EditorState;
   editor: Editor;
@@ -72,14 +71,14 @@ interface CodeEditorState {
   allowDiscardNoWarning: boolean;
   isWarningOpen: boolean;
   preventSubmit: boolean;
-  defaultEditorValue: string;
+  code: string;
   currentlanguage: string;
   isEditMode: boolean;
   codeEditorEntityKey: string; ///< Keep track of the Entity Key of the current Code Snippet Instance which to be changed/updated
 }
 
 //Monaco Programming Language Type Abstract
-type MonacoLanguage = monaco.languages.ILanguageExtensionPoint;
+type MonacoLanguage = MONACO.languages.ILanguageExtensionPoint;
 
 //Monaco Programming Languages Select Renderer
 const LanguagesRenderer: ItemRenderer<string> = (
@@ -121,7 +120,7 @@ export default class CodeEditor extends React.Component<
   //Code Editor Container
   editor: HTMLDivElement;
   //Editor Instance
-  codeEditor: monaco.editor.IStandaloneCodeEditor;
+  codeEditor: MONACO.editor.IStandaloneCodeEditor;
 
   constructor(props: CodeEditorProps) {
     super(props);
@@ -129,7 +128,7 @@ export default class CodeEditor extends React.Component<
       allowDiscardNoWarning: true,
       isWarningOpen: false,
       preventSubmit: true,
-      defaultEditorValue: null,
+      code: null,
       currentlanguage: "javascript", ///< Javascript by default
       isEditMode: false,
       codeEditorEntityKey: null
@@ -137,23 +136,14 @@ export default class CodeEditor extends React.Component<
   }
 
   onOpen() {
-    const { defaultEditorValue, currentlanguage } = this.state;
-    //Create and Add Monaco Editor to #code-editor Container
-    /*SAMPLE VALUE: ["function x() {", '\tconsole.log("Hello world!");', "}"].join(
-        "\n"
-        )*/
-    this.codeEditor = monaco.editor.create(this.editor, {
-      value: defaultEditorValue,
-      theme: "vs-dark",
-      language: currentlanguage
-    });
+    const { code, currentlanguage } = this.state;
+    //Get Monaco Editor Reference
+    this.codeEditor = (this.refs.monaco as any).editor.getModel();
+
     //Register Code Editor Specific Events
     this.codeEditor.onDidChangeModelContent(modal => {
       //Validate Code Make sure it's (NotEmpty)
-      if (
-        !this.codeEditor.getValue() ||
-        this.codeEditor.getValue().trim() == ""
-      )
+      if (!code || code.trim() == "")
         this.setState({ preventSubmit: true, allowDiscardNoWarning: true });
       else
         this.setState({ preventSubmit: false, allowDiscardNoWarning: false });
@@ -164,7 +154,7 @@ export default class CodeEditor extends React.Component<
   OpenWithCode(entityKey: string, codeText: string) {
     //Set Default Editor's Code Text Value
     this.setState({
-      defaultEditorValue: codeText,
+      code: codeText,
       isEditMode: true,
       codeEditorEntityKey: entityKey
     });
@@ -201,14 +191,14 @@ export default class CodeEditor extends React.Component<
   onCodeSnippetUpdate() {
     //const newEntityInstance = Entity.mergeData("je", { data: "nme" });
     const { editorState, updateEditorState } = this.props;
-    const { codeEditorEntityKey, currentlanguage } = this.state;
+    const { codeEditorEntityKey, currentlanguage, code } = this.state;
     //Update Entity data by merging it
     const newEditorState = mergeEntityData(
       editorState,
       Decorators(this.props.emit, this.props.on),
       codeEditorEntityKey,
       {
-        code: this.codeEditor.getValue(),
+        code,
         language: currentlanguage ? currentlanguage : "javascript"
       }
     );
@@ -225,7 +215,10 @@ export default class CodeEditor extends React.Component<
 
   updateCurrentLanguage(language: string) {
     //Update Monaco Editor Model
-    monaco.editor.setModelLanguage(this.codeEditor.getModel(), language);
+    (this.refs.monaco as any).editor.setModelLanguage(
+      this.codeEditor.getModel(),
+      language
+    );
     //Update State
     this.setState({ currentlanguage: language });
   }
@@ -237,7 +230,7 @@ export default class CodeEditor extends React.Component<
       this.OpenWithCode(data[0], data[1]);
     });
 
-    //Add Code Snippet Import Rule (for importing pre code from HTML)
+    //Add Code Snippet Import Rule (for importing (<pre> <code>) from HTML)
     addEntityImportRule(
       "CODE_SNIPPET",
       element => {
@@ -270,6 +263,10 @@ export default class CodeEditor extends React.Component<
     }
   }
 
+  onCodeEditorValueChange(newCodeValue: string) {
+    this.setState({ code: newCodeValue });
+  }
+
   render() {
     const {
       isDisabled,
@@ -279,7 +276,7 @@ export default class CodeEditor extends React.Component<
       on,
       emit
     } = this.props;
-    const { currentlanguage, isEditMode } = this.state;
+    const { code, currentlanguage, isEditMode } = this.state;
 
     let popupInline = false;
 
@@ -291,7 +288,7 @@ export default class CodeEditor extends React.Component<
 
     //Available Code Editor Programming Languages
     const LanguagesSelect = Select.ofType<string>();
-    const monacoLanguages = monaco.languages.getLanguages();
+    const monacoLanguages = MONACO.languages.getLanguages();
     //Only show the supported languages by the prism code highlighter (at least for now!)
     const prismSupportedLanguages: string[] = Object.keys(Prism.languages);
 
@@ -318,8 +315,15 @@ export default class CodeEditor extends React.Component<
             minHeight: "28em",
             maxHeight: "30em"
           }}
-          ref={editor => (this.editor = editor)}
-        />
+        >
+          <MonacoEditor
+            language={currentlanguage}
+            theme={"vs-dark"}
+            value={code}
+            onChange={this.onCodeEditorValueChange.bind(this)}
+            ref="monaco"
+          />
+        </div>
       </div>
     );
 

@@ -1,5 +1,5 @@
 module.exports = {
-  roots: ["<rootDir>/src", "<rootDir>"],
+  roots: ["<rootDir>"],
   transform: {
     "^.+\\.tsx?$": "ts-jest",
     "^.+\\.jsx?$": "babel-jest"
@@ -9,6 +9,7 @@ module.exports = {
   setupFiles: ["./src/ts/setupTests.ts"],
   moduleNameMapper: {
     "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js",
-    "\\.(otf|ttf)$": "<rootDir>/__mocks__/fontMock.js"
+    "\\.(otf|ttf)$": "<rootDir>/__mocks__/fontMock.js",
+    "monaco-editor": "<rootDir>/__mocks__/fontMock.js"
   }
 };
