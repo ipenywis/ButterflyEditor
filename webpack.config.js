@@ -1,19 +1,34 @@
+"use strict";
+
 let ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 
 let path = require("path");
 
 //Monaco Code Editor Plugin
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+//Monaco Editor Config
+const MonacoWebpackConfig = require("./monacoEditorConfig");
 
 //Webpack Extract Text Plugin
 let ExtractText = new ExtractTextWebpackPlugin("app.css");
 
+//Mini CSS Extract Plugin
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+//Webpack Analyzer
+const WebpacBundleAnalyzer = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
+
+//Temp
+const devMode = true;
+
 let config = {
-  entry: path.resolve("./app.ts"),
-  mode: "development",
+  entry: path.resolve("./app.tsx"),
+  mode: devMode ? "development" : "production",
   output: {
     filename: "app.js",
     path: path.resolve("./dist"),
+    chunkFilename: "[name].js",
     library: "opentok-ux-components",
     libraryTarget: "umd",
     umdNamedDefine: true
@@ -45,7 +60,7 @@ let config = {
         test: /\.js$/,
         loader: "source-map-loader"
       },*/
-      {
+      /*{
         test: /\.scss$/,
         use: ExtractTextWebpackPlugin.extract({
           fallback: "style-loader",
@@ -58,6 +73,38 @@ let config = {
           fallback: "style-loader",
           use: ["css-loader"]
         })
+      },*/
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: devMode
+          ? ExtractTextWebpackPlugin.extract({
+              fallback: "style-loader",
+              use: ["css-loader", "sass-loader"]
+            })
+          : [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: "css-loader",
+                options: {
+                  minimize: {
+                    safe: true
+                  }
+                }
+              },
+              /*{
+                loader: "postcss-loader"
+                /*options: {
+                  autoprefixer: {
+                    browsers: ["last 2 versions"]
+                  },
+                  plugins: () => [autoprefixer]
+                }
+      },*/
+              {
+                loader: "sass-loader",
+                options: {}
+              }
+            ]
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -86,7 +133,33 @@ let config = {
     ]
   },
 
-  plugins: [ExtractText, new MonacoWebpackPlugin()]
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          name: "commons",
+          chunks: "all",
+          enforce: true
+        },
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all"
+        }
+      }
+    }
+  },
+
+  plugins: [
+    ///new WebpacBundleAnalyzer(),
+    !devMode
+      ? new MiniCssExtractPlugin({
+          filename: devMode ? "[name].css" : "[name].[hash].css",
+          chunkFilename: devMode ? "[id].css" : "[id].[hash].css"
+        })
+      : ExtractText,
+    new MonacoWebpackPlugin(MonacoWebpackConfig)
+  ]
 };
 
 //Export Config

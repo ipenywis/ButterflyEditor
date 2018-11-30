@@ -16,24 +16,15 @@ import { SafeWrapper } from "../../components/common";
 import "./style.scss";
 
 //Blueprint Components
-import { Slider, Checkbox } from "@blueprintjs/core";
+import { Slider } from "@blueprintjs/core";
 
 //Main App State
 import { AppState } from "../../store";
 
 //Color
 import * as Color from "color";
-import {
-  EditorState,
-  Editor,
-  SelectionState,
-  ContentState,
-  RichUtils
-} from "draft-js";
-import inlineStyle, {
-  IStyle,
-  ICreateStyle
-} from "../../components/toolBar/inlineStyle";
+import { EditorState, Editor } from "draft-js";
+import { ICreateStyle } from "../../components/toolBar/inlineStyle";
 import { EventEmitter } from "events";
 
 interface ColorPickerProps {
@@ -59,10 +50,7 @@ interface ColorPickerState {
   colorBackground: boolean;
 }
 
-export default class ColorPicker extends Plugin<
-  ColorPickerProps,
-  ColorPickerState
-> {
+export class ColorPicker extends Plugin<ColorPickerProps, ColorPickerState> {
   state: ColorPickerState;
   //Picker
   private picker: Picker;

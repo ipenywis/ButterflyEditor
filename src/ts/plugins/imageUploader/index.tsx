@@ -31,7 +31,7 @@ import {
 import axios, { AxiosResponse } from "axios";
 
 //Image
-import ImageReader, { IImage, IImageType } from "../../utils/imageReader";
+import ImageReader, { IImage } from "../../utils/imageReader";
 
 //Icons
 import { Icon } from "react-icons-kit";
@@ -83,7 +83,7 @@ interface ImageUploaderState {
   isImageLoading: boolean;
 }
 
-export default class ImageUploader extends React.Component<
+export class ImageUploader extends React.Component<
   ImageUploaderProps,
   ImageUploaderState
 > {

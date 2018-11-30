@@ -14,11 +14,6 @@ import * as Prism from "prismjs";
 //Prism CUSTOM CSS Style
 import "./atomDarkStyle.css";
 
-//Prism Decorator
-const PrismDecorator = require("draft-js-prism");
-
-//MultiDecorators Combiner
-import * as MultiDecorators from "draft-js-multidecorators";
 //Main App State
 import { AppState } from "../../../store";
 //Events
@@ -43,6 +38,12 @@ export default function(
   ) => {
     contentBlock.findEntityRanges(character => {
       const entityKey = character.getEntity();
+      console.log("CHECKING IF LINK");
+      if (
+        entityKey != null &&
+        contentState.getEntity(entityKey).getType() == "LINK"
+      )
+        console.log("THIS IS A LINK");
       return (
         entityKey != null &&
         contentState.getEntity(entityKey).getType() == "LINK"
@@ -60,6 +61,9 @@ export default function(
         textDecoration: "none",
         cursor: "text"
       }}*/
+
+    alert("Rendering LINK");
+
     return (
       <a href={url} target={target} className="dc-container">
         <span className="dc-icon">

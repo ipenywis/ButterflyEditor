@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import * as _ from "lodash";
+import { includes, without } from "lodash";
 
 import { AppState } from "../../store";
 
@@ -19,7 +19,6 @@ import { SafeWrapper, insertBlock } from "../common";
 
 //Create Inline Custom Styles
 import createStyle, {
-  customStyles,
   ICreateStyle,
   IStyle,
   getStringValue
@@ -142,7 +141,7 @@ export default class Controls extends React.Component<ControlsProps> {
     this.props.inlineStyles.map((item, idx) => {
       // Array has all the other items but the one we are comaparing! let subArray =
       // this.props.toolbarItems.splice(idx, 1);
-      if (!_.includes(styleItemGroups, item.groupID)) {
+      if (!includes(styleItemGroups, item.groupID)) {
         //Only Add it to the Already In list if not already
         styleItemGroups.push(item.groupID);
       }
@@ -151,7 +150,7 @@ export default class Controls extends React.Component<ControlsProps> {
     /* Block Types Groups */
     let blockItemGroups: number[] = [];
     this.props.blockTypes.map((item, idx) => {
-      if (!_.includes(blockItemGroups, item.groupID)) {
+      if (!includes(blockItemGroups, item.groupID)) {
         blockItemGroups.push(item.groupID);
       }
     });
@@ -236,10 +235,10 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
   //Toggle Active State of an item (button, dropDown or popup)
   const toggleActive = (label: string) => {
     //Check if it already exists in the current active items array
-    if (_.includes(appState.activeItems, label)) {
+    if (includes(appState.activeItems, label)) {
       //Remove it  (not active anymore)
       console.warn("LABEL: ", label, "Before removing: ", appState.activeItems);
-      let newActiveItems = _.without(appState.activeItems, label);
+      let newActiveItems = without(appState.activeItems, label);
       console.warn("After removing: ", newActiveItems);
       setAppState({ activeItems: newActiveItems });
     } else {
@@ -361,7 +360,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
   const isActive = (item: ToolbarItem): boolean => {
     if (item.onSelect) {
       //TODO: Implement onSelect
-      return _.includes(appState.activeItems, item.label);
+      return includes(appState.activeItems, item.label);
     } else if (item.customStyles) {
       //All Custom Styles need to be checked
       let active = true;
@@ -384,10 +383,9 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
         //Temp Styles Arr
         let arr = [...currentStyle.values()];
         //Always use it's label since DropDown is does the checking on the label only
-        if (_.includes(arr, dpItem.label))
+        if (includes(arr, dpItem.label))
           dropDownActiveStyles.push(dpItem.label);
-        if (_.includes(arr, dpItem.type))
-          dropDownActiveStyles.push(dpItem.label);
+        if (includes(arr, dpItem.type)) dropDownActiveStyles.push(dpItem.label);
       });
     }
   });
@@ -482,8 +480,8 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
                         (isDisabled(item)
                           ? "disabled"
                           : isActive(item)
-                            ? "toggle"
-                            : "")
+                          ? "toggle"
+                          : "")
                       }
                       key={item.label || idx}
                       onMouseDown={e => {
@@ -545,10 +543,10 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
   //Toggle Active State of an item (button, dropDown or popup)
   const toggleActive = (label: string) => {
     //Check if it already exists in the current active items array
-    if (_.includes(appState.activeItems, label)) {
+    if (includes(appState.activeItems, label)) {
       //Remove it  (not active anymore)
       console.warn("LABEL: ", label, "Before removing: ", appState.activeItems);
-      let newActiveItems = _.without(appState.activeItems, label);
+      let newActiveItems = without(appState.activeItems, label);
       console.warn("After removing: ", newActiveItems);
       setAppState({ activeItems: newActiveItems });
     } else {
@@ -669,7 +667,7 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
     console.warn("Current Style: ", currentBlockType);
     if (item.onSelect) {
       //TODO: Implement onSelect
-      return _.includes(appState.activeItems, item.label);
+      return includes(appState.activeItems, item.label);
     } else {
       //Use the Type to check for currently toggeled style
       return currentBlockType.getType() == item.type;
@@ -682,10 +680,9 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
     if (block.dropDown) {
       block.dropDown.items.map(dpItem => {
         let arr = [...currentBlockType.values()];
-        if (_.includes(arr, dpItem.label))
+        if (includes(arr, dpItem.label))
           dropDownActiveStyles.push(dpItem.label);
-        if (_.includes(arr, dpItem.type))
-          dropDownActiveStyles.push(dpItem.label);
+        if (includes(arr, dpItem.type)) dropDownActiveStyles.push(dpItem.label);
       });
     }
   });
@@ -781,8 +778,8 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
                         (isDisabled(item)
                           ? "disabled"
                           : isActive(item)
-                            ? "toggle"
-                            : "")
+                          ? "toggle"
+                          : "")
                       }
                       key={item.label || idx}
                       onMouseDown={e => {

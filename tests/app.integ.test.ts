@@ -1,5 +1,5 @@
 //Integration Test the Editor
-import * as React from "react";
+/*import * as React from "react";
 import * as ReactDOM from "react-dom";
 //Flux Store
 import Store from "../src/ts/store";
@@ -20,4 +20,4 @@ describe("Initialize the Butterfly Editor", () => {
 
     expect(sut.find("#main-draft-container")).toBeDefined();
   });
-});
+});*/

@@ -5,7 +5,6 @@ import * as _ from "lodash";
 
 //Icon
 import { Icon } from "react-icons-kit";
-import { bold } from "react-icons-kit/fa/";
 import { chevronDown } from "react-icons-kit/fa/chevronDown";
 
 import { SafeWrapper } from "../common";
@@ -14,7 +13,6 @@ import { SafeWrapper } from "../common";
 import OutsideClickHandler from "react-outside-click-handler";
 
 //Create Styles
-import createStyle from "./inlineStyle";
 import { EditorState } from "draft-js";
 
 export interface DropDownProps {

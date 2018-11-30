@@ -1,0 +1,37 @@
+@import "./common/common.scss";
+
+.main-container {
+  .form-group.inner-container {
+    .form-group.label {
+      margin-bottom: 5px;
+      font-size: 16px;
+      &.info {
+        color: $muted-text-color;
+        font-size: 13px;
+      }
+    }
+
+    .form-group.content {
+      margin-bottom: 5px;
+    }
+
+    .form-group.helper-text {
+      font-size: 13px;
+      &.intent-primary {
+        color: $intent-primary-color;
+      }
+
+      &.intent-success {
+        color: $intent-success-color;
+      }
+
+      &.intent-danger {
+        color: $intent-danger-color;
+      }
+
+      &.intent-info {
+        color: $intent-info-color;
+      }
+    }
+  }
+}

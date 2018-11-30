@@ -21,7 +21,11 @@ import { Icon } from "react-icons-kit";
 import { flag } from "react-icons-kit/fa/";
 
 //Blueprintjs
-import { FormGroup, InputGroup, AnchorButton, Intent } from "@blueprintjs/core";
+import { AnchorButton } from "@blueprintjs/core";
+
+import FormGroup from "../components/formGroup";
+import InputGroup from "../components/inputGroup";
+import { Intent } from "../components/intent";
 
 interface AnchorProps {
   editorState: EditorState;
@@ -44,7 +48,7 @@ interface AnchorState {
   error: string;
 }
 
-export default class Anchor extends React.Component<AnchorProps, AnchorState> {
+export class Anchor extends React.Component<AnchorProps, AnchorState> {
   state: AnchorState; ///< Comp State
   popup: Popup;
   anchorInput: HTMLInputElement;
@@ -75,6 +79,7 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
     //Validate Anchor Input
     const { editorState, updateEditorState } = this.props;
     const { anchor } = this.state;
+    console.log("Anchor: ", anchor);
     if (!anchor) {
       this.setError("Please Specify Anchor Name");
       return;
@@ -92,6 +97,7 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
     );
     //Update Editor State
     updateEditorState(newEditorState);
+    alert("Here");
     //Hide Link Popup
     this.popup.closePopup();
   }
@@ -179,9 +185,24 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
     const container = (
       <div className="inner-container">
         <FormGroup
+          label="Anchor Text"
+          helperText={error ? error : "Choose a valid name for Anchors"}
+          labelInfo="required"
+          intent={error ? Intent.DANGER : Intent.PRIMARY}
+        >
+          <InputGroup
+            placeholder="Text"
+            intent={error ? Intent.DANGER : Intent.PRIMARY}
+            onChange={this.onAnchorChange.bind(this)}
+            onKeyPress={this.handleKeyPress.bind(this)}
+            inputRef={input => (this.anchorInput = input)}
+          />
+        </FormGroup>
+
+        {/*<FormGroup
           helperText={error ? error : "Choose a valid name for Anchors"}
           label="Set an Anchor"
-          labelFor="anchor-input"
+          labelFor="anchor-input" 
           labelInfo="required"
           intent={error ? Intent.DANGER : Intent.PRIMARY}
         >
@@ -194,7 +215,7 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
             onChange={this.onAnchorChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}
           />
-        </FormGroup>
+        </FormGroup>*/}
       </div>
     );
     //Footer
@@ -203,7 +224,6 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
         <AnchorButton
           text={current == "anchor" ? "set" : "remove"}
           minimal={true}
-          intent={Intent.PRIMARY}
           onClick={
             current == "anchor"
               ? this.onAnchorSubmit.bind(this)
@@ -215,7 +235,7 @@ export default class Anchor extends React.Component<AnchorProps, AnchorState> {
             type="submit"
             text="update"
             minimal={true}
-            intent={Intent.WARNING}
+            intent="warning"
             onClick={this.onAnchorSubmit.bind(this)}
           />
         )}

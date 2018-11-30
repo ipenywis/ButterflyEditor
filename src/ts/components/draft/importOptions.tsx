@@ -6,8 +6,6 @@ import { EntityInstance, DefaultDraftBlockRenderMap } from "draft-js";
 
 import { Map } from "immutable";
 
-import * as React from "react";
-
 //Entity Rule For adding Entities Import Rules (type and data)
 export interface EntityRule {
   entityType: string;

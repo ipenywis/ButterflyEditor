@@ -36,3 +36,8 @@ declare module "draft-js-prism";
 declare module "draft-js-multidecorators";
 
 //declare module ""  "../draft-js-utils/packages/draft-js-import-html/typings/index.d.ts";
+
+//Monaco Languages
+declare module "monaco-languages/*";
+//Monaco Editor MINIFIED Version
+declare module "monaco-editor/*";

@@ -3,8 +3,7 @@ import {
   ContentState,
   DraftEntityMutability,
   AtomicBlockUtils,
-  Modifier,
-  Entity
+  Modifier
 } from "draft-js";
 
 import RichUtils from "../toolBar/richUtils";
@@ -56,7 +55,9 @@ export const applyEntity = (
     entityKey
   );*/
 
-  /* return EditorState.set(editorState, {
+  //console.log("Entity: ", contentStateWithAppliedEntity.getEntity(entityKey));
+
+  /*return EditorState.set(editorState, {
     currentContent: contentStateWithAppliedEntity
   });*/
 

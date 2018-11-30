@@ -2,11 +2,6 @@ import * as React from "react";
 
 import { EditorState, Editor } from "draft-js";
 
-//Style Map
-import { defaultStyleMap } from "./components/toolBar/inlineStyle";
-
-import Popup from "./components/popup";
-
 //Event Emitter
 import { EventEmitter } from "events";
 

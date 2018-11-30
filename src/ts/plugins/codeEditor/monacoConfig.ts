@@ -1,4 +1,2 @@
 //Monaco Code Editor Custom Configuration
-export default {
-  output: {}
-};
+export const registerEditorLanguages = (languages: string[]) => {};

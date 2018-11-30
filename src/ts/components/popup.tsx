@@ -12,7 +12,6 @@ import { SafeWrapper } from "./common";
 
 import createStyle, { IStyle, ICreateStyle } from "./toolBar/inlineStyle";
 import { EditorState, Editor, RichUtils, Modifier } from "draft-js";
-import { Popover } from "@blueprintjs/core";
 
 //Main App State
 import { AppState } from "../store";

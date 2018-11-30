@@ -2,7 +2,6 @@
 
 //Crypt-js used for Base64 encoding/decoding
 import { enc } from "crypto-js";
-import { BREADCRUMBS_COLLAPSED } from "@blueprintjs/core/lib/esm/common/classes";
 
 //Axios for Sending HTTP Requests
 import axios from "axios";

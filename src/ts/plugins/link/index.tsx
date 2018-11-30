@@ -54,7 +54,7 @@ interface LinkState {
   openNewTab: boolean;
 }
 
-export default class Link extends React.Component<LinkProps, LinkState> {
+export class Link extends React.Component<LinkProps, LinkState> {
   popup: Popup;
   linkInput: HTMLInputElement;
 

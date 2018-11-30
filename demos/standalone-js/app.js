@@ -13,4 +13,4 @@ EditorCreator.createEditor("editor-root-container").then(editorInstance => {
 //ADD ME
 //CHANGED HAHA
 
-console.log("testy ANOTHER ONE");
+console.log("testy ANOTHER ONE eee");

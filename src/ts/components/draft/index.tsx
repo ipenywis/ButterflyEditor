@@ -3,7 +3,7 @@
 import * as React from "react";
 
 //Draftjs
-import { Editor, EditorState, DefaultDraftBlockRenderMap } from "draft-js";
+import { Editor, EditorState } from "draft-js";
 
 import { AppState } from "../../store";
 
@@ -20,23 +20,17 @@ import {
 } from "./details";
 
 //Style Map
-import createStyle, { getCSSPropertyOfStyle } from "../toolBar/inlineStyle";
+import createStyle from "../toolBar/inlineStyle";
 import { EventEmitter } from "events";
 
 //State to HTML
 import { stateToHTML } from "draft-js-export-html";
 //HTML to State
 import { stateFromHTML } from "draft-js-import-html";
-//const me = require("../../../../../draft-js-utils/packages");
-
 //Custom Draftjs Export HTML Options
 import exportOptions from "./exportOptions";
 //Custom Import Options
 import importOptions, { customBlockRenderMap } from "./importOptions";
-
-import { has, get } from "lodash";
-
-import * as Immutable from "immutable";
 
 //TODO: Temp
 import Decorators from "./decorators";

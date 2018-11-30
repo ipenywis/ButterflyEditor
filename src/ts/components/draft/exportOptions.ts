@@ -1,8 +1,7 @@
 /* Custom Entity Style Function (How it gets converted to HTML) since Draftjs-export-html module doesn't support all of the tags and elements conversion */
 
-import { ContentBlock, ContentState, Entity, EntityInstance } from "draft-js";
+import { ContentBlock, ContentState, EntityInstance } from "draft-js";
 
-import * as Prism from "prismjs";
 import { renderCodeWithPrismString } from "./decorators/codeHighlighter";
 
 /**
