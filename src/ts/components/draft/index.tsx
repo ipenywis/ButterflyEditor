@@ -35,10 +35,14 @@ import importOptions, { customBlockRenderMap } from "./importOptions";
 //TODO: Temp
 import Decorators from "./decorators";
 
+import { parseSizeStr } from "../../utils/";
+
 export interface DraftProps {
   appState?: AppState;
   isEditorResizable?: boolean;
   allowHTMLExport?: boolean;
+
+  height?: string;
 
   setAppState?: (newState: any, callback?: () => void) => void;
 
@@ -57,6 +61,8 @@ export interface DraftState {
   isResizeMouseDown: boolean;
   mouseOffsetY: number;
 
+  allowEditorResize: boolean;
+
   html: string;
 }
 
@@ -73,8 +79,9 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   constructor(props: DraftProps) {
     super(props);
     this.state = {
-      height: 150,
+      height: props.height ? parseSizeStr(props.height) : 180,
       isResizeMouseDown: false,
+      allowEditorResize: true,
       mouseOffsetY: 0,
       html: ""
     };
@@ -135,7 +142,11 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   onResizeMouseMove(e: React.MouseEvent) {
     e.preventDefault();
     //Mouse is Down and Editor is Resizble
-    if (this.state.isResizeMouseDown && this.props.isEditorResizable) {
+    if (
+      this.state.isResizeMouseDown &&
+      this.props.isEditorResizable &&
+      this.state.allowEditorResize
+    ) {
       const currentHeight: number = parseInt(
         this.draftEditor.style.height.slice(
           0,
@@ -155,6 +166,14 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   setEditorHeight(newHeight: string) {
     //Set Editor's height
     this.draftEditor.style.height = newHeight;
+  }
+
+  enableEditorResize() {
+    this.setState({ allowEditorResize: true });
+  }
+
+  disableEditorResize() {
+    this.setState({ allowEditorResize: false });
   }
 
   onEditorFocus() {
@@ -202,19 +221,20 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
       entityStyleFn: exportOptions.entityStyleFn,
       blockRenderers: exportOptions.blockRenderers(contentState)
     });
-    //Update State
-    this.setState({ html });
 
     return html;
   }
 
+  componentDidUpdate() {
+    //const { showDraftHTML } = this.props.appState;
+    //this.setState({ html: showDraftHTML ? this.exportHTML() : "<p></p>" });
+  }
+
   render() {
     //Quick Extract
-    const { appState } = this.props;
+    const { appState, allowHTMLExport } = this.props;
     //export HTML into State
     const html = appState.showDraftHTML ? this.getHTML() : "<p></p>";
-
-    console.log("HTML FROM DRAFT COMPONENT: ", html);
 
     return (
       <SafeWrapper style={{ position: "relative", flexDirection: "column" }}>
@@ -247,6 +267,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
                 className="ip-scrollbar-v2"
                 defaultValue={html}
                 onChange={this.onHTMLEditorChange.bind(this)}
+                disabled={!allowHTMLExport}
               />
             </div>
           )}

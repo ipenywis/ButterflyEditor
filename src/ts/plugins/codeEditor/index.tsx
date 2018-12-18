@@ -16,17 +16,10 @@ import { EventEmitter } from "events";
 
 //Style
 import "./style.scss";
-//Blueprint
-import {
-  AnchorButton,
-  Intent,
-  Popover,
-  Position,
-  PopoverInteractionKind,
-  MenuItem
-} from "@blueprintjs/core";
-//Blueprint Select
-import { Select, ItemRenderer, ItemPredicate } from "@blueprintjs/select";
+
+import Button from "../components/button";
+import { Intent } from "../components/intent";
+import Popover from "../components/popover";
 
 //Entity
 import {
@@ -83,37 +76,6 @@ interface CodeEditorState {
 //Monaco Programming Language Type Abstract
 //type MonacoLanguage = any //MONACO_LANGUAGES.ILanguageExtensionPoint;
 
-//Monaco Programming Languages Select Renderer
-const LanguagesRenderer: ItemRenderer<string> = (
-  language,
-  { handleClick, modifiers }
-) => {
-  /*if (!(modifiers as any).filtered) {
-    return null;
-  }*/
-  return (
-    <MenuItem
-      active={modifiers.active}
-      key={language}
-      label={language}
-      text={language}
-      onClick={handleClick}
-    />
-  );
-};  
-
-//Monaco Languages Predicte Filter
-const filterLanguages: ItemPredicate<string> = (query, language) => {
-  //Tell if the query string exists in the languages Array (Search Using Language ID or Most Releavent Aliase)
-  //If using Monaco Editor Supported Languages (use Monacolanguage) but for now we only need
-  //the supported Prism languages (which could be highlighted)
-  /*return (
-    language.aliases[0].toLowerCase().indexOf(query.toLowerCase()) >= 0 ||
-    language.id.toLowerCase().indexOf(query.toLowerCase()) >= 0
-  );*/
-  return language.toLowerCase().indexOf(query.toLowerCase()) >= 0;
-};
-
 export class CodeEditor extends React.Component<
   CodeEditorProps,
   CodeEditorState
@@ -161,14 +123,7 @@ export class CodeEditor extends React.Component<
 
     console.log("Monaco Languages: ", monaco.languages.getLanguages());
 
-    editor.onDidChangeModelContent(() => {
-      const { code } = this.state;
-      //Validate Code Make sure it's (NotEmpty)
-      if (!code || code === "" || code.trim() === "")
-        this.setState({ preventSubmit: true, allowDiscardNoWarning: true });
-      else
-        this.setState({ preventSubmit: false, allowDiscardNoWarning: false });
-    });
+    editor.onDidChangeModelContent(this.validateCode.bind(this));
   }
 
   //Open Code Editor with Code to Edit & Current Code Snippet Entity Key for Updating Entity Data
@@ -234,9 +189,9 @@ export class CodeEditor extends React.Component<
     //if (e.key == "Enter") this.onCodeSnippetAdd();
   }
 
-  updateCurrentLanguage(language: string) {
+  updateCurrentLanguage(e: React.ChangeEvent<HTMLSelectElement>) {
     //Update State
-    this.setState({ currentlanguage: language });
+    this.setState({ currentlanguage: e.currentTarget.value });
   }
 
   componentWillMount() {
@@ -274,16 +229,27 @@ export class CodeEditor extends React.Component<
     if (!this.state.allowDiscardNoWarning)
       this.setState({ isWarningOpen: true });
     else {
-      this.setState({ isWarningOpen: true });
+      this.setState({ isWarningOpen: false });
       this.popup.closePopup();
     }
   }
 
+  onCloseCrossClick(e: React.MouseEvent<any>) {
+    this.onDiscardCode();
+  }
+
+  validateCode(code: string) {
+    console.log(" CODE Changed: ", code);
+    //Validate Code Make sure it's (NotEmpty)
+    if (!code || code === "" || code.trim() === "")
+      this.setState({ preventSubmit: true, allowDiscardNoWarning: true });
+    else this.setState({ preventSubmit: false, allowDiscardNoWarning: false });
+  }
+
   onCodeEditorValueChange(newCodeValue: string) {
-    console.log("Value Updated..., ", newCodeValue);
-    this.setState({ code: newCodeValue }, () =>
-      console.log("State updated", this.state.code)
-    );
+    this.setState({ code: newCodeValue }, () => {
+      this.validateCode(newCodeValue);
+    });
   }
 
   render() {
@@ -305,8 +271,6 @@ export class CodeEditor extends React.Component<
     //Header
     const header = "Code Editor";
 
-    //Available Code Editor Programming Languages
-    const LanguagesSelect = Select.ofType<string>();
     //Only show the supported languages by the prism code highlighter (at least for now!)
     const prismSupportedLanguages: string[] = Object.keys(Prism.languages);
 
@@ -318,20 +282,16 @@ export class CodeEditor extends React.Component<
 
     //Container
     const container = (
-      <div onKeyPress={this.handleKeyPress.bind(this)}>
+      <div
+        style={{ width: "100%" }}
+        onKeyPress={this.handleKeyPress.bind(this)}
+      >
         <div className="language-select-container">
-          <LanguagesSelect
-            items={prismSupportedLanguages}
-            itemPredicate={filterLanguages}
-            itemRenderer={LanguagesRenderer}
-            noResults={<MenuItem disabled={true} text="No results." />}
-            onItemSelect={this.updateCurrentLanguage.bind(this)}
-          >
-            <AnchorButton
-              text={currentlanguage}
-              rightIcon={"double-caret-vertical"}
-            />
-          </LanguagesSelect>
+          <select onChange={this.updateCurrentLanguage.bind(this)}>
+            {prismSupportedLanguages.map((lang, idx) => {
+              return <option key={lang}>{lang}</option>;
+            })}
+          </select>
         </div>
         <div
           id="code-editor"
@@ -364,7 +324,7 @@ export class CodeEditor extends React.Component<
     //Footer
     const footer = (
       <div className="footer-container">
-        <AnchorButton
+        <Button
           className="btn"
           text={isEditMode ? "Update Snippet" : "Add Snippet"}
           intent={Intent.SUCCESS}
@@ -375,44 +335,46 @@ export class CodeEditor extends React.Component<
               : this.onCodeSnippetAdd.bind(this)
           }
         />
-        <Popover
-          interactionKind={PopoverInteractionKind.CLICK}
-          popoverClassName="bp3-popover-content-sizing"
-          position={Position.TOP}
-          isOpen={this.state.isWarningOpen}
-        >
-          <AnchorButton
-            className="btn"
-            intent={Intent.DANGER}
-            onClick={this.onDiscardCode.bind(this)}
-          >
-            Discard
-          </AnchorButton>
-          <div style={{ zIndex: 1000 }}>
-            <h4>Are you sure you want to Discard Code?</h4>
-            <p>All Code Will be Lost!</p>
-            <div className="footer-container">
-              {" "}
-              <AnchorButton
+        {
+          <Popover
+            popoverClassName="bp3-popover-content-sizing"
+            isOpen={this.state.isWarningOpen}
+            targetBtn={
+              <Button
                 className="btn"
                 intent={Intent.DANGER}
-                onClick={() => {
-                  this.setState({ isWarningOpen: false });
-                  this.popup.closePopup();
-                }}
+                onClick={this.onDiscardCode.bind(this)}
               >
-                OK
-              </AnchorButton>
-              <AnchorButton
-                className="btn"
-                intent={Intent.PRIMARY}
-                onClick={() => this.setState({ isWarningOpen: false })}
-              >
-                No, Continue
-              </AnchorButton>{" "}
+                Discard
+              </Button>
+            }
+          >
+            <div style={{ zIndex: 1000 }}>
+              <h4>Are you sure you want to Discard Code?</h4>
+              <p>All Code Will be Lost!</p>
+              <div className="footer-container">
+                {" "}
+                <Button
+                  className="btn"
+                  intent={Intent.DANGER}
+                  onClick={() => {
+                    this.setState({ isWarningOpen: false });
+                    this.popup.closePopup();
+                  }}
+                >
+                  OK
+                </Button>
+                <Button
+                  className="btn"
+                  intent={Intent.PRIMARY}
+                  onClick={() => this.setState({ isWarningOpen: false })}
+                >
+                  No, Continue
+                </Button>{" "}
+              </div>
             </div>
-          </div>
-        </Popover>
+          </Popover>
+        }
       </div>
     );
 
@@ -447,6 +409,7 @@ export class CodeEditor extends React.Component<
       <Popup
         isInline={popupInline}
         isDisabled={isDisabled}
+        usePortal={false}
         canOutsideClose={false}
         icon={icon}
         editorState={editorState}
@@ -467,7 +430,7 @@ export class CodeEditor extends React.Component<
           maxHeight: "30em",
           padding: 0
         }}
-        onCloseCross={() => this.setState({ isWarningOpen: true })}
+        onCloseCross={this.onCloseCrossClick.bind(this)}
         container={container}
         footer={footer}
         didOpen={this.onOpen.bind(this)}

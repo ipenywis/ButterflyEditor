@@ -14,14 +14,11 @@ import { EventEmitter } from "events";
 import { Icon } from "react-icons-kit";
 import { link } from "react-icons-kit/fa/";
 
-//Blueprint
-import {
-  FormGroup,
-  InputGroup,
-  Intent,
-  AnchorButton,
-  Checkbox
-} from "@blueprintjs/core";
+import FormGroup from "../components/formGroup";
+import InputGroup from "../components/inputGroup";
+import { Intent } from "../components/intent";
+import Checkbox from "../components/checkbox";
+import Button from "../components/button";
 
 //Link Style
 import "./style.scss";
@@ -165,8 +162,9 @@ export class Link extends React.Component<LinkProps, LinkState> {
     setTimeout(() => this.linkInput.focus(), 0);
   }
 
-  handleOpenNewTabChange(e: React.MouseEvent<HTMLInputElement>) {
-    this.setState({ openNewTab: e.currentTarget.checked });
+  handleOpenNewTabChange(checked: boolean) {
+    console.log();
+    this.setState({ openNewTab: checked });
   }
 
   render() {
@@ -178,7 +176,7 @@ export class Link extends React.Component<LinkProps, LinkState> {
       on,
       emit
     } = this.props;
-    const { error } = this.state;
+    const { error, openNewTab } = this.state;
 
     let current = "link";
     //Check if Current Selected Text (Cursor) is a link (to activate Edit and Remove mode)
@@ -217,9 +215,10 @@ export class Link extends React.Component<LinkProps, LinkState> {
           />
         </FormGroup>
         <Checkbox
-          checked={this.state.openNewTab}
+          checked={openNewTab}
           onChange={this.handleOpenNewTabChange.bind(this)}
           label="Open in New Tab"
+          intent={Intent.PRIMARY}
         />
       </div>
     );
@@ -227,7 +226,7 @@ export class Link extends React.Component<LinkProps, LinkState> {
     //Footer
     const footer = (
       <div className="footer-container">
-        <AnchorButton
+        <Button
           text={current}
           minimal={true}
           intent={Intent.PRIMARY}
@@ -238,11 +237,11 @@ export class Link extends React.Component<LinkProps, LinkState> {
           }
         />
         {linkURL && (
-          <AnchorButton
+          <Button
             type="submit"
             text="update"
             minimal={true}
-            intent={Intent.WARNING}
+            intent={Intent.DANGER}
             onClick={this.onLinkSubmit.bind(this)}
           />
         )}

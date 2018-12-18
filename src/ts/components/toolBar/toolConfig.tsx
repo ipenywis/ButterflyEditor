@@ -252,3 +252,212 @@ export const initToolbarItems = async (
     }
   );
 };
+
+import { ColorPicker } from "../../plugins/colorPicker";
+import { Link } from "../../plugins/link";
+import { Anchor } from "../../plugins/anchor";
+import { ImageUploader } from "../../plugins/imageUploader";
+import { CodeEditor } from "../../plugins/codeEditor";
+
+export const initToolbarItemsSync = (
+  appState: AppState,
+  on: (
+    eventName: string,
+    handler: (appState: AppState, ...args: any[]) => void
+  ) => EventEmitter,
+  emit: (eventName: string, ...args: any[]) => boolean,
+  updateEditorState: (editorState: EditorState) => void,
+  toggleDraftView: () => boolean
+): { inlineStyles: InlineStyle[]; blockTypes: BlockType[] } => {
+  let inlineStyles: InlineStyle[] = [
+    {
+      label: "Bold",
+      type: "BOLD",
+      groupID: 0,
+      icon: <Icon icon={bold} />
+    },
+    {
+      label: "Italic",
+      type: "ITALIC",
+      groupID: 0,
+      icon: <Icon icon={italic} />
+    },
+    {
+      label: "underline",
+      type: "UNDERLINE",
+      groupID: 0,
+      icon: <Icon icon={underline} />
+    },
+    {
+      label: "strike through",
+      type: "STRIKE-THROUGH",
+      groupID: 0,
+      icon: <Icon icon={bold} />
+    },
+    {
+      label: "Font Familly",
+      groupID: 1,
+      icon: <Icon icon={font} />,
+      dropDown: {
+        items: fontFamiliesStyle
+      }
+    },
+    {
+      label: "Font Size",
+      groupID: 1,
+      icon: <Icon icon={textHeight} />,
+      dropDown: {
+        items: fontSizesStyle
+      }
+    },
+    {
+      groupID: 2,
+      popup: {
+        standAlone: (
+          <ColorPicker
+            updateEditorState={updateEditorState}
+            editorState={appState.editorState}
+            editor={appState.editor}
+            on={on}
+            emit={emit}
+          />
+        )
+      }
+    },
+    {
+      label: EDITOR_TOOLBAR_LABELS.HTML,
+      groupID: 3,
+      icon: <Icon icon={code} />,
+      onSelect: () => toggleDraftView()
+    },
+    {
+      groupID: 3,
+      popup: {
+        standAlone: (
+          <Link
+            updateEditorState={updateEditorState}
+            editorState={appState.editorState}
+            editor={appState.editor}
+            on={on}
+            emit={emit}
+          />
+        )
+      }
+    },
+    {
+      groupID: 3,
+      popup: {
+        standAlone: (
+          <Anchor
+            updateEditorState={updateEditorState}
+            editorState={appState.editorState}
+            editor={appState.editor}
+            on={on}
+            emit={emit}
+          />
+        )
+      }
+    },
+    {
+      groupID: 3,
+      popup: {
+        standAlone: (
+          <CodeEditor
+            updateEditorState={updateEditorState}
+            editorState={appState.editorState}
+            editor={appState.editor}
+            on={on}
+            emit={emit}
+          />
+        )
+      }
+    }
+  ];
+
+  let blockTypes: BlockType[] = [
+    {
+      groupID: 0,
+      popup: {
+        standAlone: (
+          <ImageUploader
+            updateEditorState={updateEditorState}
+            editorState={appState.editorState}
+            editor={appState.editor}
+            on={on}
+            emit={emit}
+            onFileUpload={file => {
+              return new Promise((rs, rj) => {
+                //TEMP only for testing it works as a server uploading Technique (Just For Visualazation)
+                setTimeout(
+                  () => rj(`File Uploaded ${file.name} Successfully`),
+                  2000
+                );
+              });
+            }}
+          />
+        )
+      }
+    },
+    {
+      label: "Header",
+      icon: <Icon icon={paragraph} />,
+      groupID: 0,
+      dropDown: {
+        items: [
+          {
+            label: "H1",
+            type: "header-one"
+          },
+          {
+            label: "H2",
+            type: "header-two"
+          },
+          {
+            label: "H3",
+            type: "header-three"
+          },
+          {
+            label: "H4",
+            type: "header-fourth"
+          },
+          {
+            label: "H5",
+            type: "header-five"
+          },
+          {
+            label: "H6",
+            type: "header-six"
+          }
+        ]
+      }
+    },
+    {
+      label: "Blockquote",
+      type: "blockquote",
+      groupID: 1,
+      icon: <Icon icon={quoteLeft} />
+    },
+    {
+      label: "UL",
+      type: "unordered-list-item",
+      groupID: 1,
+      icon: <Icon icon={listUl} />
+    },
+    {
+      label: "OL",
+      type: "ordered-list-item",
+      groupID: 1,
+      icon: <Icon icon={listOl} />
+    }
+    /*{
+    label: "Code Block",
+    type: "code-block",
+    groupID: 1,
+    icon: <Icon icon={square} />
+  }
+  NOTE: Code block is displayed because we have the Code Editor Plugin to rely on (more advanced) (using both may cause some unexpected bugs)
+  */
+  ];
+
+  return { inlineStyles, blockTypes };
+};

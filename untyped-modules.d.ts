@@ -41,3 +41,7 @@ declare module "draft-js-multidecorators";
 declare module "monaco-languages/*";
 //Monaco Editor MINIFIED Version
 declare module "monaco-editor/*";
+
+//react tabs (rc-tabs)
+declare module "rc-tabs";
+declare module "rc-tabs/*";

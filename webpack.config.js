@@ -19,8 +19,13 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WebpacBundleAnalyzer = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 
+//Add Style Components Better Debugging through plugin
+const createStyledComponentsTransformer = require("typescript-plugin-styled-components")
+  .default;
+const styledComponentsTransformer = createStyledComponentsTransformer();
+
 //Temp
-const devMode = true;
+const devMode = false;
 
 let config = {
   entry: path.resolve("./app.tsx"),
@@ -44,7 +49,12 @@ let config = {
         test: /\.tsx?$/,
         exclude: [/-ignore\.tsx?$/],
         exclude: [/-ignore\.tsx?$/],
-        loader: "awesome-typescript-loader"
+        loader: "awesome-typescript-loader",
+        options: {
+          getCustomTransformers: () => ({
+            before: [styledComponentsTransformer]
+          })
+        }
       },
       {
         test: /\.jsx?$/,
@@ -133,7 +143,7 @@ let config = {
     ]
   },
 
-  optimization: {
+  /* optimization: {
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -148,10 +158,14 @@ let config = {
         }
       }
     }
+  },*/
+
+  stats: {
+    children: false
   },
 
   plugins: [
-    ///new WebpacBundleAnalyzer(),
+    new WebpacBundleAnalyzer(),
     !devMode
       ? new MiniCssExtractPlugin({
           filename: devMode ? "[name].css" : "[name].[hash].css",

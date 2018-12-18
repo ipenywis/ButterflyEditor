@@ -6,7 +6,7 @@ import Store from "./store";
 //Main Rich Text Editor
 import Editor from "./editor";
 //Configuration
-import { EditorConfig } from "./editorConfig";
+import { EditorConfig, DEFAULT_CONFIG } from "./editorConfig";
 
 export class EditorInstance {
   private editorRef: Editor;
@@ -17,6 +17,17 @@ export class EditorInstance {
 
   getExportedHTML() {
     return this.editorRef.getHTML();
+  }
+
+  onChange(callback: (newText: string, html: string) => void) {
+    //TODO: Add On Change Callback
+  }
+
+  setEditorInitialHight(height: string) {
+    this.editorRef.setInitialHeight(height);
+  }
+  setEditorFixedHeight(height: string) {
+    this.editorRef.setFixedHeight(height);
   }
 
   //TODO: Add Markdown Export support
@@ -46,7 +57,9 @@ export const renderToDOM = (
 
 //React Renderable component
 export interface BFlyEditorProps {
-  config?: EditorConfig;
+  config?: Partial<EditorConfig>;
+
+  ref?: (ref: Editor | null) => void;
 }
 export class BFlyEditor extends React.Component<BFlyEditorProps> {
   constructor(props: BFlyEditorProps) {
@@ -54,11 +67,11 @@ export class BFlyEditor extends React.Component<BFlyEditorProps> {
   }
 
   render() {
-    const { config } = this.props;
+    const { config, ref } = this.props;
 
     return (
       <Store>
-        <Editor config={config} />
+        <Editor ref={ref} config={{ ...DEFAULT_CONFIG, ...config }} />
       </Store>
     );
   }

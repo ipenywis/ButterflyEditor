@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 //Icon
 import { Icon } from "react-icons-kit";
@@ -11,14 +12,11 @@ import { SafeWrapper } from "./common";
 //TODO: BAD BOY ==> import OutsideClickHandler from "react-outside-click-handler";
 
 import createStyle, { IStyle, ICreateStyle } from "./toolBar/inlineStyle";
-import { EditorState, Editor, RichUtils, Modifier } from "draft-js";
+import { EditorState, Editor } from "draft-js";
 
 //Main App State
 import { AppState } from "../store";
 import { EventEmitter } from "events";
-
-//Lodash
-import * as _ from "lodash";
 
 //Click outside handler (Not Airbnb)
 import ClickOutsideHandler from "../clickOutsideHandler";
@@ -28,6 +26,9 @@ export interface PopupProps {
   icon?: typeof Icon | Object;
   canOutsideClose?: boolean;
   isInline?: boolean;
+
+  //React Portal (render popup on #bef-editor container)
+  usePortal?: boolean;
 
   header?: string;
   container?: React.ReactElement<any>;
@@ -62,6 +63,8 @@ export interface PopupProps {
 interface PopupState {
   isOpen: boolean;
   didOpen: boolean;
+  topPos: number;
+  leftPos: number;
 }
 
 export default class Popup extends React.Component<PopupProps, PopupState> {
@@ -77,6 +80,7 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
   static defaultProps = {
     isInline: true,
     canOutsideClose: true,
+    usePortal: true,
     header: "Test Popup",
     container: <div>Nothing is in the Popup</div>,
     footer: <div>Control Button Should Go Here</div>
@@ -86,7 +90,9 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
     super(props);
     this.state = {
       isOpen: false,
-      didOpen: false
+      didOpen: false,
+      topPos: null,
+      leftPos: null
     };
   }
 
@@ -134,14 +140,6 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
     //this.toggleBtn.click();
   }
 
-  componentDidMount() {
-    //Once Blured Show the Popup
-    /*this.eventEmitter = this.props.on(
-      "EditorBlur",
-      this.onEditorBlur.bind(this)
-    );*/
-  }
-
   openPopup() {
     if (!this.state.isOpen && this.props.onOpen) {
       //Run OnOpen for first time for initialization
@@ -154,6 +152,16 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
   closePopup() {
     this.setState({ isOpen: false, didOpen: false });
     this.props.onClose ? this.props.onClose() : null;
+  }
+
+  componentDidMount() {
+    //Calculate ToggleBtn window relative Top and Left Position for using it with the Popup if the Portal is Active.
+    const toggleBtnBoundingBox = this.toggleBtn.getBoundingClientRect();
+    //Offset the Top & Left position a littel bit
+    this.setState({
+      topPos: toggleBtnBoundingBox.top + toggleBtnBoundingBox.height + 14,
+      leftPos: toggleBtnBoundingBox.left - 5
+    });
   }
 
   componentDidUpdate() {
@@ -171,6 +179,7 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
       isInline,
       icon,
       isDisabled,
+      usePortal,
       header,
       container,
       footer,
@@ -180,11 +189,61 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
       onCloseCross,
       outsideClkDiscaredElem
     } = this.props;
-    const { isOpen } = this.state;
+    const { isOpen, topPos, leftPos } = this.state;
     //Check for Icon type
     if (!React.isValidElement(icon)) {
       console.error("Editor Popup Icon is Invalid");
     }
+
+    //Calculate Popup Style (Only if its using Portal)
+    const popupStyle: React.CSSProperties = usePortal
+      ? { position: "fixed", width: "auto", top: topPos, left: leftPos }
+      : null;
+
+    //Popup Element
+    const popupElment = (
+      <div className={isInline ? "inline-popup" : "popup"} style={popupStyle}>
+        <ClickOutsideHandler
+          onOutsideClick={canOutsideClose && this.closePopup.bind(this)}
+          discaredElmentsClassNames={outsideClkDiscaredElem}
+          style={
+            isInline
+              ? { width: "100%", height: "100%", display: "flex" }
+              : {
+                  width: "auto",
+                  height: "auto",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "relative"
+                }
+          }
+        >
+          <div
+            className="popup-container"
+            ref={popup => (this.popup = popup)}
+            style={popupContainerStyle}
+          >
+            <div className="header">{header}</div>
+            <div className="container" style={containerStyle}>
+              {container}
+            </div>
+            <div className="footer">{footer}</div>
+          </div>
+          <span
+            className="popup-close"
+            ref={closeBtn => (this.closeBtn = closeBtn)}
+            onClick={onCloseCross ? onCloseCross : this.closePopup.bind(this)}
+          >
+            <Icon icon={close} size={20} />
+          </span>
+        </ClickOutsideHandler>
+        <div className="popup-tail-shadow" />
+        <div className="popup-tail-glow" />
+        <div className="popup-tail" />
+      </div>
+    );
+
     return (
       <SafeWrapper
         style={{
@@ -196,55 +255,19 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
           className={
             "t-item " + (isDisabled ? "disabled" : isOpen ? "toggle" : "")
           }
-          onMouseDown={() => this.setState({ isOpen: !isDisabled })}
+          onMouseDown={() => (!isDisabled ? this.togglePopup() : null)}
+          ref={toggleBtn => (this.toggleBtn = toggleBtn)}
         >
           {icon && <div className="t-icon">{icon}</div>}
         </div>
         {!isDisabled &&
-          isOpen && (
-            <div className={isInline ? "inline-popup" : "popup"}>
-              <ClickOutsideHandler
-                onOutsideClick={canOutsideClose && this.closePopup.bind(this)}
-                discaredElmentsClassNames={outsideClkDiscaredElem}
-                style={
-                  isInline
-                    ? { width: "100%", height: "100%", display: "flex" }
-                    : {
-                        width: "auto",
-                        height: "auto",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        position: "relative"
-                      }
-                }
-              >
-                <div
-                  className="popup-container"
-                  ref={popup => (this.popup = popup)}
-                  style={popupContainerStyle}
-                >
-                  <div className="header">{header}</div>
-                  <div className="container" style={containerStyle}>
-                    {container}
-                  </div>
-                  <div className="footer">{footer}</div>
-                </div>
-                <span
-                  className="popup-close"
-                  ref={closeBtn => (this.closeBtn = closeBtn)}
-                  onClick={
-                    onCloseCross ? onCloseCross : this.closePopup.bind(this)
-                  }
-                >
-                  <Icon icon={close} size={20} />
-                </span>
-              </ClickOutsideHandler>
-              <div className="popup-tail-shadow" />
-              <div className="popup-tail-glow" />
-              <div className="popup-tail" />
-            </div>
+          isOpen &&
+          usePortal &&
+          ReactDOM.createPortal(
+            popupElment,
+            document.getElementById("bfe-portal")
           )}
+        {!isDisabled && isOpen && !usePortal && popupElment}
       </SafeWrapper>
     );
   }

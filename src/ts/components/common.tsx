@@ -12,14 +12,16 @@ interface SafeWrapperProps {
   className?: string;
 
   children?: any;
+
+  innerRef?: (ref: HTMLDivElement | null) => void;
 }
 export const SafeWrapper: React.SFC<SafeWrapperProps> = (
   props: SafeWrapperProps
 ) => {
   const newStyle: React.CSSProperties = {};
-  Object.assign(newStyle, props.style, { display: "flex" });
+  Object.assign(newStyle, { display: "flex" }, props.style);
   return (
-    <div className={props.className} style={newStyle}>
+    <div className={props.className} style={newStyle} ref={props.innerRef}>
       {props.children}
     </div>
   );

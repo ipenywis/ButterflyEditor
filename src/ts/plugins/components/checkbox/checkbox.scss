@@ -1,0 +1,112 @@
+@import "../common/common.scss";
+
+.checkbox {
+  & > input {
+    position: absolute; // take it out of document flow
+    opacity: 0; // hide it
+  }
+
+  & > label {
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  // Box.
+  & > label:before {
+    content: "";
+    margin-right: 9px;
+    display: inline-block;
+    vertical-align: text-top;
+    width: 15px;
+    height: 15px;
+    background: #ececec;
+    box-shadow: 0px 0px 1px 1px rgba(15, 15, 15, 0.1);
+    border: 0.8px solid rgba(15, 15, 15, 0.2);
+    border-radius: 2px;
+    transition: background, 140ms ease-in-out;
+  }
+
+  //Intents
+  &.intent-none,
+  &.intent-primary {
+    // Box hover
+    &:hover > label:before {
+      background: $intent-primary-hover-color;
+    }
+
+    // Box checked
+    & > input[class="checkbox"]:checked + label:before {
+      background: $intent-primary-color;
+    }
+  }
+
+  &.intent-success {
+    // Box hover
+    &:hover > label:before {
+      background: $intent-success-hover-color;
+    }
+
+    // Box checked
+    & > input[class="checkbox"]:checked + label:before {
+      background: $intent-success-color;
+    }
+  }
+
+  &.intent-danger {
+    // Box hover
+    &:hover > label:before {
+      background: $intent-danger-hover-color;
+    }
+
+    // Box checked
+    & > input[class="checkbox"]:checked + label:before {
+      background: $intent-danger-color;
+    }
+  }
+
+  &.intent-info {
+    // Box hover
+    &:hover > label:before {
+      background: $intent-info-hover-color;
+    }
+
+    // Box checked
+    & > input[class="checkbox"]:checked + label:before {
+      background: $intent-info-color;
+    }
+  }
+
+  // Box focus
+  &:focus > label:before {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+  }
+
+  // Disabled state label.
+  &:disabled > label {
+    color: #b8b8b8;
+    cursor: auto;
+  }
+
+  // Disabled box.
+  &:disabled > label:before {
+    box-shadow: none;
+    background: #ddd;
+  }
+
+  // Checkmark. Could be replaced with an image
+  &[class*="intent-"] > input[class="checkbox"]:checked + label:after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 7px;
+    background: white;
+    width: 2px;
+    height: 2px;
+    box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white,
+      4px -6px 0 white, 4px -8px 0 white;
+    transform: rotate(45deg);
+    transition-property: background, box-shadow;
+    transition: 130ms ease-in-out;
+  }
+}

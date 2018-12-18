@@ -62,8 +62,12 @@ export const EditorComponent = BFlyEditor;
 
 //QUICK TEMP TEST
 ReactDOM.render(
-  <Store>
-    <Editor />
-  </Store>,
+  <BFlyEditor
+    config={{
+      allowHTMLExport: true,
+      allowEditorFullExpand: true,
+      allowResize: true
+    }}
+  />,
   document.getElementById("root")
 );

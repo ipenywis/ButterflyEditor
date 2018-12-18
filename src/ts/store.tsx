@@ -86,7 +86,12 @@ export default class Store extends React.Component {
     this.setState(callback);
   }
 
-  componentWillUpdate() {}
+  componentDidMount() {
+    //Create Portal Container a.k.a React Portal Container
+    let portalContainer = document.createElement("div");
+    portalContainer.id = "bfe-portal";
+    document.body.appendChild(portalContainer);
+  }
 
   render() {
     return (

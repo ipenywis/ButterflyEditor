@@ -1,0 +1,29 @@
+.popover-content {
+  position: absolute;
+  background-color: #fff;
+  padding: 18px;
+  border-radius: 4px;
+  top: -14em;
+  max-width: 38em;
+  min-width: 20em;
+  left: -100%;
+}
+
+.popover-container {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 4px;
+  min-width: 22em;
+}
+/*
+
+    width: 0px;
+    height: 0px;
+    border: 10px solid;
+    border-color: #d42020 transparent transparent transparent;
+    position: absolute;
+    right: -20px; 
+    bottom: 19px; 
+    z-index: 99;
+
+*/

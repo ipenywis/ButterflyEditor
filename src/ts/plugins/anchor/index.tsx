@@ -20,12 +20,10 @@ import { EventEmitter } from "events";
 import { Icon } from "react-icons-kit";
 import { flag } from "react-icons-kit/fa/";
 
-//Blueprintjs
-import { AnchorButton } from "@blueprintjs/core";
-
 import FormGroup from "../components/formGroup";
 import InputGroup from "../components/inputGroup";
 import { Intent } from "../components/intent";
+import Button from "../components/button";
 
 interface AnchorProps {
   editorState: EditorState;
@@ -221,7 +219,7 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
     //Footer
     const footer = (
       <div className="footer-container">
-        <AnchorButton
+        <Button
           text={current == "anchor" ? "set" : "remove"}
           minimal={true}
           onClick={
@@ -229,13 +227,14 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
               ? this.onAnchorSubmit.bind(this)
               : this.onUnanchorSubmit.bind(this)
           }
+          intent={Intent.PRIMARY}
         />
         {anchorName && (
-          <AnchorButton
+          <Button
             type="submit"
             text="update"
             minimal={true}
-            intent="warning"
+            intent={Intent.INFO}
             onClick={this.onAnchorSubmit.bind(this)}
           />
         )}

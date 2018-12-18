@@ -260,8 +260,8 @@
   .popup-container {
     min-width: 34em;
     max-width: 50em;
-    min-height: 26em;
-    max-height: 45em;
+    //min-height: 26em;
+    max-height: 50em;
     background-color: #fff;
     color: #565858;
     padding: 14px;
@@ -281,7 +281,8 @@
 
     .container {
       width: 100%;
-      flex: 2;
+      display: flex;
+      //flex: 2;
       padding: 6px;
     }
 
@@ -289,9 +290,10 @@
       /* flex: 0.25; */
       flex-direction: row-reverse;
       display: flex;
-      margin-top: 11px;
+      //margin-top: 11px;
       width: 100%;
       padding: 7;
+      height: 3em;
     }
   }
 }

@@ -1,8 +1,25 @@
 /* Intent */
+//Background
 $intent-primary-color: #2980b9;
 $intent-danger-color: #e74c3c;
 $intent-success-color: #27ae60;
 $intent-info-color: #f39c12;
+//Text Color
+$intent-primary-text-color: #fff;
+$intent-danger-text-color: #fff;
+$intent-success-text-color: #fff;
+$intent-info-text-color: #fff;
+//Minimal Color
+$intent-primary-minimal-color: #c1ddf0;
+$intent-danger-minimal-color: #f1c4bf;
+$intent-success-minimal-color: #b6f0ce;
+$intent-info-minimal-color: #f1e1c8;
+
+//Hover Color
+$intent-primary-hover-color: #1e7ab8;
+$intent-danger-hover-color: #cf3625;
+$intent-success-hover-color: #1daa58;
+$intent-info-hover-color: #d88f19;
 
 //Muted Text
 $muted-text-color: #5c7080;

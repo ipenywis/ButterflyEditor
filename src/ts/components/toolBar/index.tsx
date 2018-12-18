@@ -4,7 +4,7 @@ import { AppState } from "../../store";
 
 import * as _ from "lodash";
 
-import { initToolbarItems } from "./toolConfig";
+import { initToolbarItems, initToolbarItemsSync } from "./toolConfig";
 
 import Controls, { InlineStyle, BlockType } from "./controls";
 import { EditorState } from "draft-js";
@@ -17,6 +17,7 @@ import { expand } from "react-icons-kit/fa/";
 
 export interface ToolBarProps {
   appState?: AppState;
+  allowEditorExpand?: boolean;
 
   setAppState?: (newState: any, callback?: () => void) => void;
   setAppStateClb?: (callback: (prevState: AppState) => void) => void;
@@ -41,6 +42,10 @@ export default class ToolBar extends React.Component<ToolBarProps> {
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
+  };
+
+  static defaultProps = {
+    allowEditorExpand: true
   };
 
   constructor(props: ToolBarProps) {
@@ -70,11 +75,13 @@ export default class ToolBar extends React.Component<ToolBarProps> {
     return true;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { appState, on, emit } = this.props;
 
+    console.log("Current App State: ", appState);
+
     //Initialize Toolbar Items
-    initToolbarItems(
+    /*initToolbarItems(
       appState,
       on,
       emit,
@@ -82,13 +89,19 @@ export default class ToolBar extends React.Component<ToolBarProps> {
       this.toggleDraftHTMLView.bind(this)
     ).then(toolbarItems => {
       if (toolbarItems) this.setState({ toolbarItems });
-    });
+    });*/
   }
+
+  /*componentWillUpdate() {
+    console.log("After mounting state: ", this.props.appState);
+  }*/
 
   render() {
     //TODO: Export This on a CONFIG object and allow it as a Creation API for users
 
-    const { toolbarItems } = this.state;
+    const { allowEditorExpand } = this.props;
+
+    /* const { toolbarItems } = this.state;
     if (toolbarItems)
       return (
         <div className="toolbar">
@@ -110,7 +123,39 @@ export default class ToolBar extends React.Component<ToolBarProps> {
           </span>
         </div>
       );
-    return null;
+    return null;*/
+
+    const { inlineStyles, blockTypes } = initToolbarItemsSync(
+      this.props.appState,
+      this.props.on,
+      this.props.emit,
+      this.updateEditorState.bind(this),
+      this.toggleDraftHTMLView.bind(this)
+    );
+
+    return (
+      <div className="toolbar">
+        <Controls
+          appState={this.props.appState}
+          setAppState={this.props.setAppState}
+          inlineStyles={inlineStyles}
+          blockTypes={blockTypes}
+          updateEditorState={this.updateEditorState.bind(this)}
+          on={this.props.on}
+          emit={this.props.emit}
+        />
+        {allowEditorExpand && (
+          <span
+            id="expand-editor-btn"
+            className="expand-editor"
+            onClick={this.props.expandEditor}
+          >
+            <Icon icon={expand} size={15} />
+          </span>
+        )}
+      </div>
+    );
+
     //Loading Error! Dont' Render Editor Toolbar
     //console.error("Cannot Render Toolbar!, Please Refresh & Try Again");
   }

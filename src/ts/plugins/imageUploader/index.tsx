@@ -1,3 +1,7 @@
+/**
+ * NOTE: The Advanced section of the imageUploader is not working and still in early stages of development therefor it is marked as disabled
+ */
+
 import * as React from "react";
 
 import Popup from "../../components/popup";
@@ -12,20 +16,16 @@ import { AppState } from "../../store";
 
 //Events
 import { EventEmitter } from "events";
-//Blueprintjs
-import {
-  AnchorButton,
-  FormGroup,
-  InputGroup,
-  Intent,
-  ProgressBar,
-  Toaster,
-  Position,
-  IToaster,
-  Tab,
-  Tabs,
-  NumericInput
-} from "@blueprintjs/core";
+
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
+
+//Building Components
+import Button from "../components/button";
+import { Intent } from "../components/intent";
+import FormGroup from "../components/formGroup";
+import InputGroup from "../components/inputGroup";
+import Toaster from "../components/toast/toaster";
 
 //Axios
 import axios, { AxiosResponse } from "axios";
@@ -176,7 +176,7 @@ export class ImageUploader extends React.Component<
         //Stop Loading
         this.setState({ isImageLoading: false });
         //Catch Errors (and show them)
-        //toaster.show({ message: err, intent: Intent.DANGER });
+        toaster.show({ text: err, intent: Intent.DANGER });
         this.showError(err);
         return; ///< Stop!
       });
@@ -229,6 +229,10 @@ export class ImageUploader extends React.Component<
       //Show Error
       this.showError("Cannot Load Image from URL, Please Try Again!");
     };
+  }
+
+  onAdvancedTabChange(tabID: string) {
+    this.setState({ currentAdvancedTab: tabID });
   }
 
   componentWillMount() {
@@ -299,27 +303,32 @@ export class ImageUploader extends React.Component<
           labelFor="image-width-input"
           intent={Intent.PRIMARY}
         >
-          <NumericInput
-            allowNumericCharactersOnly={true}
-            buttonPosition="right"
-            fill={false}
+          <InputGroup
+            //allowNumericCharactersOnly={true}
+            //buttonPosition="right"
+            //fill={false}
             placeholder="Width"
-            value={imgWidth}
-            onValueChange={value => this.setState({ imgWidth: value })}
+            onChange={e =>
+              this.setState({ imgWidth: parseInt(e.currentTarget.value) })
+            }
+            //onValueChange={value => this.setState({ imgWidth: value })}
           />
+          {/* TODO: Add Better Image Width and Height Controllers and Inputs for ensuring a valid number instead of a string */}
         </FormGroup>
         <FormGroup
           label="Image Height"
           labelFor="image-height-input"
           intent={Intent.PRIMARY}
         >
-          <NumericInput
-            allowNumericCharactersOnly={true}
-            buttonPosition="right"
-            fill={false}
+          <InputGroup
+            //allowNumericCharactersOnly={true}
+            //buttonPosition="right"
+            //fill={false}
             placeholder="Height"
-            value={imgHeight}
-            onValueChange={value => this.setState({ imgHeight: value })}
+            onChange={e =>
+              this.setState({ imgHeight: parseInt(e.currentTarget.value) })
+            }
+            //onValueChange={value => this.setState({ imgWidth: value })}
           />
         </FormGroup>
       </div>
@@ -328,19 +337,18 @@ export class ImageUploader extends React.Component<
     //Footer
     const inlineFooter = (
       <div className="footer-container">
-        <AnchorButton
+        <Button
           text="Place Image"
           minimal={true}
           intent={Intent.SUCCESS}
           onClick={this.onURLImagePlace.bind(this)}
-          loading={isImageLoading}
         />
-        <AnchorButton
+        <Button
           text="Advanced"
           minimal={true}
           intent={Intent.PRIMARY}
           onClick={this.onAdvancedUploaderClick.bind(this)}
-          disabled={isImageLoading}
+          disabled={true}
         />
       </div>
     );
@@ -348,7 +356,6 @@ export class ImageUploader extends React.Component<
     /* Advanced Renderers */
     //Advanced Header
     const advancedHeader = "Advanced Image Uploader";
-    //Advanced Container
     const uploader = (
       <div className="inner-container">
         <DraggableUploader
@@ -369,8 +376,8 @@ export class ImageUploader extends React.Component<
       </div>
     );
 
-    const advancedContainer = (
-      <Tabs
+    {
+      /*<Tabs
         id="uploader-tabs"
         className="tabs-container"
         onChange={tabID =>
@@ -384,13 +391,46 @@ export class ImageUploader extends React.Component<
         )}
         <Tab id="uploader" title="Upload" panel={uploader} />
         <Tabs.Expander />
+        </Tabs>*/
+    }
+
+    /*
+            <Tabs
+        defaultActiveKey={currentAdvancedTab}
+        onChange={this.onAdvancedTabChange.bind(this)}
+        renderTabBar={() => <ScrollableInkTabBar />}
+        renderTabContent={() => <TabContent />}
+      >
+        <TabPane tab="Browser" key="borwser">
+          {imageBrowser}
+        </TabPane>
+        <TabPane tab="Upload" key="uploader">
+          {uploader}
+        </TabPane>
+      </Tabs>
+    */
+
+    //Order Matter for react-tabs to know which one to render first and their indecies
+    const tabs = ["browser", "uploader"];
+    //Popup Container
+    const advancedContainer = (
+      <Tabs
+        defaultIndex={0}
+        onSelect={tabIdx => this.onAdvancedTabChange(tabs[tabIdx])}
+      >
+        <TabList>
+          <Tab>Browser</Tab>
+          <Tab>Upload</Tab>
+        </TabList>
+        <TabPanel>{imageBrowser}</TabPanel>
+        <TabPanel>{uploader}</TabPanel>
       </Tabs>
     );
     //Advanced Footer
     const advancedFooter = (
       <div className="footer-container">
         {currentAdvancedTab == "uploader" && (
-          <AnchorButton
+          <Button
             text="Upload"
             minimal={false}
             intent={Intent.SUCCESS}
@@ -409,11 +449,11 @@ export class ImageUploader extends React.Component<
         canOutsideClose={isInline}
         isInline={isInline}
         isDisabled={isDisabled}
+        usePortal={isInline}
         icon={icon}
         editorState={editorState}
         updateEditorState={updateEditorState}
         editor={editor}
-        outsideClkDiscaredElem={["toast", "bp3-toast-message"]}
         on={on}
         emit={emit}
         header={isInline ? inlineHeader : advancedHeader}
@@ -428,8 +468,8 @@ export class ImageUploader extends React.Component<
 }
 
 //Toaster Notification
-let toaster: IToaster;
-toaster = Toaster.create({ position: Position.TOP });
+let toaster: Toaster;
+toaster = Toaster.create({ intent: Intent.PRIMARY });
 
 //Image Uploader Unit
 interface DraggableUploaderProps {
@@ -534,11 +574,11 @@ class DraggableUploader extends React.Component<
   }
 
   showUploadSuccess(msg: string) {
-    toaster.show({ message: msg, intent: Intent.SUCCESS });
+    toaster.show({ text: msg, intent: Intent.SUCCESS });
   }
 
   showUploadError(msg: string) {
-    toaster.show({ message: msg, intent: Intent.DANGER });
+    toaster.show({ text: msg, intent: Intent.DANGER });
   }
 
   //NOTE: Can be triggered from other Components
@@ -548,8 +588,8 @@ class DraggableUploader extends React.Component<
     //Make sure there is at least one image to upload
     if (!loadedFiles || loadedFiles === [])
       return toaster.show({
-        message: "Please Choose Images First to Upload them!",
-        intent: Intent.WARNING
+        text: "Please Choose Images First to Upload them!",
+        intent: Intent.DANGER
       });
     //Upload Loaded Files
     loadedFiles.map(file => {
@@ -616,7 +656,7 @@ class DraggableUploader extends React.Component<
                     <img src={file.data as string} />
                     <div className="container">
                       <span className="progress-bar">
-                        {file.isLoading && <ProgressBar />}
+                        {file.isLoading && <div>Loading...</div>}
                       </span>
                       <span
                         className="remove-btn"
@@ -631,7 +671,7 @@ class DraggableUploader extends React.Component<
           </div>
           <div className="helper-text">Drag & Drop Images Here</div>
           <div className="file-uploader-browse">
-            <AnchorButton
+            <Button
               text="Browse"
               intent={Intent.PRIMARY}
               minimal={true}

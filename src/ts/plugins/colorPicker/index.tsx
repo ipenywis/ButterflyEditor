@@ -15,11 +15,12 @@ import { SafeWrapper } from "../../components/common";
 //Style
 import "./style.scss";
 
-//Blueprint Components
-import { Slider } from "@blueprintjs/core";
-
 //Main App State
 import { AppState } from "../../store";
+
+//Build Components
+import Slider from "rc-slider"; ///< TODO: Make your own custom slider component
+import "rc-slider/assets/index.css";
 
 //Color
 import * as Color from "color";
@@ -237,9 +238,9 @@ export class ColorPicker extends Plugin<ColorPickerProps, ColorPickerState> {
               <Slider
                 min={0}
                 max={1}
-                onChange={this.onOpacitySliderChange.bind(this)}
+                step={0.1}
                 value={this.state.opacityValue}
-                stepSize={0.1}
+                onChange={this.onOpacitySliderChange.bind(this)}
                 ref={slider => (this.opacitySlider = slider)}
               />
             </div>
@@ -287,6 +288,7 @@ export class ColorPicker extends Plugin<ColorPickerProps, ColorPickerState> {
         footer={footer}
         isInline={false}
         isDisabled={isDisabled}
+        usePortal={false}
         icon={icon}
         didOpen={this.init.bind(this)}
         ref={popup => (this.popup = popup)}
