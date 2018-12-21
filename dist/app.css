@@ -122,7 +122,8 @@ body .ip-icon-large {
   font-size: 22px; }
 
 * {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  font-family: Oxygen, sans-serif; }
 
 .bp3-portal {
   z-index: 20; }
@@ -200,8 +201,8 @@ body .ip-icon-large {
 
 .draft-resizer {
   position: absolute;
-  right: -7px;
-  bottom: -7px;
+  right: -6px;
+  bottom: -5px;
   transform: rotate(-39deg);
   color: rgba(101, 101, 101, 0.68);
   color: #42576bc4;
@@ -440,6 +441,8 @@ body .ip-icon-large {
 
 .expand-editor {
   position: absolute;
+  width: 15px;
+  height: 15px;
   top: 2px;
   right: 3px;
   /* border: 1px solid rgba(255, 255, 255, 0.5); */

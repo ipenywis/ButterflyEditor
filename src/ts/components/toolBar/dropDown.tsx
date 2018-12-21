@@ -4,7 +4,7 @@ import * as React from "react";
 import * as _ from "lodash";
 
 //Icon
-import { Icon } from "react-icons-kit";
+import Icon, { IIconRotate } from "../toolBar/icon";
 import { chevronDown } from "react-icons-kit/fa/chevronDown";
 
 import { SafeWrapper } from "../common";
@@ -154,7 +154,11 @@ export default class DropDown extends React.Component<DropDownProps> {
               <span className="btn-icon">{icon}</span>
               {false && <span className="btn-text">DropDown</span>}
               <span style={{ marginTop: "2px" }}>
-                <Icon icon={chevronDown} size={iconFontSize - 2} />
+                <Icon
+                  icon={"minimalArrow"}
+                  size={iconFontSize - 2}
+                  rotation={IIconRotate.TOP}
+                />
               </span>
               <div style={{ display: "flex", flexDirection: "column" }}>
                 {this.state.isOpen && (

@@ -30,6 +30,10 @@ export class EditorInstance {
     this.editorRef.setFixedHeight(height);
   }
 
+  setEditorMaxHeight(height: string) {
+    //TODO: Add Height Limitation
+  }
+
   //TODO: Add Markdown Export support
 }
 
@@ -47,7 +51,6 @@ export const renderToDOM = (
       </Store>,
       document.getElementById(targetID),
       () => {
-        console.warn("EDITOR FULL DOM RENDERING...");
         //Resolve by creating a New Editor Instance Object once the Editor is Fully Rendered to the DOM
         return rs(new EditorInstance(editorRef));
       }

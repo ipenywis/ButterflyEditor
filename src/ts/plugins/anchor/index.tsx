@@ -17,7 +17,7 @@ import { AppState } from "../../store";
 import { EventEmitter } from "events";
 
 //Icon
-import { Icon } from "react-icons-kit";
+import Icon from "../../components/toolBar/icon";
 import { flag } from "react-icons-kit/fa/";
 
 import FormGroup from "../components/formGroup";
@@ -175,7 +175,7 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
     }
 
     //Icon
-    const icon = <Icon icon={flag} />;
+    const icon = <Icon icon={"anchor"} />;
 
     //Header
     const header = current == "anchor" ? "Set Anchor" : "Edit Anchor";

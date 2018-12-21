@@ -19,3 +19,11 @@ export const parseSizeStr = (size: string): number => {
   if (!match || match == []) return 0;
   return parseInt(match[1]);
 };
+
+export function getSVGFromSource(src: string): SVGElement {
+  const svgContainer = document.createElement("div");
+  svgContainer.innerHTML = src;
+  const svg = svgContainer.firstElementChild;
+  svg.remove ? svg.remove() : svgContainer.removeChild(svg); // deref from parent element
+  return svg as SVGElement;
+}

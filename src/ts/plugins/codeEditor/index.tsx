@@ -3,7 +3,7 @@ import * as React from "react";
 //Popup
 import Popup from "../../components/popup";
 
-import { Icon } from "react-icons-kit";
+import Icon from "../../components/toolBar/icon";
 import { terminal } from "react-icons-kit/fa/";
 
 import { Editor, EditorState } from "draft-js";
@@ -266,7 +266,7 @@ export class CodeEditor extends React.Component<
     let popupInline = false;
 
     //Icon
-    const icon = <Icon icon={terminal} />;
+    const icon = <Icon icon={"codeEditor"} />;
 
     //Header
     const header = "Code Editor";

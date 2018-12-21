@@ -15,7 +15,7 @@ import {
   paragraph,
   code
 } from "react-icons-kit/fa/";
-import { Icon } from "react-icons-kit";
+import Icon, { IIconRotate } from "../toolBar/icon";
 
 //Custom Styles
 import { fontSizesStyle, fontFamiliesStyle } from "../customStyles";
@@ -61,30 +61,30 @@ export const initToolbarItems = async (
           label: "Bold",
           type: "BOLD",
           groupID: 0,
-          icon: <Icon icon={bold} />
+          icon: <Icon icon={"bold"} />
         },
         {
           label: "Italic",
           type: "ITALIC",
           groupID: 0,
-          icon: <Icon icon={italic} />
+          icon: <Icon icon={"italic"} />
         },
         {
           label: "underline",
           type: "UNDERLINE",
           groupID: 0,
-          icon: <Icon icon={underline} />
+          icon: <Icon icon={"underline"} />
         },
         {
           label: "strike through",
           type: "STRIKE-THROUGH",
           groupID: 0,
-          icon: <Icon icon={bold} />
+          icon: <Icon icon={"bold"} />
         },
         {
           label: "Font Familly",
           groupID: 1,
-          icon: <Icon icon={font} />,
+          icon: <Icon icon={"fontFamily"} size={12} />,
           dropDown: {
             items: fontFamiliesStyle
           }
@@ -92,7 +92,7 @@ export const initToolbarItems = async (
         {
           label: "Font Size",
           groupID: 1,
-          icon: <Icon icon={textHeight} />,
+          icon: <Icon icon={"fontSize"} size={12} />,
           dropDown: {
             items: fontSizesStyle
           }
@@ -114,7 +114,7 @@ export const initToolbarItems = async (
         {
           label: EDITOR_TOOLBAR_LABELS.HTML,
           groupID: 3,
-          icon: <Icon icon={code} />,
+          icon: <Icon icon={"htmlView"} />,
           onSelect: () => toggleDraftView()
         },
         {
@@ -187,7 +187,7 @@ export const initToolbarItems = async (
         },
         {
           label: "Header",
-          icon: <Icon icon={paragraph} />,
+          icon: <Icon icon={"paragraph"} />,
           groupID: 0,
           dropDown: {
             items: [
@@ -222,19 +222,19 @@ export const initToolbarItems = async (
           label: "Blockquote",
           type: "blockquote",
           groupID: 1,
-          icon: <Icon icon={quoteLeft} />
+          icon: <Icon icon={"quote"} />
         },
         {
           label: "UL",
           type: "unordered-list-item",
           groupID: 1,
-          icon: <Icon icon={listUl} />
+          icon: <Icon icon={"unorderedList"} size={14} />
         },
         {
           label: "OL",
           type: "ordered-list-item",
           groupID: 1,
-          icon: <Icon icon={listOl} />
+          icon: <Icon icon={"orderedList"} />
         }
         /*{
         label: "Code Block",
@@ -259,6 +259,15 @@ import { Anchor } from "../../plugins/anchor";
 import { ImageUploader } from "../../plugins/imageUploader";
 import { CodeEditor } from "../../plugins/codeEditor";
 
+/**
+ * Initialize the Toolbar Items Synchronously
+ * @param appState
+ * @param on
+ * @param emit
+ * @param updateEditorState
+ * @param toggleDraftView
+ */
+
 export const initToolbarItemsSync = (
   appState: AppState,
   on: (
@@ -274,30 +283,30 @@ export const initToolbarItemsSync = (
       label: "Bold",
       type: "BOLD",
       groupID: 0,
-      icon: <Icon icon={bold} />
+      icon: <Icon icon={"bold"} />
     },
     {
       label: "Italic",
       type: "ITALIC",
       groupID: 0,
-      icon: <Icon icon={italic} />
+      icon: <Icon icon={"italic"} />
     },
     {
       label: "underline",
       type: "UNDERLINE",
       groupID: 0,
-      icon: <Icon icon={underline} />
+      icon: <Icon icon={"underline"} />
     },
     {
       label: "strike through",
       type: "STRIKE-THROUGH",
       groupID: 0,
-      icon: <Icon icon={bold} />
+      icon: <Icon icon={"bold"} />
     },
     {
       label: "Font Familly",
       groupID: 1,
-      icon: <Icon icon={font} />,
+      icon: <Icon icon={"fontFamily"} />,
       dropDown: {
         items: fontFamiliesStyle
       }
@@ -305,7 +314,7 @@ export const initToolbarItemsSync = (
     {
       label: "Font Size",
       groupID: 1,
-      icon: <Icon icon={textHeight} />,
+      icon: <Icon icon={"fontSize"} />,
       dropDown: {
         items: fontSizesStyle
       }
@@ -327,7 +336,7 @@ export const initToolbarItemsSync = (
     {
       label: EDITOR_TOOLBAR_LABELS.HTML,
       groupID: 3,
-      icon: <Icon icon={code} />,
+      icon: <Icon icon={"htmlView"} />,
       onSelect: () => toggleDraftView()
     },
     {
@@ -400,7 +409,7 @@ export const initToolbarItemsSync = (
     },
     {
       label: "Header",
-      icon: <Icon icon={paragraph} />,
+      icon: <Icon icon={"paragraph"} />,
       groupID: 0,
       dropDown: {
         items: [
@@ -435,19 +444,19 @@ export const initToolbarItemsSync = (
       label: "Blockquote",
       type: "blockquote",
       groupID: 1,
-      icon: <Icon icon={quoteLeft} />
+      icon: <Icon icon={"quote"} />
     },
     {
       label: "UL",
       type: "unordered-list-item",
       groupID: 1,
-      icon: <Icon icon={listUl} />
+      icon: <Icon icon={"unorderedList"} />
     },
     {
       label: "OL",
       type: "ordered-list-item",
       groupID: 1,
-      icon: <Icon icon={listOl} />
+      icon: <Icon icon={"orderedList"} />
     }
     /*{
     label: "Code Block",

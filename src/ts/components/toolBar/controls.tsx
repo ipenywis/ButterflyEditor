@@ -13,7 +13,7 @@ import DropDown from "./dropDown";
 import Popup, { PopupProps } from "../popup";
 
 //Icons
-import { Icon } from "react-icons-kit";
+import Icon from "../toolBar/icon";
 
 import { SafeWrapper, insertBlock } from "../common";
 

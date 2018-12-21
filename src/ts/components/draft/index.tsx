@@ -7,7 +7,7 @@ import { Editor, EditorState } from "draft-js";
 
 import { AppState } from "../../store";
 
-import { Icon } from "react-icons-kit";
+import Icon from "../toolBar/icon";
 import { caretDown } from "react-icons-kit/fa/";
 
 import { SafeWrapper } from "../common";
@@ -296,7 +296,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
           onMouseDown={this.onResizeMouseDown.bind(this)}
           onMouseUp={this.onResizeMouseUp.bind(this)}
         >
-          <Icon icon={caretDown} size={20} />
+          <Icon icon={"minimalArrow"} size={17} rotation={"80deg"} />
         </span>
       </SafeWrapper>
     );

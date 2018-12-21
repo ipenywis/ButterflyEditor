@@ -25,7 +25,7 @@ const createStyledComponentsTransformer = require("typescript-plugin-styled-comp
 const styledComponentsTransformer = createStyledComponentsTransformer();
 
 //Temp
-const devMode = false;
+const devMode = true;
 
 let config = {
   entry: path.resolve("./app.tsx"),
@@ -117,7 +117,7 @@ let config = {
             ]
       },
       {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
             loader: "file-loader",
@@ -128,14 +128,26 @@ let config = {
           }
         ]
       },
-      {
+      /*{
         test: /\.(svg)(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
             loader: "file-loader",
             options: {
               name: "[name].[ext]",
-              outputPath: "svgs/"
+              outputPath: "svgs/",
+              exclude: /icons/,
+            }
+          }
+        ]
+      },*/
+      {
+        test: /\.(svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: "svg-inline-loader",
+            options: {
+              classPrefix: true
             }
           }
         ]
@@ -160,12 +172,12 @@ let config = {
     }
   },*/
 
-  stats: {
+  /*stats: {
     children: false
-  },
+  },*/
 
   plugins: [
-    new WebpacBundleAnalyzer(),
+    //new WebpacBundleAnalyzer(),
     !devMode
       ? new MiniCssExtractPlugin({
           filename: devMode ? "[name].css" : "[name].[hash].css",

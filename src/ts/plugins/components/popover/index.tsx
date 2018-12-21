@@ -40,8 +40,6 @@ export default class Popover extends React.Component<
       ? this.targetBtn.getBoundingClientRect()
       : null;
 
-    console.log("Target Button POS: ", btnRect);
-
     return (
       <Manager>
         <Reference>
@@ -85,10 +83,6 @@ export default class Popover extends React.Component<
                   innerRef={arrowProps.ref}
                 />
               </SafeWrapper>
-              /*<div ref={ref} style={style} data-placement={placement}>
-                  Popper element
-                  <div ref={arrowProps.ref} style={arrowProps.style} />
-                </div>*/
             );
           }}
         </Popper>

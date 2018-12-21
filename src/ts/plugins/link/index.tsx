@@ -11,7 +11,7 @@ import { AppState } from "../../store";
 import { EventEmitter } from "events";
 
 //Icon
-import { Icon } from "react-icons-kit";
+import Icon from "../../components/toolBar/icon";
 import { link } from "react-icons-kit/fa/";
 
 import FormGroup from "../components/formGroup";
@@ -163,7 +163,6 @@ export class Link extends React.Component<LinkProps, LinkState> {
   }
 
   handleOpenNewTabChange(checked: boolean) {
-    console.log();
     this.setState({ openNewTab: checked });
   }
 
@@ -190,7 +189,7 @@ export class Link extends React.Component<LinkProps, LinkState> {
     const isPopupInline = true;
 
     //Button Icon
-    const icon = <Icon icon={link} />;
+    const icon = <Icon icon={"link"} />;
     console.warn("State: ", this.state);
     //Header
     const header = current == "link" ? "Set Link" : "Manage Link";

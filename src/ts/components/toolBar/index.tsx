@@ -12,8 +12,9 @@ import { EditorState } from "draft-js";
 import { EventEmitter } from "events";
 
 //Icons
-import { Icon } from "react-icons-kit";
 import { expand } from "react-icons-kit/fa/";
+
+import Icon from "./icon";
 
 export interface ToolBarProps {
   appState?: AppState;
@@ -77,8 +78,6 @@ export default class ToolBar extends React.Component<ToolBarProps> {
 
   componentDidMount() {
     const { appState, on, emit } = this.props;
-
-    console.log("Current App State: ", appState);
 
     //Initialize Toolbar Items
     /*initToolbarItems(
@@ -150,7 +149,7 @@ export default class ToolBar extends React.Component<ToolBarProps> {
             className="expand-editor"
             onClick={this.props.expandEditor}
           >
-            <Icon icon={expand} size={15} />
+            <Icon icon="expandArrow" size={13} />
           </span>
         )}
       </div>

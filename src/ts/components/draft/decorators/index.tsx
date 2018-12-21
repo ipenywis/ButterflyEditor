@@ -6,7 +6,7 @@ import { CompositeDecorator, ContentBlock, ContentState } from "draft-js";
 import "./style.scss";
 
 //Icons
-import { Icon } from "react-icons-kit";
+import Icon from "../../toolBar/icon";
 import { flag, link, pencil } from "react-icons-kit/fa/";
 
 //Prims Code Highlighter
@@ -67,7 +67,7 @@ export default function(
     return (
       <a href={url} target={target} className="dc-container">
         <span className="dc-icon">
-          <Icon icon={link} size={19} />
+          <Icon icon={"link"} size={17} />
         </span>
         {props.children}
       </a>
@@ -95,7 +95,7 @@ export default function(
     return (
       <a href={"#" + anchor} id={anchor} className="dc-container">
         <span className="dc-icon">
-          <Icon icon={flag} size={19} />
+          <Icon icon={"anchor"} size={17} />
         </span>
         {props.children}
       </a>
@@ -175,7 +175,7 @@ export default function(
               );
           })}
         <span className="edit-btn" onClick={onEditBtnClick}>
-          <Icon icon={pencil} size={13} />
+          <Icon icon={"pencil"} size={12} />
         </span>
       </div>
     );

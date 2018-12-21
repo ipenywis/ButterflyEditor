@@ -34,7 +34,7 @@ import axios, { AxiosResponse } from "axios";
 import ImageReader, { IImage } from "../../utils/imageReader";
 
 //Icons
-import { Icon } from "react-icons-kit";
+import Icon from "../../components/toolBar/icon";
 import { image, remove, download } from "react-icons-kit/fa/";
 import { SafeWrapper } from "../../components/common";
 
@@ -271,7 +271,7 @@ export class ImageUploader extends React.Component<
     } = this.state;
 
     //Image Uploader Icon
-    const icon = <Icon icon={image} />;
+    const icon = <Icon icon={"imageUploader"} />;
 
     /* Inline Renderers */
     //Header
@@ -662,7 +662,7 @@ class DraggableUploader extends React.Component<
                         className="remove-btn"
                         onClick={() => this.removeLoadedFile(file)}
                       >
-                        <Icon icon={remove} size={19} />
+                        <Icon icon={"cross"} size={19} />
                       </span>
                     </div>
                   </div>
@@ -788,10 +788,10 @@ class FileBrowser extends React.Component<FileBrowserProps, FileBrowserState> {
                 >
                   <div className="options">
                     <span className="option">
-                      <Icon icon={download} size={16} />
+                      <Icon icon={"download"} size={16} />
                     </span>
                     <span className="option">
-                      <Icon icon={remove} size={16} />
+                      <Icon icon={"cross"} size={16} />
                     </span>
                   </div>
                   <span className="img-preview">

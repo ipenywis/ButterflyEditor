@@ -4,7 +4,7 @@ import * as React from "react";
 import Plugin from "../plugin";
 
 //Icon
-import { Icon } from "react-icons-kit";
+import Icon from "../../components/toolBar/icon";
 import { tint } from "react-icons-kit/fa/";
 
 //Popup
@@ -279,7 +279,7 @@ export class ColorPicker extends Plugin<ColorPickerProps, ColorPickerState> {
       </SafeWrapper>
     );
 
-    const icon = <Icon icon={tint} />;
+    const icon = <Icon icon={"colorPicker"} />;
 
     return (
       <Popup

@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 //Icon
-import { Icon } from "react-icons-kit";
+import Icon from "../components/toolBar/icon";
 import { close } from "react-icons-kit/fa/";
 
 //Safe Wrapper
@@ -235,7 +235,7 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
             ref={closeBtn => (this.closeBtn = closeBtn)}
             onClick={onCloseCross ? onCloseCross : this.closePopup.bind(this)}
           >
-            <Icon icon={close} size={20} />
+            <Icon icon={"cross"} size={11} />
           </span>
         </ClickOutsideHandler>
         <div className="popup-tail-shadow" />

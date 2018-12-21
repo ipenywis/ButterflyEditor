@@ -45,3 +45,6 @@ declare module "monaco-editor/*";
 //react tabs (rc-tabs)
 declare module "rc-tabs";
 declare module "rc-tabs/*";
+
+//Inline SVG React Wrapper
+declare module "svg-inline-react";

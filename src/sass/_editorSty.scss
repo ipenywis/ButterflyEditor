@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-family: Oxygen, sans-serif;
 }
 
 //BlurprintJS Overwriting
@@ -96,8 +97,8 @@
 //Resize Icon
 .draft-resizer {
   position: absolute;
-  right: -7px;
-  bottom: -7px;
+  right: -6px;
+  bottom: -5px;
   transform: rotate(-39deg);
   color: rgba(101, 101, 101, 0.68);
   color: #42576bc4;
@@ -414,6 +415,8 @@
 //Toolbar Expand Icon
 .expand-editor {
   position: absolute;
+  width: 15px;
+  height: 15px;
   top: 2px;
   right: 3px;
   /* border: 1px solid rgba(255, 255, 255, 0.5); */
