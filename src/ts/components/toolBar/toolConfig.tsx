@@ -2,19 +2,6 @@ import { InlineStyle, BlockType, ToolbarItem } from "./controls";
 
 import * as React from "react";
 
-//Icons
-import {
-  bold,
-  italic,
-  underline,
-  quoteLeft,
-  listUl,
-  listOl,
-  font,
-  textHeight,
-  paragraph,
-  code
-} from "react-icons-kit/fa/";
 import Icon, { IIconRotate } from "../toolBar/icon";
 
 //Custom Styles

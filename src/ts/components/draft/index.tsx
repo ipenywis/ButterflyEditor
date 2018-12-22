@@ -8,7 +8,6 @@ import { Editor, EditorState } from "draft-js";
 import { AppState } from "../../store";
 
 import Icon from "../toolBar/icon";
-import { caretDown } from "react-icons-kit/fa/";
 
 import { SafeWrapper } from "../common";
 

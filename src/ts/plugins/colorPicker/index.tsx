@@ -5,7 +5,6 @@ import Plugin from "../plugin";
 
 //Icon
 import Icon from "../../components/toolBar/icon";
-import { tint } from "react-icons-kit/fa/";
 
 //Popup
 import Popup from "../../components/popup";

@@ -18,7 +18,6 @@ import { EventEmitter } from "events";
 
 //Icon
 import Icon from "../../components/toolBar/icon";
-import { flag } from "react-icons-kit/fa/";
 
 import FormGroup from "../components/formGroup";
 import InputGroup from "../components/inputGroup";

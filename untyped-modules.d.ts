@@ -1,10 +1,5 @@
 /* This file fakes the declaration of modules that doens't have a @types either included or on the typescript repository it's just a hack around */
 
-//React Icons Kit
-declare module "react-icons-kit";
-declare module "react-icons-kit/*/";
-declare module "react-icons-kit/fa/*";
-
 //Draft to html
 declare module "draftjs-to-html";
 
@@ -34,8 +29,6 @@ declare module "draft-js-prism";
 
 //Draftjs Decorators Combiners
 declare module "draft-js-multidecorators";
-
-//declare module ""  "../draft-js-utils/packages/draft-js-import-html/typings/index.d.ts";
 
 //Monaco Languages
 declare module "monaco-languages/*";

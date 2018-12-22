@@ -3,7 +3,6 @@ import * as ReactDOM from "react-dom";
 
 //Icon
 import Icon from "../components/toolBar/icon";
-import { close } from "react-icons-kit/fa/";
 
 //Safe Wrapper
 import { SafeWrapper } from "./common";

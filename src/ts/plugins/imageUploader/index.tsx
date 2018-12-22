@@ -35,7 +35,6 @@ import ImageReader, { IImage } from "../../utils/imageReader";
 
 //Icons
 import Icon from "../../components/toolBar/icon";
-import { image, remove, download } from "react-icons-kit/fa/";
 import { SafeWrapper } from "../../components/common";
 
 //Lodash

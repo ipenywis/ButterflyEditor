@@ -7,7 +7,6 @@ import "./style.scss";
 
 //Icons
 import Icon from "../../toolBar/icon";
-import { flag, link, pencil } from "react-icons-kit/fa/";
 
 //Prims Code Highlighter
 import * as Prism from "prismjs";
