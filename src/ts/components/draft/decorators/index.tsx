@@ -37,16 +37,14 @@ export default function(
   ) => {
     contentBlock.findEntityRanges(character => {
       const entityKey = character.getEntity();
-      console.log("CHECKING IF LINK");
       if (
         entityKey != null &&
         contentState.getEntity(entityKey).getType() == "LINK"
       )
-        console.log("THIS IS A LINK");
-      return (
-        entityKey != null &&
-        contentState.getEntity(entityKey).getType() == "LINK"
-      );
+        return (
+          entityKey != null &&
+          contentState.getEntity(entityKey).getType() == "LINK"
+        );
     }, callback);
   };
 
@@ -54,15 +52,6 @@ export default function(
     const { url, target } = props.contentState
       .getEntity(props.entityKey)
       .getData();
-    /*Removed Style       style={{
-        color: "#126fc7",
-        fontWeight: 500,
-        textDecoration: "none",
-        cursor: "text"
-      }}*/
-
-    alert("Rendering LINK");
-
     return (
       <a href={url} target={target} className="dc-container">
         <span className="dc-icon">
@@ -140,13 +129,6 @@ export default function(
       emit("EditCode", props.entityKey, code);
     };
 
-    console.log(
-      "RENDERING ENTITY CODE DECORATOR: ",
-      code,
-      language,
-      isImportedCode
-    );
-
     //NOTE: isImportedCode tells us if the code has been imported & converted from HTML
     //(since draftjs already applies it's own wrapping for code elements), adds pre wrapper for code (so no need to rendering it twice)
 
@@ -174,7 +156,7 @@ export default function(
               );
           })}
         <span className="edit-btn" onClick={onEditBtnClick}>
-          <Icon icon={"pencil"} size={12} />
+          <Icon icon={"edit"} size={12} />
         </span>
       </div>
     );
@@ -196,16 +178,12 @@ export default function(
   };
 
   const ImageDecoratorComp = (props: any) => {
-    console.log("In the IMAGE ENTITY COMPONENT RENDERER");
     const image: IImage = props.contentState
       .getEntity(props.entityKey)
       .getData();
     //Normalize width and height
     const width = image.width ? image.width + "px" : "120px";
     const height = image.height ? image.height + "px" : "100px";
-    //Convert IImageType to string representation
-    //const imgStrType: string = ImageReader.convertTypeToStr(image.type);
-    console.log("Received Image: ", image);
     //If Image URL presents (Use URL instead of Base64 Data, for performance Reasons)
     let compatibleImgDataOrURL = null;
     if (image.URL) {

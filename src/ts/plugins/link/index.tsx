@@ -258,7 +258,7 @@ export class Link extends React.Component<LinkProps, LinkState> {
         header={header}
         container={container}
         footer={footer}
-        didOpen={this.onPopupOpen.bind(this)}
+        onDidOpen={this.onPopupOpen.bind(this)}
         onClose={this.clearErrors.bind(this)}
         ref={popup => (this.popup = popup)}
       />

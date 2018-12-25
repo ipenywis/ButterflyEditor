@@ -1,4 +1,4 @@
-import * as React from "react";
+/*import * as React from "react";
 
 //Popup
 import Popup from "../../components/popup";
@@ -33,12 +33,7 @@ import Decorators from "../../components/draft/decorators";
 import * as Prism from "prismjs";
 import { addEntityImportRule } from "../../components/draft/importOptions";
 
-//Monaco
-/*import {
-  languages as MONACO_LANGUAGES,
-  editor as MONACO_EDITOR
-} from "monaco-editor/min/vs/editor/editor.main.js";
-*/
+
 
 //React Monaco Editor Comp
 import MonacoEditor from "react-monaco-editor";
@@ -99,12 +94,8 @@ export class CodeEditor extends React.Component<
     };
   }
 
-  onOpen() {}
-
   monacoEditorWillMount(monaco: any) {
     monaco.languages.register({ id: "javascript" });
-
-    console.log("Lang: ", javascriptLanguage);
 
     //let jsLang: MONACO_LANGUAGES.IMonarchLanguage = javascriptLanguage.language as MONACO_LANGUAGES.IMonarchLanguage;
     let jsLang: any = javascriptLanguage.language as any;
@@ -119,8 +110,6 @@ export class CodeEditor extends React.Component<
     monaco: any
   ) {
     monaco.editor.setModelLanguage(editor.getModel(), "javascript");
-
-    console.log("Monaco Languages: ", monaco.languages.getLanguages());
 
     editor.onDidChangeModelContent(this.validateCode.bind(this));
   }
@@ -238,7 +227,6 @@ export class CodeEditor extends React.Component<
   }
 
   validateCode(code: string) {
-    console.log(" CODE Changed: ", code);
     //Validate Code Make sure it's (NotEmpty)
     if (!code || code === "" || code.trim() === "")
       this.setState({ preventSubmit: true, allowDiscardNoWarning: true });
@@ -377,33 +365,6 @@ export class CodeEditor extends React.Component<
       </div>
     );
 
-    /*
-              <Popover
-          isOpen={this.state.isWarningOpen}
-          target={
-            <AnchorButton
-              className="btn"
-              text="Discard"
-              intent={Intent.DANGER}
-              onClick={() => this.setState({ isWarningOpen: true })}
-            />
-          }
-        >
-          <div>Are you sure you want to Discard Code?</div>
-          <AnchorButton
-            text="No, Continue"
-            intent={Intent.PRIMARY}
-            onClick={() => this.setState({ isWarningOpen: false })}
-          />
-          <AnchorButton
-            text="Discard"
-            intent={Intent.DANGER}
-            onClick={() => this.popup.closePopup()}
-          />
-        </Popover>
-      */
-
-    //Popup
     return (
       <Popup
         isInline={popupInline}
@@ -432,9 +393,9 @@ export class CodeEditor extends React.Component<
         onCloseCross={this.onCloseCrossClick.bind(this)}
         container={container}
         footer={footer}
-        didOpen={this.onOpen.bind(this)}
         ref={popup => (this.popup = popup)}
       />
     );
   }
 }
+*/

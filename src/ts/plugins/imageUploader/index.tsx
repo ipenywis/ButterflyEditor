@@ -458,7 +458,7 @@ export class ImageUploader extends React.Component<
         header={isInline ? inlineHeader : advancedHeader}
         container={isInline ? inlineContainer : advancedContainer}
         footer={isInline ? inlineFooter : advancedFooter}
-        didOpen={this.onPopupOpen.bind(this)}
+        onDidOpen={this.onPopupOpen.bind(this)}
         onClose={this.onPopupClose.bind(this)}
         ref={popup => (this.popup = popup)}
       />

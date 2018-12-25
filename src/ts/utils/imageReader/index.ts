@@ -373,7 +373,6 @@ export default class ImageReader {
         .then(res => {
           //OUR Custom Cors-Escape Will Automatically do the encoding and return an base64 encoded image
           this.data = res.data;
-          console.log("DATA: ", this.data);
           //Generate a temp name
           this.name = name
             ? name

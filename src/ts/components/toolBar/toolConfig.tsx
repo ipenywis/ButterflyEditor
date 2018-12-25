@@ -37,7 +37,7 @@ export const initToolbarItems = async (
   return new Promise<{ inlineStyles: InlineStyle[]; blockTypes: BlockType[] }>(
     async (rs, rj) => {
       //Import Plugins Dynamically
-      const { CodeEditor } = await import("../../plugins/codeEditor");
+      //const { CodeEditor } = await import("../../plugins/codeEditor");
       const { ColorPicker } = await import("../../plugins/colorPicker");
       const { Anchor } = await import("../../plugins/anchor");
       const { Link } = await import("../../plugins/link");
@@ -135,15 +135,15 @@ export const initToolbarItems = async (
         {
           groupID: 3,
           popup: {
-            standAlone: (
-              <CodeEditor
+            standAlone:
+              /*<CodeEditor
                 updateEditorState={updateEditorState}
                 editorState={appState.editorState}
                 editor={appState.editor}
                 on={on}
                 emit={emit}
-              />
-            )
+              />*/
+              null
           }
         }
       ];
@@ -244,7 +244,8 @@ import { ColorPicker } from "../../plugins/colorPicker";
 import { Link } from "../../plugins/link";
 import { Anchor } from "../../plugins/anchor";
 import { ImageUploader } from "../../plugins/imageUploader";
-import { CodeEditor } from "../../plugins/codeEditor";
+//import { CodeEditor } from "../../plugins/codeEditor";
+import CodeMirrorEditor from "../../plugins/codeEditor/codeMirrorEditor";
 
 /**
  * Initialize the Toolbar Items Synchronously
@@ -324,7 +325,7 @@ export const initToolbarItemsSync = (
       label: EDITOR_TOOLBAR_LABELS.HTML,
       groupID: 3,
       icon: <Icon icon={"htmlView"} />,
-      onSelect: () => toggleDraftView()
+      onSelect: toggleDraftView
     },
     {
       groupID: 3,
@@ -358,7 +359,14 @@ export const initToolbarItemsSync = (
       groupID: 3,
       popup: {
         standAlone: (
-          <CodeEditor
+          /*<CodeEditor
+            updateEditorState={updateEditorState}
+            editorState={appState.editorState}
+            editor={appState.editor}
+            on={on}
+            emit={emit}
+          />*/
+          <CodeMirrorEditor
             updateEditorState={updateEditorState}
             editorState={appState.editorState}
             editor={appState.editor}

@@ -55,8 +55,6 @@ export const applyEntity = (
     entityKey
   );*/
 
-  //console.log("Entity: ", contentStateWithAppliedEntity.getEntity(entityKey));
-
   /*return EditorState.set(editorState, {
     currentContent: contentStateWithAppliedEntity
   });*/

@@ -19,6 +19,7 @@ let entityRules: EntityRule[] = [];
  * Add a Rule for Importing a New Type of Entity
  * Specify the element using filter
  * use rule callback for adding the specific data to get the entity renderer
+ * *(Importing is when writing HTML in the editor)*
  * @param entityType
  * @param filter
  * @param rule

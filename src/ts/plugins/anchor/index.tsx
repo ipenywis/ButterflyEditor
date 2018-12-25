@@ -76,7 +76,6 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
     //Validate Anchor Input
     const { editorState, updateEditorState } = this.props;
     const { anchor } = this.state;
-    console.log("Anchor: ", anchor);
     if (!anchor) {
       this.setError("Please Specify Anchor Name");
       return;
@@ -167,7 +166,6 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
 
     let current = "anchor";
     const anchorName = this.getCurrentTextAnchor();
-    console.log("ANCHOR: ", anchorName);
     if (anchorName) {
       //Change current mode to unAnchor (Remove Anchor)
       current = "unanchor";
@@ -253,7 +251,7 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
         header={header}
         container={container}
         footer={footer}
-        didOpen={this.onPopupOpen.bind(this)}
+        onDidOpen={this.onPopupOpen.bind(this)}
         onClose={this.clearErrors.bind(this)}
         ref={popup => (this.popup = popup)}
       />

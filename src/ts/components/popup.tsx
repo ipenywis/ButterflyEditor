@@ -41,8 +41,10 @@ export interface PopupProps {
   //Is Popup Disabled
   isDisabled?: boolean;
 
+  /**(Popup) ComponentWillMount (Popup is going to open)*/
   onOpen?: () => void;
-  didOpen?: () => void;
+  /**(Popup) ComponentDidMount (Popup was opened) */
+  onDidOpen?: () => void;
 
   onClose?: () => void;
   onCloseCross?: () => void;
@@ -163,11 +165,15 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
     });
   }
 
+  componentWillUnmount() {
+    console.log("Popup is Unmouting OMG Good bye!");
+  }
+
   componentDidUpdate() {
     //Updated and the Popup isOpen?
-    if (this.state.isOpen && !this.state.didOpen && this.props.didOpen) {
+    if (this.state.isOpen && !this.state.didOpen && this.props.onDidOpen) {
       //Run Callback
-      this.props.didOpen();
+      this.props.onDidOpen();
       //Set DidOpen
       this.setState({ didOpen: true });
     }

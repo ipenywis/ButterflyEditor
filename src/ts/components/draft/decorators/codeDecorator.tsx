@@ -33,10 +33,6 @@ const defaultFilter = (
       const entityKey = character.getEntity();
       const entity = contentState.getEntity(entityKey);
       entityData = entity.getData();
-      console.log("TCL: Find entity ranges: entity", entity);
-
-      //return block.getType() == "code-block";
-
       return (
         entityKey != null &&
         contentState.getEntity(entityKey).getType() == "CODE_SNIPPET"
@@ -52,8 +48,6 @@ const defaultGetSyntax = (block: ContentBlock) => {
 };
 
 const defaultRenderer = (props: any) => {
-  console.log("TCL: defaultRenderer -> props", props);
-
   return React.createElement(
     "span",
     { className: "prism-token token " + props.type },
@@ -103,9 +97,7 @@ class CodeDecorator {
     var filter = this.options.filter;
     var getSyntax = this.options.syntaxt;
     var blockKey = block.getKey();
-    console.log("TCL: CodeDecorator -> blockKey", blockKey);
     var blockText = block.getText();
-    console.log("TCL: CodeDecorator -> blockText", blockText);
     var decorations = Array(blockText.length).fill(null);
     var highlighted = this.highlighted;
 
@@ -116,7 +108,6 @@ class CodeDecorator {
     }*/
 
     filter(block, contentState, (entityStart, entityEnd, data) => {
-      console.log("TCL: CodeDecorator -> data", data);
       //filter: used to tell which entity type to apply decoration on to for ex: SNIPPTET_CODE
       //syntax: is the current language to apply highlight to for ex: javascript
       //tokens: returned by prism tokenize which is an object holding different text parts have type and current code type of it
@@ -133,8 +124,6 @@ class CodeDecorator {
       var grammar = Prism.languages[syntax];
       //Using Prism highlight text and return as tokens object
       tokens = Prism.tokenize(data.code, grammar);
-
-      console.log("TCL: CodeDecorator -> tokens", tokens);
 
       function processToken(decorations: any, token: any, offset: any) {
         if (typeof token === "string") {
@@ -162,13 +151,10 @@ class CodeDecorator {
       }
     });
 
-    console.log("TCL: CodeDecorator -> decorations", decorations);
     return Immutable.List(decorations);
   }
 
   getComponentForKey(key: string) {
-    console.log("TCL: CodeDecorator -> key IN GET COMPONENT", key);
-
     return defaultRenderer;
   }
 
@@ -177,7 +163,6 @@ class CodeDecorator {
     var blockKey = parts[0];
     var tokId = parts[1];
     var token = this.highlighted[blockKey][tokId];
-    console.log("TCL: CodeDecorator -> token", token);
 
     return {
       type: token.type

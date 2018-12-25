@@ -68,7 +68,6 @@ export default class Toaster extends React.Component<ToasterProps, ToasterState>
   //NOTE: If key is not provided, then show the latest toast crearted
   public show(props?: ToastProps, key?: string): string {
     const options = this.createToastOptions(props, key);
-    console.log("Toast Options: ", options);
     if (key == undefined || this.isNewToastKey(options.key)) {
       this.setState(prevState => ({ toasts: [options, ...prevState.toasts] }));
     } else {
@@ -106,10 +105,6 @@ export default class Toaster extends React.Component<ToasterProps, ToasterState>
 
   public render() {
     const { toasts } = this.state;
-
-    console.log("Toasts Available: ", toasts);
-
-    //Force position to be relative since we are using a Toaster that manage the Toasts (Not a Standalone Toast)
 
     return (
       <ToastsWrapper>

@@ -1,0 +1,60 @@
+.CodeMirror {
+  min-height: 27em;
+  max-height: 33em;
+}
+
+.CodeMirror-hscrollbar {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.CodeMirror-vscrollbar {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+#code-editor {
+  width: 100%;
+}
+
+//Figure (holds the code editor and other embedded media)
+figure {
+  margin: 0;
+}
+
+//Code Block
+pre {
+  //background-color: #2c3e50;
+  background-color: #3c4e5f;
+  color: #fff;
+  /* font-size: 14px; */
+  padding: 15px;
+  padding-left: 10px;
+  /* font-family: Oxygen, sans-serif; */
+  border-radius: 4px;
+}
+
+//Editor Code Container
+.code-container {
+  position: relative;
+  .edit-btn {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: #aba8a8cf;
+    /* background-color: #fff; */
+    padding: 2px;
+    cursor: pointer;
+    &:hover {
+      color: #42576b;
+      background-color: rgb(215, 215, 216);
+    }
+  }
+}
+
+.language-select-container {
+  display: flex;
+  /*#language-select {
+    
+  }*/
+}

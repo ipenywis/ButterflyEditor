@@ -98,8 +98,6 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     //Insert New Line After Last Item on the List (Last Children on the Container)
     let lastItem = container.children.item(container.children.length - 1);
 
-    console.log(this.props.appState.editorState);
-
     //Register RETURN KEY HANDLER
     window.addEventListener("keydown", e => {
       switch (e.key) {

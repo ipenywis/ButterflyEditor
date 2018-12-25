@@ -310,7 +310,8 @@ body .ip-icon-large {
       .btn-dropDown .btn-dropDown-container .dropDown-item:hover {
         background-color: #3b4658; }
       .btn-dropDown .btn-dropDown-container .dropDown-item.toggle {
-        background-color: #3b4658; }
+        background-color: #3b4658;
+        border-bottom: 0.6px solid #ecf0f1; }
 
 .popup {
   position: fixed;
@@ -655,1475 +656,6 @@ pre[class*="language-"] {
 
 .token.entity {
   cursor: help; }
-#code-editor {
-  width: 100%; }
-
-.inner-container {
-  padding: 12px; }
-
-.footer-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  padding: 0px 27px;
-  width: 100%; }
-  .footer-container .btn {
-    margin-left: 10px; }
-
-figure {
-  margin: 0; }
-
-pre {
-  background-color: #3c4e5f;
-  color: #fff;
-  /* font-size: 14px; */
-  padding: 15px;
-  padding-left: 10px;
-  /* font-family: Oxygen, sans-serif; */
-  border-radius: 4px; }
-
-.code-container {
-  position: relative; }
-  .code-container .edit-btn {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    color: #aba8a8cf;
-    /* background-color: #fff; */
-    padding: 2px;
-    cursor: pointer; }
-    .code-container .edit-btn:hover {
-      color: #42576b;
-      background-color: #d7d7d8; }
-
-.language-select-container {
-  display: flex;
-  /*#language-select {
-    
-  }*/ }
-/* Intent */
-.btn {
-  border: 0;
-  padding: 5px 10px;
-  border-radius: 3px;
-  margin-left: 10px;
-  box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.2), inset 0 -1px 0 rgba(16, 22, 26, 0.1);
-  transition: background-color, 150ms ease-in-out;
-  cursor: pointer;
-  font-size: 15px; }
-  .btn.intent-none {
-    background-color: #f5f8fa;
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
-    color: #242424; }
-    .btn.intent-none:hover {
-      background-clip: padding-box;
-      background-color: #ebf1f5; }
-    .btn.intent-none.disabled {
-      opacity: 0.6;
-      cursor: no-drop; }
-    .btn.intent-none.minimal {
-      background: none;
-      border: 0;
-      box-shadow: none;
-      font-size: 14px; }
-      .btn.intent-none.minimal:hover {
-        background-color: #e0e6e7;
-        background-image: 0; }
-  .btn.intent-primary {
-    background-color: #2980b9;
-    background-image: none;
-    color: #fff; }
-    .btn.intent-primary:hover {
-      background-color: #1e7ab8; }
-    .btn.intent-primary.disabled {
-      opacity: 0.6;
-      cursor: no-drop; }
-    .btn.intent-primary.minimal {
-      background: none;
-      border: 0;
-      color: #1e7ab8;
-      box-shadow: none;
-      font-size: 14px; }
-      .btn.intent-primary.minimal:hover {
-        background-color: #c1ddf0; }
-  .btn.intent-danger {
-    background-color: #e74c3c;
-    background-image: none;
-    color: #fff; }
-    .btn.intent-danger:hover {
-      background-color: #cf3625; }
-    .btn.intent-danger.disabled {
-      opacity: 0.6;
-      cursor: no-drop; }
-    .btn.intent-danger.minimal {
-      background: none;
-      border: 0;
-      color: #cf3625;
-      box-shadow: none;
-      font-size: 14px; }
-      .btn.intent-danger.minimal:hover {
-        background-color: #f1c4bf; }
-  .btn.intent-success {
-    background-color: #27ae60;
-    background-image: none;
-    color: #fff; }
-    .btn.intent-success:hover {
-      background-color: #1daa58; }
-    .btn.intent-success.disabled {
-      opacity: 0.6;
-      cursor: no-drop; }
-    .btn.intent-success.minimal {
-      background: none;
-      border: 0;
-      color: #1daa58;
-      box-shadow: none;
-      font-size: 14px; }
-      .btn.intent-success.minimal:hover {
-        background-color: #b6f0ce; }
-  .btn.intent-info {
-    background-color: #f39c12;
-    background-image: none;
-    color: #fff; }
-    .btn.intent-info:hover {
-      background-color: #d88f19; }
-    .btn.intent-info.disabled {
-      opacity: 0.6;
-      cursor: no-drop; }
-    .btn.intent-info.minimal {
-      background: none;
-      border: 0;
-      color: #d88f19;
-      box-shadow: none;
-      font-size: 14px; }
-      .btn.intent-info.minimal:hover {
-        background-color: #f1e1c8; }
-.arrow-tail {
-  position: absolute;
-  width: 0px;
-  height: 0px;
-  border: 10px solid;
-  border-color: transparent transparent transparent #ffffff; }
-  .arrow-tail.arrow-tail-top {
-    border-color: transparent transparent #ffffff transparent; }
-  .arrow-tail.arrow-tail-right {
-    border-color: transparent transparent transparent #ffffff; }
-  .arrow-tail.arrow-tail-bottom {
-    border-color: #ffffff transparent transparent transparent; }
-  .arrow-tail.arrow-tail-left {
-    border-color: transparent #ffffff transparent transparent; }
-
-.arrow-tail-shadow {
-  background-color: transparent;
-  width: 2px;
-  height: 2px;
-  position: absolute;
-  /* z-index: -10; */
-  box-shadow: 0px 0px 5px 1px black;
-  bottom: -6px;
-  transform: translate(9px, 0px); }
-
-.arrow-tail-glow {
-  width: 0px;
-  height: 0px;
-  border: 10px solid;
-  position: absolute; }
-  .arrow-tail-glow.arrow-tail-top {
-    border-color: transparent transparent #73a7f0 transparent; }
-  .arrow-tail-glow.arrow-tail-right {
-    border-color: transparent transparent transparent #73a7f0; }
-  .arrow-tail-glow.arrow-tail-bottom {
-    border-color: #73a7f0 transparent transparent transparent; }
-  .arrow-tail-glow.arrow-tail-left {
-    border-color: transparent #73a7f0 transparent transparent; }
-.popover-content {
-  position: absolute;
-  background-color: #fff;
-  padding: 18px;
-  border-radius: 4px;
-  top: -14em;
-  max-width: 38em;
-  min-width: 20em;
-  left: -100%; }
-
-.popover-container {
-  background-color: #fff;
-  padding: 16px;
-  border-radius: 4px;
-  min-width: 22em; }
-
-/*
-
-    width: 0px;
-    height: 0px;
-    border: 10px solid;
-    border-color: #d42020 transparent transparent transparent;
-    position: absolute;
-    right: -20px; 
-    bottom: 19px; 
-    z-index: 99;
-
-*/
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/* Default standalone editor font */
-.monaco-editor {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "HelveticaNeue-Light", "Ubuntu", "Droid Sans", sans-serif; }
-
-.monaco-menu .monaco-action-bar.vertical .action-item .action-menu-item:focus .action-label {
-  stroke-width: 1.2px; }
-
-.monaco-editor.vs-dark .monaco-menu .monaco-action-bar.vertical .action-menu-item:focus .action-label,
-.monaco-editor.hc-black .monaco-menu .monaco-action-bar.vertical .action-menu-item:focus .action-label {
-  stroke-width: 1.2px; }
-
-.monaco-editor-hover p {
-  margin: 0; }
-
-/* The hc-black theme is already high contrast optimized */
-.monaco-editor.hc-black {
-  -ms-high-contrast-adjust: none; }
-
-/* In case the browser goes into high contrast mode and the editor is not configured with the hc-black theme */
-@media screen and (-ms-high-contrast: active) {
-  /* current line highlight */
-  .monaco-editor.vs .view-overlays .current-line,
-  .monaco-editor.vs-dark .view-overlays .current-line {
-    border-color: windowtext !important;
-    border-left: 0;
-    border-right: 0; }
-  /* view cursors */
-  .monaco-editor.vs .cursor,
-  .monaco-editor.vs-dark .cursor {
-    background-color: windowtext !important; }
-  /* dnd target */
-  .monaco-editor.vs .dnd-target,
-  .monaco-editor.vs-dark .dnd-target {
-    border-color: windowtext !important; }
-  /* selected text background */
-  .monaco-editor.vs .selected-text,
-  .monaco-editor.vs-dark .selected-text {
-    background-color: highlight !important; }
-  /* allow the text to have a transparent background. */
-  .monaco-editor.vs .view-line,
-  .monaco-editor.vs-dark .view-line {
-    -ms-high-contrast-adjust: none; }
-  /* text color */
-  .monaco-editor.vs .view-line span,
-  .monaco-editor.vs-dark .view-line span {
-    color: windowtext !important; }
-  /* selected text color */
-  .monaco-editor.vs .view-line span.inline-selected-text,
-  .monaco-editor.vs-dark .view-line span.inline-selected-text {
-    color: highlighttext !important; }
-  /* allow decorations */
-  .monaco-editor.vs .view-overlays,
-  .monaco-editor.vs-dark .view-overlays {
-    -ms-high-contrast-adjust: none; }
-  /* various decorations */
-  .monaco-editor.vs .selectionHighlight,
-  .monaco-editor.vs-dark .selectionHighlight,
-  .monaco-editor.vs .wordHighlight,
-  .monaco-editor.vs-dark .wordHighlight,
-  .monaco-editor.vs .wordHighlightStrong,
-  .monaco-editor.vs-dark .wordHighlightStrong,
-  .monaco-editor.vs .reference-decoration,
-  .monaco-editor.vs-dark .reference-decoration {
-    border: 2px dotted highlight !important;
-    background: transparent !important;
-    box-sizing: border-box; }
-  .monaco-editor.vs .rangeHighlight,
-  .monaco-editor.vs-dark .rangeHighlight {
-    background: transparent !important;
-    border: 1px dotted activeborder !important;
-    box-sizing: border-box; }
-  .monaco-editor.vs .bracket-match,
-  .monaco-editor.vs-dark .bracket-match {
-    border-color: windowtext !important;
-    background: transparent !important; }
-  /* find widget */
-  .monaco-editor.vs .findMatch,
-  .monaco-editor.vs-dark .findMatch,
-  .monaco-editor.vs .currentFindMatch,
-  .monaco-editor.vs-dark .currentFindMatch {
-    border: 2px dotted activeborder !important;
-    background: transparent !important;
-    box-sizing: border-box; }
-  .monaco-editor.vs .find-widget,
-  .monaco-editor.vs-dark .find-widget {
-    border: 1px solid windowtext; }
-  /* list - used by suggest widget */
-  .monaco-editor.vs .monaco-list .monaco-list-row,
-  .monaco-editor.vs-dark .monaco-list .monaco-list-row {
-    -ms-high-contrast-adjust: none;
-    color: windowtext !important; }
-  .monaco-editor.vs .monaco-list .monaco-list-row.focused,
-  .monaco-editor.vs-dark .monaco-list .monaco-list-row.focused {
-    color: highlighttext !important;
-    background-color: highlight !important; }
-  .monaco-editor.vs .monaco-list .monaco-list-row:hover,
-  .monaco-editor.vs-dark .monaco-list .monaco-list-row:hover {
-    background: transparent !important;
-    border: 1px solid highlight;
-    box-sizing: border-box; }
-  /* tree */
-  .monaco-editor.vs .monaco-tree .monaco-tree-row,
-  .monaco-editor.vs-dark .monaco-tree .monaco-tree-row {
-    -ms-high-contrast-adjust: none;
-    color: windowtext !important; }
-  .monaco-editor.vs .monaco-tree .monaco-tree-row.selected,
-  .monaco-editor.vs-dark .monaco-tree .monaco-tree-row.selected,
-  .monaco-editor.vs .monaco-tree .monaco-tree-row.focused,
-  .monaco-editor.vs-dark .monaco-tree .monaco-tree-row.focused {
-    color: highlighttext !important;
-    background-color: highlight !important; }
-  .monaco-editor.vs .monaco-tree .monaco-tree-row:hover,
-  .monaco-editor.vs-dark .monaco-tree .monaco-tree-row:hover {
-    background: transparent !important;
-    border: 1px solid highlight;
-    box-sizing: border-box; }
-  /* scrollbars */
-  .monaco-editor.vs .monaco-scrollable-element > .scrollbar,
-  .monaco-editor.vs-dark .monaco-scrollable-element > .scrollbar {
-    -ms-high-contrast-adjust: none;
-    background: background !important;
-    border: 1px solid windowtext;
-    box-sizing: border-box; }
-  .monaco-editor.vs .monaco-scrollable-element > .scrollbar > .slider,
-  .monaco-editor.vs-dark .monaco-scrollable-element > .scrollbar > .slider {
-    background: windowtext !important; }
-  .monaco-editor.vs .monaco-scrollable-element > .scrollbar > .slider:hover,
-  .monaco-editor.vs-dark .monaco-scrollable-element > .scrollbar > .slider:hover {
-    background: highlight !important; }
-  .monaco-editor.vs .monaco-scrollable-element > .scrollbar > .slider.active,
-  .monaco-editor.vs-dark .monaco-scrollable-element > .scrollbar > .slider.active {
-    background: highlight !important; }
-  /* overview ruler */
-  .monaco-editor.vs .decorationsOverviewRuler,
-  .monaco-editor.vs-dark .decorationsOverviewRuler {
-    opacity: 0; }
-  /* minimap */
-  .monaco-editor.vs .minimap,
-  .monaco-editor.vs-dark .minimap {
-    display: none; }
-  /* squiggles */
-  .monaco-editor.vs .squiggly-d-error,
-  .monaco-editor.vs-dark .squiggly-d-error {
-    background: transparent !important;
-    border-bottom: 4px double #E47777; }
-  .monaco-editor.vs .squiggly-c-warning,
-  .monaco-editor.vs-dark .squiggly-c-warning {
-    border-bottom: 4px double #71B771; }
-  .monaco-editor.vs .squiggly-b-info,
-  .monaco-editor.vs-dark .squiggly-b-info {
-    border-bottom: 4px double #71B771; }
-  .monaco-editor.vs .squiggly-a-hint,
-  .monaco-editor.vs-dark .squiggly-a-hint {
-    border-bottom: 4px double #6c6c6c; }
-  /* contextmenu */
-  .monaco-editor.vs .monaco-menu .monaco-action-bar.vertical .action-menu-item:focus .action-label,
-  .monaco-editor.vs-dark .monaco-menu .monaco-action-bar.vertical .action-menu-item:focus .action-label {
-    -ms-high-contrast-adjust: none;
-    color: highlighttext !important;
-    background-color: highlight !important; }
-  .monaco-editor.vs .monaco-menu .monaco-action-bar.vertical .action-menu-item:hover .action-label,
-  .monaco-editor.vs-dark .monaco-menu .monaco-action-bar.vertical .action-menu-item:hover .action-label {
-    -ms-high-contrast-adjust: none;
-    background: transparent !important;
-    border: 1px solid highlight;
-    box-sizing: border-box; }
-  /* diff editor */
-  .monaco-diff-editor.vs .diffOverviewRuler,
-  .monaco-diff-editor.vs-dark .diffOverviewRuler {
-    display: none; }
-  .monaco-editor.vs .line-insert,
-  .monaco-editor.vs-dark .line-insert,
-  .monaco-editor.vs .line-delete,
-  .monaco-editor.vs-dark .line-delete {
-    background: transparent !important;
-    border: 1px solid highlight !important;
-    box-sizing: border-box; }
-  .monaco-editor.vs .char-insert,
-  .monaco-editor.vs-dark .char-insert,
-  .monaco-editor.vs .char-delete,
-  .monaco-editor.vs-dark .char-delete {
-    background: transparent !important; } }
-
-/*.monaco-editor.vs [tabindex="0"]:focus {
-	outline: 1px solid rgba(0, 122, 204, 0.4);
-	outline-offset: -1px;
-	opacity: 1 !important;
-}
-
-.monaco-editor.vs-dark [tabindex="0"]:focus {
-	outline: 1px solid rgba(14, 99, 156, 0.6);
-	outline-offset: -1px;
-	opacity: 1 !important;
-}*/
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-aria-container {
-  position: absolute;
-  /* try to hide from window but not from screen readers */
-  left: -999em; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/* -------------------- IE10 remove auto clear button -------------------- */
-::-ms-clear {
-  display: none; }
-
-/* All widgets */
-/* I am not a big fan of this rule */
-.monaco-editor .editor-widget input {
-  color: inherit; }
-
-/* -------------------- Editor -------------------- */
-.monaco-editor {
-  position: relative;
-  overflow: visible;
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-feature-settings: "liga" off, "calt" off;
-  font-feature-settings: "liga" off, "calt" off; }
-
-.monaco-editor.enable-ligatures {
-  -webkit-font-feature-settings: "liga" on, "calt" on;
-  font-feature-settings: "liga" on, "calt" on; }
-
-/* -------------------- Misc -------------------- */
-.monaco-editor .overflow-guard {
-  position: relative;
-  overflow: hidden; }
-
-.monaco-editor .view-overlays {
-  position: absolute;
-  top: 0; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .vs-whitespace {
-  display: inline-block; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .inputarea {
-  min-width: 0;
-  min-height: 0;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  outline: none !important;
-  resize: none;
-  border: none;
-  overflow: hidden;
-  color: transparent;
-  background-color: transparent; }
-
-/*.monaco-editor .inputarea {
-	position: fixed !important;
-	width: 800px !important;
-	height: 500px !important;
-	top: initial !important;
-	left: initial !important;
-	bottom: 0 !important;
-	right: 0 !important;
-	color: black !important;
-	background: white !important;
-	line-height: 15px !important;
-	font-size: 14px !important;
-}*/
-.monaco-editor .inputarea.ime-input {
-  z-index: 10; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .margin-view-overlays .line-numbers {
-  position: absolute;
-  text-align: right;
-  display: inline-block;
-  vertical-align: middle;
-  box-sizing: border-box;
-  cursor: default;
-  height: 100%; }
-
-.monaco-editor .relative-current-line-number {
-  text-align: left;
-  display: inline-block;
-  width: 100%; }
-
-.monaco-editor .margin-view-overlays .line-numbers {
-  cursor: -webkit-image-set(url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNSIgaGVpZ2h0PSIyMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCAxNSAyMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTUgMjE7Ij48cG9seWdvbiBzdHlsZT0iZmlsbDojRkZGRkZGO3N0cm9rZTojMDAwMDAwIiBwb2ludHM9IjE0LjUsMS4yIDEuOSwxMy44IDcuMSwxMy44IDQuNSwxOS4xIDcuNywyMC4xIDEwLjMsMTQuOSAxNC41LDE4Ii8+PC9zdmc+") 1x, url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMzAiIGhlaWdodD0iNDIiIHZpZXdCb3g9IjAgMCAzMCA0MiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzAgNDI7Ij48cG9seWdvbiBzdHlsZT0iZmlsbDojRkZGRkZGO3N0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoyOyIgcG9pbnRzPSIyOSwyLjQgMy44LDI3LjYgMTQuMywyNy42IDksMzguMSAxNS40LDQwLjIgMjAuNiwyOS43IDI5LDM2Ii8+PC9zdmc+DQo=") 2x) 30 0, default; }
-
-.monaco-editor.mac .margin-view-overlays .line-numbers {
-  cursor: -webkit-image-set(url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDEyIDE4Ij48c3R5bGU+LnN0MHtmaWxsOiNmZmZ9PC9zdHlsZT48dGl0bGU+ZmxpcHBlZC1jdXJzb3ItbWFjPC90aXRsZT48cGF0aCBkPSJNNC4zIDE2LjVsMS42LTQuNkgxLjFMMTEuNSAxLjJ2MTQuNEw4LjcgMTNsLTEuNiA0LjV6Ii8+PHBhdGggY2xhc3M9InN0MCIgZD0iTTExIDE0LjVsLTIuNS0yLjNMNyAxNi43IDUgMTZsMS42LTQuNWgtNGw4LjUtOU0wIDEyLjVoNS4ybC0xLjUgNC4xTDcuNSAxOCA5IDE0LjJsMi45IDIuM1YwTDAgMTIuNXoiLz48L3N2Zz4=") 1x, url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDI0IDM2LjEiPjxkZWZzPjxzdHlsZT4uYXtmaWxsOiNmZmY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5mbGlwcGVkLWN1cnNvci1tYWMtMng8L3RpdGxlPjxwb2x5Z29uIHBvaW50cz0iOC42IDMzLjEgMTEuOCAyMy45IDIuMiAyMy45IDIzIDIuNSAyMyAzMS4zIDE3LjQgMjYuMSAxNC4yIDM1LjEgOC42IDMzLjEiLz48cGF0aCBjbGFzcz0iYSIgZD0iTTIyLDI5LjFsLTUtNC42LTMuMDYyLDguOTM4LTQuMDYyLTEuNUwxMywyM0g1TDIyLDVNMCwyNUgxMC40bC0zLDguM0wxNSwzNi4xbDMuMTI1LTcuNjYyTDI0LDMzVjBaIi8+PC9zdmc+") 2x) 24 3, default; }
-
-.monaco-editor .margin-view-overlays .line-numbers.lh-odd {
-  margin-top: 1px; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .view-overlays .current-line {
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  box-sizing: border-box; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .margin-view-overlays .current-line {
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  box-sizing: border-box; }
-
-.monaco-editor .margin-view-overlays .current-line.current-line-margin.current-line-margin-both {
-  border-right: 0; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/*
-	Keeping name short for faster parsing.
-	cdr = core decorations rendering (div)
-*/
-.monaco-editor .lines-content .cdr {
-  position: absolute; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/* Arrows */
-.monaco-scrollable-element > .scrollbar > .up-arrow {
-  background: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTEgMTEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0ibTkuNDgwNDYsOC45NjE1bDEuMjYsLTEuMjZsLTUuMDQsLTUuMDRsLTUuNDYsNS4wNGwxLjI2LDEuMjZsNC4yLC0zLjc4bDMuNzgsMy43OHoiIGZpbGw9IiM0MjQyNDIiLz48L3N2Zz4=");
-  cursor: pointer; }
-
-.monaco-scrollable-element > .scrollbar > .down-arrow {
-  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxMSI+PHBhdGggdHJhbnNmb3JtPSJyb3RhdGUoLTE4MCA1LjQ5MDQ1OTkxODk3NTgzLDUuODExNTAwMDcyNDc5MjQ4KSIgZmlsbD0iIzQyNDI0MiIgZD0ibTkuNDgwNDYsOC45NjE1bDEuMjYsLTEuMjZsLTUuMDQsLTUuMDRsLTUuNDYsNS4wNGwxLjI2LDEuMjZsNC4yLC0zLjc4bDMuNzgsMy43OHoiLz48L3N2Zz4=");
-  cursor: pointer; }
-
-.monaco-scrollable-element > .scrollbar > .left-arrow {
-  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxMSI+PHBhdGggdHJhbnNmb3JtPSJyb3RhdGUoLTkwIDUuNDkwNDU5OTE4OTc1ODMxLDUuNDMxMzgyMTc5MjYwMjU0KSIgZmlsbD0iIzQyNDI0MiIgZD0ibTkuNDgwNDYsOC41ODEzOGwxLjI2LC0xLjI2bC01LjA0LC01LjA0bC01LjQ2LDUuMDRsMS4yNiwxLjI2bDQuMiwtMy43OGwzLjc4LDMuNzh6Ii8+PC9zdmc+");
-  cursor: pointer; }
-
-.monaco-scrollable-element > .scrollbar > .right-arrow {
-  background: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTEgMTEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggdHJhbnNmb3JtPSJyb3RhdGUoOTAgNS42MTcxNjUwODg2NTM1NjQ1LDUuNTU4MDg5NzMzMTIzNzgpICIgZmlsbD0iIzQyNDI0MiIgZD0ibTkuNjA3MTcsOC43MDgwOWwxLjI2LC0xLjI2bC01LjA0LC01LjA0bC01LjQ2LDUuMDRsMS4yNiwxLjI2bDQuMiwtMy43OGwzLjc4LDMuNzh6Ii8+PC9zdmc+");
-  cursor: pointer; }
-
-.hc-black .monaco-scrollable-element > .scrollbar > .up-arrow,
-.vs-dark .monaco-scrollable-element > .scrollbar > .up-arrow {
-  background: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTEgMTEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0ibTkuNDgwNDYsOC45NjE1bDEuMjYsLTEuMjZsLTUuMDQsLTUuMDRsLTUuNDYsNS4wNGwxLjI2LDEuMjZsNC4yLC0zLjc4bDMuNzgsMy43OHoiIGZpbGw9IiNFOEU4RTgiLz48L3N2Zz4="); }
-
-.hc-black .monaco-scrollable-element > .scrollbar > .down-arrow,
-.vs-dark .monaco-scrollable-element > .scrollbar > .down-arrow {
-  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxMSI+PHBhdGggdHJhbnNmb3JtPSJyb3RhdGUoLTE4MCA1LjQ5MDQ1OTkxODk3NTgzLDUuODExNTAwMDcyNDc5MjQ4KSIgZmlsbD0iI0U4RThFOCIgZD0ibTkuNDgwNDYsOC45NjE1bDEuMjYsLTEuMjZsLTUuMDQsLTUuMDRsLTUuNDYsNS4wNGwxLjI2LDEuMjZsNC4yLC0zLjc4bDMuNzgsMy43OHoiLz48L3N2Zz4="); }
-
-.hc-black .monaco-scrollable-element > .scrollbar > .left-arrow,
-.vs-dark .monaco-scrollable-element > .scrollbar > .left-arrow {
-  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMSAxMSI+PHBhdGggdHJhbnNmb3JtPSJyb3RhdGUoLTkwIDUuNDkwNDU5OTE4OTc1ODMxLDUuNDMxMzgyMTc5MjYwMjU0KSIgZmlsbD0iI0U4RThFOCIgZD0ibTkuNDgwNDYsOC41ODEzOGwxLjI2LC0xLjI2bC01LjA0LC01LjA0bC01LjQ2LDUuMDRsMS4yNiwxLjI2bDQuMiwtMy43OGwzLjc4LDMuNzh6Ii8+PC9zdmc+"); }
-
-.hc-black .monaco-scrollable-element > .scrollbar > .right-arrow,
-.vs-dark .monaco-scrollable-element > .scrollbar > .right-arrow {
-  background: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTEgMTEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggdHJhbnNmb3JtPSJyb3RhdGUoOTAgNS42MTcxNjUwODg2NTM1NjQ1LDUuNTU4MDg5NzMzMTIzNzgpICIgZmlsbD0iI0U4RThFOCIgZD0ibTkuNjA3MTcsOC43MDgwOWwxLjI2LC0xLjI2bC01LjA0LC01LjA0bC01LjQ2LDUuMDRsMS4yNiwxLjI2bDQuMiwtMy43OGwzLjc4LDMuNzh6Ii8+PC9zdmc+"); }
-
-.monaco-scrollable-element > .visible {
-  opacity: 1;
-  /* Background rule added for IE9 - to allow clicks on dom node */
-  background: rgba(0, 0, 0, 0);
-  transition: opacity 100ms linear; }
-
-.monaco-scrollable-element > .invisible {
-  opacity: 0;
-  pointer-events: none; }
-
-.monaco-scrollable-element > .invisible.fade {
-  transition: opacity 800ms linear; }
-
-/* Scrollable Content Inset Shadow */
-.monaco-scrollable-element > .shadow {
-  position: absolute;
-  display: none; }
-
-.monaco-scrollable-element > .shadow.top {
-  display: block;
-  top: 0;
-  left: 3px;
-  height: 3px;
-  width: 100%;
-  box-shadow: #DDD 0 6px 6px -6px inset; }
-
-.monaco-scrollable-element > .shadow.left {
-  display: block;
-  top: 3px;
-  left: 0;
-  height: 100%;
-  width: 3px;
-  box-shadow: #DDD 6px 0 6px -6px inset; }
-
-.monaco-scrollable-element > .shadow.top-left-corner {
-  display: block;
-  top: 0;
-  left: 0;
-  height: 3px;
-  width: 3px; }
-
-.monaco-scrollable-element > .shadow.top.left {
-  box-shadow: #DDD 6px 6px 6px -6px inset; }
-
-/* ---------- Default Style ---------- */
-.vs .monaco-scrollable-element > .scrollbar > .slider {
-  background: rgba(100, 100, 100, 0.4); }
-
-.vs-dark .monaco-scrollable-element > .scrollbar > .slider {
-  background: rgba(121, 121, 121, 0.4); }
-
-.hc-black .monaco-scrollable-element > .scrollbar > .slider {
-  background: rgba(111, 195, 223, 0.6); }
-
-.monaco-scrollable-element > .scrollbar > .slider:hover {
-  background: rgba(100, 100, 100, 0.7); }
-
-.hc-black .monaco-scrollable-element > .scrollbar > .slider:hover {
-  background: rgba(111, 195, 223, 0.8); }
-
-.monaco-scrollable-element > .scrollbar > .slider.active {
-  background: rgba(0, 0, 0, 0.6); }
-
-.vs-dark .monaco-scrollable-element > .scrollbar > .slider.active {
-  background: rgba(191, 191, 191, 0.4); }
-
-.hc-black .monaco-scrollable-element > .scrollbar > .slider.active {
-  background: #6fc3df; }
-
-.vs-dark .monaco-scrollable-element .shadow.top {
-  box-shadow: none; }
-
-.vs-dark .monaco-scrollable-element .shadow.left {
-  box-shadow: #000 6px 0 6px -6px inset; }
-
-.vs-dark .monaco-scrollable-element .shadow.top.left {
-  box-shadow: #000 6px 6px 6px -6px inset; }
-
-.hc-black .monaco-scrollable-element .shadow.top {
-  box-shadow: none; }
-
-.hc-black .monaco-scrollable-element .shadow.left {
-  box-shadow: none; }
-
-.hc-black .monaco-scrollable-element .shadow.top.left {
-  box-shadow: none; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .glyph-margin {
-  position: absolute;
-  top: 0; }
-
-/*
-	Keeping name short for faster parsing.
-	cgmr = core glyph margin rendering (div)
-*/
-.monaco-editor .margin-view-overlays .cgmr {
-  position: absolute; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/*
-	Keeping name short for faster parsing.
-	cigr = core ident guides rendering (div)
-*/
-.monaco-editor .lines-content .cigr {
-  position: absolute; }
-
-.monaco-editor .lines-content .cigra {
-  position: absolute; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/* Uncomment to see lines flashing when they're painted */
-/*.monaco-editor .view-lines > .view-line {
-	background-color: none;
-	animation-name: flash-background;
-	animation-duration: 800ms;
-}
-@keyframes flash-background {
-	0%   { background-color: lightgreen; }
-	100% { background-color: none }
-}*/
-.monaco-editor.safari .lines-content,
-.monaco-editor.safari .view-line,
-.monaco-editor.safari .view-lines {
-  -webkit-user-select: text;
-  user-select: text; }
-
-.monaco-editor .lines-content,
-.monaco-editor .view-line,
-.monaco-editor .view-lines {
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -o-user-select: none;
-  user-select: none; }
-
-.monaco-editor .view-lines {
-  cursor: text;
-  white-space: nowrap; }
-
-.monaco-editor.vs-dark.mac .view-lines,
-.monaco-editor.hc-black.mac .view-lines {
-  cursor: -webkit-image-set(url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAL0lEQVQoz2NgCD3x//9/BhBYBWdhgFVAiVW4JBFKGIa4AqD0//9D3pt4I4tAdAMAHTQ/j5Zom30AAAAASUVORK5CYII=) 1x, url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAAz0lEQVRIx2NgYGBY/R8I/vx5eelX3n82IJ9FxGf6tksvf/8FiTMQAcAGQMDvSwu09abffY8QYSAScNk45G198eX//yev73/4///701eh//kZSARckrNBRvz//+8+6ZohwCzjGNjdgQxkAg7B9WADeBjIBqtJCbhRA0YNoIkBSNmaPEMoNmA0FkYNoFKhapJ6FGyAH3nauaSmPfwI0v/3OukVi0CIZ+F25KrtYcx/CTIy0e+rC7R1Z4KMICVTQQ14feVXIbR695u14+Ir4gwAAD49E54wc1kWAAAAAElFTkSuQmCC) 2x) 5 8, text; }
-
-.monaco-editor .view-line {
-  position: absolute;
-  width: 100%; }
-
-/* TODO@tokenization bootstrap fix */
-/*.monaco-editor .view-line > span > span {
-	float: none;
-	min-height: inherit;
-	margin-left: inherit;
-}*/
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .lines-decorations {
-  position: absolute;
-  top: 0;
-  background: white; }
-
-/*
-	Keeping name short for faster parsing.
-	cldr = core lines decorations rendering (div)
-*/
-.monaco-editor .margin-view-overlays .cldr {
-  position: absolute;
-  height: 100%; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/*
-	Keeping name short for faster parsing.
-	cmdr = core margin decorations rendering (div)
-*/
-.monaco-editor .margin-view-overlays .cmdr {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 100%; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/* START cover the case that slider is visible on mouseover */
-.monaco-editor .minimap.slider-mouseover .minimap-slider {
-  opacity: 0;
-  transition: opacity 100ms linear; }
-
-.monaco-editor .minimap.slider-mouseover:hover .minimap-slider {
-  opacity: 1; }
-
-.monaco-editor .minimap.slider-mouseover .minimap-slider.active {
-  opacity: 1; }
-
-/* END cover the case that slider is visible on mouseover */
-.monaco-editor .minimap-shadow-hidden {
-  position: absolute;
-  width: 0; }
-
-.monaco-editor .minimap-shadow-visible {
-  position: absolute;
-  left: -6px;
-  width: 6px; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .overlayWidgets {
-  position: absolute;
-  top: 0;
-  left: 0; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .view-ruler {
-  position: absolute;
-  top: 0; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .scroll-decoration {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 6px; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/*
-	Keeping name short for faster parsing.
-	cslr = core selections layer rendering (div)
-*/
-.monaco-editor .lines-content .cslr {
-  position: absolute; }
-
-.monaco-editor .top-left-radius {
-  border-top-left-radius: 3px; }
-
-.monaco-editor .bottom-left-radius {
-  border-bottom-left-radius: 3px; }
-
-.monaco-editor .top-right-radius {
-  border-top-right-radius: 3px; }
-
-.monaco-editor .bottom-right-radius {
-  border-bottom-right-radius: 3px; }
-
-.monaco-editor.hc-black .top-left-radius {
-  border-top-left-radius: 0; }
-
-.monaco-editor.hc-black .bottom-left-radius {
-  border-bottom-left-radius: 0; }
-
-.monaco-editor.hc-black .top-right-radius {
-  border-top-right-radius: 0; }
-
-.monaco-editor.hc-black .bottom-right-radius {
-  border-bottom-right-radius: 0; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-editor .cursors-layer {
-  position: absolute;
-  top: 0; }
-
-.monaco-editor .cursors-layer > .cursor {
-  position: absolute;
-  cursor: text;
-  overflow: hidden; }
-
-/* -- block-outline-style -- */
-.monaco-editor .cursors-layer.cursor-block-outline-style > .cursor {
-  box-sizing: border-box;
-  background: transparent !important;
-  border-style: solid;
-  border-width: 1px; }
-
-/* -- underline-style -- */
-.monaco-editor .cursors-layer.cursor-underline-style > .cursor {
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
-  background: transparent !important;
-  box-sizing: border-box; }
-
-/* -- underline-thin-style -- */
-.monaco-editor .cursors-layer.cursor-underline-thin-style > .cursor {
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
-  background: transparent !important;
-  box-sizing: border-box; }
-
-@keyframes monaco-cursor-smooth {
-  0%,
-  20% {
-    opacity: 1; }
-  60%,
-  100% {
-    opacity: 0; } }
-
-@keyframes monaco-cursor-phase {
-  0%,
-  20% {
-    opacity: 1; }
-  90%,
-  100% {
-    opacity: 0; } }
-
-@keyframes monaco-cursor-expand {
-  0%,
-  20% {
-    transform: scaleY(1); }
-  80%,
-  100% {
-    transform: scaleY(0); } }
-
-.cursor-smooth {
-  animation: monaco-cursor-smooth 0.5s ease-in-out 0s 20 alternate; }
-
-.cursor-phase {
-  animation: monaco-cursor-phase 0.5s ease-in-out 0s 20 alternate; }
-
-.cursor-expand > .cursor {
-  animation: monaco-cursor-expand 0.5s ease-in-out 0s 20 alternate; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/* ---------- DiffEditor ---------- */
-.monaco-diff-editor .diffOverview {
-  z-index: 9; }
-
-/* colors not externalized: using transparancy on background */
-.monaco-diff-editor.vs .diffOverview {
-  background: rgba(0, 0, 0, 0.03); }
-
-.monaco-diff-editor.vs-dark .diffOverview {
-  background: rgba(255, 255, 255, 0.01); }
-
-.monaco-diff-editor .diffViewport {
-  box-shadow: inset 0px 0px 1px 0px #B9B9B9;
-  background: rgba(0, 0, 0, 0.1); }
-
-.monaco-diff-editor.vs-dark .diffViewport,
-.monaco-diff-editor.hc-black .diffViewport {
-  background: rgba(255, 255, 255, 0.1); }
-
-.monaco-scrollable-element.modified-in-monaco-diff-editor.vs .scrollbar {
-  background: rgba(0, 0, 0, 0); }
-
-.monaco-scrollable-element.modified-in-monaco-diff-editor.vs-dark .scrollbar {
-  background: rgba(0, 0, 0, 0); }
-
-.monaco-scrollable-element.modified-in-monaco-diff-editor.hc-black .scrollbar {
-  background: none; }
-
-.monaco-scrollable-element.modified-in-monaco-diff-editor .slider {
-  z-index: 10; }
-
-.modified-in-monaco-diff-editor .slider.active {
-  background: rgba(171, 171, 171, 0.4); }
-
-.modified-in-monaco-diff-editor.hc-black .slider.active {
-  background: none; }
-
-/* ---------- Diff ---------- */
-.monaco-editor .insert-sign,
-.monaco-diff-editor .insert-sign,
-.monaco-editor .delete-sign,
-.monaco-diff-editor .delete-sign {
-  background-size: 60%;
-  opacity: 0.7;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-position: center;
-  background-size: 11px 11px; }
-
-.monaco-editor.hc-black .insert-sign,
-.monaco-diff-editor.hc-black .insert-sign,
-.monaco-editor.hc-black .delete-sign,
-.monaco-diff-editor.hc-black .delete-sign {
-  opacity: 1; }
-
-.monaco-editor .insert-sign,
-.monaco-diff-editor .insert-sign {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHRpdGxlPkxheWVyIDE8L3RpdGxlPjxyZWN0IGhlaWdodD0iMTEiIHdpZHRoPSIzIiB5PSIzIiB4PSI3IiBmaWxsPSIjNDI0MjQyIi8+PHJlY3QgaGVpZ2h0PSIzIiB3aWR0aD0iMTEiIHk9IjciIHg9IjMiIGZpbGw9IiM0MjQyNDIiLz48L3N2Zz4="); }
-
-.monaco-editor .delete-sign,
-.monaco-diff-editor .delete-sign {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHRpdGxlPkxheWVyIDE8L3RpdGxlPjxyZWN0IGhlaWdodD0iMyIgd2lkdGg9IjExIiB5PSI3IiB4PSIzIiBmaWxsPSIjNDI0MjQyIi8+PC9zdmc+"); }
-
-.monaco-editor.vs-dark .insert-sign,
-.monaco-diff-editor.vs-dark .insert-sign,
-.monaco-editor.hc-black .insert-sign,
-.monaco-diff-editor.hc-black .insert-sign {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHRpdGxlPkxheWVyIDE8L3RpdGxlPjxyZWN0IGhlaWdodD0iMTEiIHdpZHRoPSIzIiB5PSIzIiB4PSI3IiBmaWxsPSIjQzVDNUM1Ii8+PHJlY3QgaGVpZ2h0PSIzIiB3aWR0aD0iMTEiIHk9IjciIHg9IjMiIGZpbGw9IiNDNUM1QzUiLz48L3N2Zz4="); }
-
-.monaco-editor.vs-dark .delete-sign,
-.monaco-diff-editor.vs-dark .delete-sign,
-.monaco-editor.hc-black .delete-sign,
-.monaco-diff-editor.hc-black .delete-sign {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHRpdGxlPkxheWVyIDE8L3RpdGxlPjxyZWN0IGhlaWdodD0iMyIgd2lkdGg9IjExIiB5PSI3IiB4PSIzIiBmaWxsPSIjQzVDNUM1Ii8+PC9zdmc+"); }
-
-.monaco-editor .inline-deleted-margin-view-zone {
-  text-align: right; }
-
-.monaco-editor .inline-added-margin-view-zone {
-  text-align: right; }
-
-.monaco-editor .diagonal-fill {
-  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAChJREFUKFNjOH/+fAMDDgCSu3Dhwn9c8gwwBTgNGR4KQP4HhQOhsAIAZCBTkhtqePcAAAAASUVORK5CYII="); }
-
-.monaco-editor.vs-dark .diagonal-fill {
-  opacity: 0.2; }
-
-.monaco-editor.hc-black .diagonal-fill {
-  background: none; }
-
-/* ---------- Inline Diff ---------- */
-.monaco-editor .view-zones .view-lines .view-line span {
-  display: inline-block; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-sash {
-  position: absolute;
-  z-index: 90;
-  touch-action: none; }
-
-.monaco-sash.disabled {
-  pointer-events: none; }
-
-.monaco-sash.vertical {
-  cursor: ew-resize;
-  top: 0;
-  width: 4px;
-  height: 100%; }
-
-.monaco-sash.mac.vertical {
-  cursor: col-resize; }
-
-.monaco-sash.vertical.minimum {
-  cursor: e-resize; }
-
-.monaco-sash.vertical.maximum {
-  cursor: w-resize; }
-
-.monaco-sash.horizontal {
-  cursor: ns-resize;
-  left: 0;
-  width: 100%;
-  height: 4px; }
-
-.monaco-sash.mac.horizontal {
-  cursor: row-resize; }
-
-.monaco-sash.horizontal.minimum {
-  cursor: s-resize; }
-
-.monaco-sash.horizontal.maximum {
-  cursor: n-resize; }
-
-.monaco-sash:not(.disabled).orthogonal-start::before,
-.monaco-sash:not(.disabled).orthogonal-end::after {
-  content: ' ';
-  height: 8px;
-  width: 8px;
-  z-index: 100;
-  display: block;
-  cursor: all-scroll;
-  position: absolute; }
-
-.monaco-sash.orthogonal-start.vertical::before {
-  left: -2px;
-  top: -4px; }
-
-.monaco-sash.orthogonal-end.vertical::after {
-  left: -2px;
-  bottom: -4px; }
-
-.monaco-sash.orthogonal-start.horizontal::before {
-  top: -2px;
-  left: -4px; }
-
-.monaco-sash.orthogonal-end.horizontal::after {
-  top: -2px;
-  right: -4px; }
-
-.monaco-sash.disabled {
-  cursor: default !important; }
-
-/** Touch **/
-.monaco-sash.touch.vertical {
-  width: 20px; }
-
-.monaco-sash.touch.horizontal {
-  height: 20px; }
-
-/** Debug **/
-.monaco-sash.debug:not(.disabled) {
-  background: cyan; }
-
-.monaco-sash.debug:not(.disabled).orthogonal-start::before,
-.monaco-sash.debug:not(.disabled).orthogonal-end::after {
-  background: red; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-diff-editor .diff-review-line-number {
-  text-align: right;
-  display: inline-block; }
-
-.monaco-diff-editor .diff-review {
-  position: absolute;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -o-user-select: none;
-  user-select: none; }
-
-.monaco-diff-editor .diff-review-summary {
-  padding-left: 10px; }
-
-.monaco-diff-editor .diff-review-shadow {
-  position: absolute; }
-
-.monaco-diff-editor .diff-review-row {
-  white-space: pre; }
-
-.monaco-diff-editor .diff-review-table {
-  display: table;
-  min-width: 100%; }
-
-.monaco-diff-editor .diff-review-row {
-  display: table-row;
-  width: 100%; }
-
-.monaco-diff-editor .diff-review-cell {
-  display: table-cell; }
-
-.monaco-diff-editor .diff-review-spacer {
-  display: inline-block;
-  width: 10px; }
-
-.monaco-diff-editor .diff-review-actions {
-  display: inline-block;
-  position: absolute;
-  right: 10px;
-  top: 2px; }
-
-.monaco-diff-editor .diff-review-actions .action-label {
-  width: 16px;
-  height: 16px;
-  margin: 2px 0; }
-
-.monaco-diff-editor .action-label.icon.close-diff-review {
-  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMyAzIDE2IDE2IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDMgMyAxNiAxNiI+PHBvbHlnb24gZmlsbD0iIzQyNDI0MiIgcG9pbnRzPSIxMi41OTcsMTEuMDQyIDE1LjQsMTMuODQ1IDEzLjg0NCwxNS40IDExLjA0MiwxMi41OTggOC4yMzksMTUuNCA2LjY4MywxMy44NDUgOS40ODUsMTEuMDQyIDYuNjgzLDguMjM5IDguMjM4LDYuNjgzIDExLjA0Miw5LjQ4NiAxMy44NDUsNi42ODMgMTUuNCw4LjIzOSIvPjwvc3ZnPg==") center center no-repeat; }
-
-.monaco-diff-editor.hc-black .action-label.icon.close-diff-review,
-.monaco-diff-editor.vs-dark .action-label.icon.close-diff-review {
-  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMyAzIDE2IDE2IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDMgMyAxNiAxNiI+PHBvbHlnb24gZmlsbD0iI2U4ZThlOCIgcG9pbnRzPSIxMi41OTcsMTEuMDQyIDE1LjQsMTMuODQ1IDEzLjg0NCwxNS40IDExLjA0MiwxMi41OTggOC4yMzksMTUuNCA2LjY4MywxMy44NDUgOS40ODUsMTEuMDQyIDYuNjgzLDguMjM5IDguMjM4LDYuNjgzIDExLjA0Miw5LjQ4NiAxMy44NDUsNi42ODMgMTUuNCw4LjIzOSIvPjwvc3ZnPg==") center center no-repeat; }
-@charset "UTF-8";
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-action-bar {
-  text-align: right;
-  overflow: hidden;
-  white-space: nowrap; }
-
-.monaco-action-bar .actions-container {
-  display: flex;
-  margin: 0 auto;
-  padding: 0;
-  width: 100%;
-  justify-content: flex-end; }
-
-.monaco-action-bar.vertical .actions-container {
-  display: inline-block; }
-
-.monaco-action-bar.reverse .actions-container {
-  flex-direction: row-reverse; }
-
-.monaco-action-bar .action-item {
-  cursor: pointer;
-  display: inline-block;
-  transition: transform 50ms ease;
-  position: relative;
-  /* DO NOT REMOVE - this is the key to preventing the ghosting icon bug in Chrome 42 */ }
-
-.monaco-action-bar .action-item.disabled {
-  cursor: default; }
-
-.monaco-action-bar.animated .action-item.active {
-  transform: scale(1.27202, 1.27202);
-  /* 1.272019649 = √φ */ }
-
-.monaco-action-bar .action-item .icon {
-  display: inline-block; }
-
-.monaco-action-bar .action-label {
-  font-size: 11px;
-  margin-right: 4px; }
-
-.monaco-action-bar .action-label.octicon {
-  font-size: 15px;
-  line-height: 35px;
-  text-align: center; }
-
-.monaco-action-bar .action-item.disabled .action-label,
-.monaco-action-bar .action-item.disabled .action-label:hover {
-  opacity: 0.4; }
-
-/* Vertical actions */
-.monaco-action-bar.vertical {
-  text-align: left; }
-
-.monaco-action-bar.vertical .action-item {
-  display: block; }
-
-.monaco-action-bar.vertical .action-label.separator {
-  display: block;
-  border-bottom: 1px solid #bbb;
-  padding-top: 1px;
-  margin-left: .8em;
-  margin-right: .8em; }
-
-.monaco-action-bar.animated.vertical .action-item.active {
-  transform: translate(5px, 0); }
-
-.secondary-actions .monaco-action-bar .action-label {
-  margin-left: 6px; }
-
-/* Action Items */
-.monaco-action-bar .action-item.select-container {
-  overflow: hidden;
-  /* somehow the dropdown overflows its container, we prevent it here to not push */
-  flex: 1;
-  max-width: 170px;
-  min-width: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.context-view .monaco-menu {
-  min-width: 130px; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-menu .monaco-action-bar.vertical {
-  margin-left: 0;
-  overflow: visible; }
-
-.monaco-menu .monaco-action-bar.vertical .actions-container {
-  display: block; }
-
-.monaco-menu .monaco-action-bar.vertical .action-item {
-  padding: 0;
-  transform: none;
-  display: -ms-flexbox;
-  display: flex; }
-
-.monaco-menu .monaco-action-bar.vertical .action-item.active {
-  transform: none; }
-
-.monaco-menu .monaco-action-bar.vertical .action-menu-item {
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  display: -ms-flexbox;
-  display: flex;
-  height: 2em;
-  align-items: center; }
-
-.monaco-menu .monaco-action-bar.vertical .action-label {
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  text-decoration: none;
-  padding: 0 1em;
-  background: none;
-  font-size: 12px;
-  line-height: 1; }
-
-.monaco-menu .monaco-action-bar.vertical .keybinding,
-.monaco-menu .monaco-action-bar.vertical .submenu-indicator {
-  display: inline-block;
-  -ms-flex: 2 1 auto;
-  flex: 2 1 auto;
-  padding: 0 1em;
-  text-align: right;
-  font-size: 12px;
-  line-height: 1; }
-
-.monaco-menu .monaco-action-bar.vertical .submenu-indicator {
-  height: 100%;
-  -webkit-mask: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCjxwYXRoIGQ9Ik00LjUyMDUxIDEyLjM2NDNMOS44Nzc5MyA3TDQuNTIwNTEgMS42MzU3NDJMNS4xMzU3NCAxLjAyMDUwNzhMMTEuMTIyMSA3TDUuMTM1NzQgMTIuOTc5NUw0LjUyMDUxIDEyLjM2NDNaIiBmaWxsPSJibGFjayIvPg0KPC9zdmc+DQo=") no-repeat 90% 50%/13px 13px;
-  mask: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCjxwYXRoIGQ9Ik00LjUyMDUxIDEyLjM2NDNMOS44Nzc5MyA3TDQuNTIwNTEgMS42MzU3NDJMNS4xMzU3NCAxLjAyMDUwNzhMMTEuMTIyMSA3TDUuMTM1NzQgMTIuOTc5NUw0LjUyMDUxIDEyLjM2NDNaIiBmaWxsPSJibGFjayIvPg0KPC9zdmc+DQo=") no-repeat 90% 50%/13px 13px; }
-
-.monaco-menu .monaco-action-bar.vertical .action-item.disabled .keybinding,
-.monaco-menu .monaco-action-bar.vertical .action-item.disabled .submenu-indicator {
-  opacity: 0.4; }
-
-.monaco-menu .monaco-action-bar.vertical .action-label:not(.separator) {
-  display: inline-block;
-  -webkit-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0; }
-
-.monaco-menu .monaco-action-bar.vertical .action-label.separator {
-  padding: 0.5em 0 0 0;
-  margin-bottom: 0.5em;
-  width: 100%; }
-
-.monaco-menu .monaco-action-bar.vertical .action-label.separator.text {
-  padding: 0.7em 1em 0.1em 1em;
-  font-weight: bold;
-  opacity: 1; }
-
-.monaco-menu .monaco-action-bar.vertical .action-label:hover {
-  color: inherit; }
-
-.monaco-menu .monaco-action-bar.vertical .menu-item-check {
-  position: absolute;
-  visibility: hidden;
-  -webkit-mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iLTIgLTIgMTYgMTYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgLTIgLTIgMTYgMTYiPjxwb2x5Z29uIGZpbGw9IiM0MjQyNDIiIHBvaW50cz0iOSwwIDQuNSw5IDMsNiAwLDYgMywxMiA2LDEyIDEyLDAiLz48L3N2Zz4=") no-repeat 50% 56%/15px 15px;
-  mask: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iLTIgLTIgMTYgMTYiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgLTIgLTIgMTYgMTYiPjxwb2x5Z29uIGZpbGw9IiM0MjQyNDIiIHBvaW50cz0iOSwwIDQuNSw5IDMsNiAwLDYgMywxMiA2LDEyIDEyLDAiLz48L3N2Zz4=") no-repeat 50% 56%/15px 15px;
-  width: 1em;
-  height: 100%; }
-
-.monaco-menu .monaco-action-bar.vertical .action-menu-item.checked .menu-item-check {
-  visibility: visible; }
-
-/* Context Menu */
-.context-view.monaco-menu-container {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "HelveticaNeue-Light", "Ubuntu", "Droid Sans", sans-serif;
-  outline: 0;
-  border: none;
-  -webkit-animation: fadeIn 0.083s linear;
-  -o-animation: fadeIn 0.083s linear;
-  -moz-animation: fadeIn 0.083s linear;
-  -ms-animation: fadeIn 0.083s linear;
-  animation: fadeIn 0.083s linear; }
-
-.context-view.monaco-menu-container :focus,
-.context-view.monaco-menu-container .monaco-action-bar.vertical:focus,
-.context-view.monaco-menu-container .monaco-action-bar.vertical :focus {
-  outline: 0; }
-
-.monaco-menu .monaco-action-bar.vertical .action-item {
-  border: 1px solid transparent;
-  /* prevents jumping behaviour on hover or focus */ }
-
-/* High Contrast Theming */
-.hc-black .context-view.monaco-menu-container {
-  box-shadow: none; }
-
-.hc-black .monaco-menu .monaco-action-bar.vertical .action-item.focused {
-  background: none; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.context-view {
-  position: absolute;
-  z-index: 2000; }
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-.monaco-tree {
-  height: 100%;
-  width: 100%;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: -moz-none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-  position: relative; }
-
-.monaco-tree > .monaco-scrollable-element {
-  height: 100%; }
-
-.monaco-tree > .monaco-scrollable-element > .monaco-tree-wrapper {
-  height: 100%;
-  width: 100%;
-  position: relative; }
-
-.monaco-tree .monaco-tree-rows {
-  position: absolute;
-  width: 100%;
-  height: 100%; }
-
-.monaco-tree .monaco-tree-rows > .monaco-tree-row {
-  -moz-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-  cursor: pointer;
-  overflow: hidden;
-  width: 100%;
-  touch-action: none; }
-
-.monaco-tree .monaco-tree-rows > .monaco-tree-row > .content {
-  position: relative;
-  height: 100%; }
-
-.monaco-tree-drag-image {
-  display: inline-block;
-  padding: 1px 7px;
-  border-radius: 10px;
-  font-size: 12px;
-  position: absolute; }
-
-/* for OS X ballistic scrolling */
-.monaco-tree .monaco-tree-rows > .monaco-tree-row.scrolling {
-  display: none; }
-
-/* Expansion */
-.monaco-tree .monaco-tree-rows.show-twisties > .monaco-tree-row.has-children > .content:before {
-  content: ' ';
-  position: absolute;
-  display: block;
-  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iIzY0NjQ2NSIgZD0iTTYgNHY4bDQtNC00LTR6bTEgMi40MTRMOC41ODYgOCA3IDkuNTg2VjYuNDE0eiIvPjwvc3ZnPg==") 50% 50% no-repeat;
-  width: 16px;
-  height: 100%;
-  top: 0;
-  left: -16px; }
-
-.monaco-tree .monaco-tree-rows.show-twisties > .monaco-tree-row.expanded > .content:before {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iIzY0NjQ2NSIgZD0iTTExIDEwSDUuMzQ0TDExIDQuNDE0VjEweiIvPjwvc3ZnPg=="); }
-
-.monaco-tree .monaco-tree-rows > .monaco-tree-row.has-children.loading > .content:before {
-  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBzdGFuZGFsb25lPSdubycgPz4NCjxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2ZXJzaW9uPScxLjEnIHdpZHRoPScxMHB4JyBoZWlnaHQ9JzEwcHgnPg0KCTxzdHlsZT4NCiAgICBjaXJjbGUgew0KICAgICAgYW5pbWF0aW9uOiBiYWxsIDAuNnMgbGluZWFyIGluZmluaXRlOw0KICAgIH0NCg0KICAgIGNpcmNsZTpudGgtY2hpbGQoMikgeyBhbmltYXRpb24tZGVsYXk6IDAuMDc1czsgfQ0KICAgIGNpcmNsZTpudGgtY2hpbGQoMykgeyBhbmltYXRpb24tZGVsYXk6IDAuMTVzOyB9DQogICAgY2lyY2xlOm50aC1jaGlsZCg0KSB7IGFuaW1hdGlvbi1kZWxheTogMC4yMjVzOyB9DQogICAgY2lyY2xlOm50aC1jaGlsZCg1KSB7IGFuaW1hdGlvbi1kZWxheTogMC4zczsgfQ0KICAgIGNpcmNsZTpudGgtY2hpbGQoNikgeyBhbmltYXRpb24tZGVsYXk6IDAuMzc1czsgfQ0KICAgIGNpcmNsZTpudGgtY2hpbGQoNykgeyBhbmltYXRpb24tZGVsYXk6IDAuNDVzOyB9DQogICAgY2lyY2xlOm50aC1jaGlsZCg4KSB7IGFuaW1hdGlvbi1kZWxheTogMC41MjVzOyB9DQoNCiAgICBAa2V5ZnJhbWVzIGJhbGwgew0KICAgICAgZnJvbSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgIHRvIHsgb3BhY2l0eTogMC4zOyB9DQogICAgfQ0KCTwvc3R5bGU+DQoJPGc+DQoJCTxjaXJjbGUgY3g9JzUnIGN5PScxJyByPScxJyBzdHlsZT0nb3BhY2l0eTowLjM7JyAvPg0KCQk8Y2lyY2xlIGN4PSc3LjgyODQnIGN5PScyLjE3MTYnIHI9JzEnIHN0eWxlPSdvcGFjaXR5OjAuMzsnIC8+DQoJCTxjaXJjbGUgY3g9JzknIGN5PSc1JyByPScxJyBzdHlsZT0nb3BhY2l0eTowLjM7JyAvPg0KCQk8Y2lyY2xlIGN4PSc3LjgyODQnIGN5PSc3LjgyODQnIHI9JzEnIHN0eWxlPSdvcGFjaXR5OjAuMzsnIC8+DQoJCTxjaXJjbGUgY3g9JzUnIGN5PSc5JyByPScxJyBzdHlsZT0nb3BhY2l0eTowLjM7JyAvPg0KCQk8Y2lyY2xlIGN4PScyLjE3MTYnIGN5PSc3LjgyODQnIHI9JzEnIHN0eWxlPSdvcGFjaXR5OjAuMzsnIC8+DQoJCTxjaXJjbGUgY3g9JzEnIGN5PSc1JyByPScxJyBzdHlsZT0nb3BhY2l0eTowLjM7JyAvPg0KCQk8Y2lyY2xlIGN4PScyLjE3MTYnIGN5PScyLjE3MTYnIHI9JzEnIHN0eWxlPSdvcGFjaXR5OjAuMzsnIC8+DQoJPC9nPg0KPC9zdmc+DQo="); }
-
-/* Highlighted */
-.monaco-tree.highlighted .monaco-tree-rows > .monaco-tree-row:not(.highlighted) {
-  opacity: 0.3; }
-
-.vs-dark .monaco-tree .monaco-tree-rows.show-twisties > .monaco-tree-row.has-children > .content:before {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI0U4RThFOCIgZD0iTTYgNHY4bDQtNC00LTR6bTEgMi40MTRMOC41ODYgOCA3IDkuNTg2VjYuNDE0eiIvPjwvc3ZnPg=="); }
-
-.vs-dark .monaco-tree .monaco-tree-rows.show-twisties > .monaco-tree-row.expanded > .content:before {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI0U4RThFOCIgZD0iTTExIDEwSDUuMzQ0TDExIDQuNDE0VjEweiIvPjwvc3ZnPg=="); }
-
-.vs-dark .monaco-tree .monaco-tree-rows > .monaco-tree-row.has-children.loading > .content:before {
-  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBzdGFuZGFsb25lPSdubycgPz4NCjxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2ZXJzaW9uPScxLjEnIHdpZHRoPScxMHB4JyBoZWlnaHQ9JzEwcHgnPg0KCTxzdHlsZT4NCiAgICBjaXJjbGUgew0KICAgICAgYW5pbWF0aW9uOiBiYWxsIDAuNnMgbGluZWFyIGluZmluaXRlOw0KICAgIH0NCg0KICAgIGNpcmNsZTpudGgtY2hpbGQoMikgeyBhbmltYXRpb24tZGVsYXk6IDAuMDc1czsgfQ0KICAgIGNpcmNsZTpudGgtY2hpbGQoMykgeyBhbmltYXRpb24tZGVsYXk6IDAuMTVzOyB9DQogICAgY2lyY2xlOm50aC1jaGlsZCg0KSB7IGFuaW1hdGlvbi1kZWxheTogMC4yMjVzOyB9DQogICAgY2lyY2xlOm50aC1jaGlsZCg1KSB7IGFuaW1hdGlvbi1kZWxheTogMC4zczsgfQ0KICAgIGNpcmNsZTpudGgtY2hpbGQoNikgeyBhbmltYXRpb24tZGVsYXk6IDAuMzc1czsgfQ0KICAgIGNpcmNsZTpudGgtY2hpbGQoNykgeyBhbmltYXRpb24tZGVsYXk6IDAuNDVzOyB9DQogICAgY2lyY2xlOm50aC1jaGlsZCg4KSB7IGFuaW1hdGlvbi1kZWxheTogMC41MjVzOyB9DQoNCiAgICBAa2V5ZnJhbWVzIGJhbGwgew0KICAgICAgZnJvbSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgIHRvIHsgb3BhY2l0eTogMC4zOyB9DQogICAgfQ0KCTwvc3R5bGU+DQoJPGcgc3R5bGU9ImZpbGw6Z3JleTsiPg0KCQk8Y2lyY2xlIGN4PSc1JyBjeT0nMScgcj0nMScgc3R5bGU9J29wYWNpdHk6MC4zOycgLz4NCgkJPGNpcmNsZSBjeD0nNy44Mjg0JyBjeT0nMi4xNzE2JyByPScxJyBzdHlsZT0nb3BhY2l0eTowLjM7JyAvPg0KCQk8Y2lyY2xlIGN4PSc5JyBjeT0nNScgcj0nMScgc3R5bGU9J29wYWNpdHk6MC4zOycgLz4NCgkJPGNpcmNsZSBjeD0nNy44Mjg0JyBjeT0nNy44Mjg0JyByPScxJyBzdHlsZT0nb3BhY2l0eTowLjM7JyAvPg0KCQk8Y2lyY2xlIGN4PSc1JyBjeT0nOScgcj0nMScgc3R5bGU9J29wYWNpdHk6MC4zOycgLz4NCgkJPGNpcmNsZSBjeD0nMi4xNzE2JyBjeT0nNy44Mjg0JyByPScxJyBzdHlsZT0nb3BhY2l0eTowLjM7JyAvPg0KCQk8Y2lyY2xlIGN4PScxJyBjeT0nNScgcj0nMScgc3R5bGU9J29wYWNpdHk6MC4zOycgLz4NCgkJPGNpcmNsZSBjeD0nMi4xNzE2JyBjeT0nMi4xNzE2JyByPScxJyBzdHlsZT0nb3BhY2l0eTowLjM7JyAvPg0KCTwvZz4NCjwvc3ZnPg0K"); }
-
-.hc-black .monaco-tree .monaco-tree-rows.show-twisties > .monaco-tree-row.has-children > .content:before {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTYgNHY4bDQtNC00LTR6bTEgMi40MTRsMS41ODYgMS41ODYtMS41ODYgMS41ODZ2LTMuMTcyeiIvPjwvc3ZnPg=="); }
-
-.hc-black .monaco-tree .monaco-tree-rows.show-twisties > .monaco-tree-row.expanded > .content:before {
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTExIDEwLjA3aC01LjY1Nmw1LjY1Ni01LjY1NnY1LjY1NnoiLz48L3N2Zz4="); }
-
-.hc-black .monaco-tree .monaco-tree-rows > .monaco-tree-row.has-children.loading > .content:before {
-  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBzdGFuZGFsb25lPSdubycgPz4NCjxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2ZXJzaW9uPScxLjEnIHdpZHRoPScxMHB4JyBoZWlnaHQ9JzEwcHgnPg0KCTxzdHlsZT4NCiAgICBjaXJjbGUgew0KICAgICAgYW5pbWF0aW9uOiBiYWxsIDAuNnMgbGluZWFyIGluZmluaXRlOw0KICAgIH0NCg0KICAgIGNpcmNsZTpudGgtY2hpbGQoMikgeyBhbmltYXRpb24tZGVsYXk6IDAuMDc1czsgfQ0KICAgIGNpcmNsZTpudGgtY2hpbGQoMykgeyBhbmltYXRpb24tZGVsYXk6IDAuMTVzOyB9DQogICAgY2lyY2xlOm50aC1jaGlsZCg0KSB7IGFuaW1hdGlvbi1kZWxheTogMC4yMjVzOyB9DQogICAgY2lyY2xlOm50aC1jaGlsZCg1KSB7IGFuaW1hdGlvbi1kZWxheTogMC4zczsgfQ0KICAgIGNpcmNsZTpudGgtY2hpbGQoNikgeyBhbmltYXRpb24tZGVsYXk6IDAuMzc1czsgfQ0KICAgIGNpcmNsZTpudGgtY2hpbGQoNykgeyBhbmltYXRpb24tZGVsYXk6IDAuNDVzOyB9DQogICAgY2lyY2xlOm50aC1jaGlsZCg4KSB7IGFuaW1hdGlvbi1kZWxheTogMC41MjVzOyB9DQoNCiAgICBAa2V5ZnJhbWVzIGJhbGwgew0KICAgICAgZnJvbSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgIHRvIHsgb3BhY2l0eTogMC4zOyB9DQogICAgfQ0KCTwvc3R5bGU+DQoJPGcgc3R5bGU9ImZpbGw6d2hpdGU7Ij4NCgkJPGNpcmNsZSBjeD0nNScgY3k9JzEnIHI9JzEnIHN0eWxlPSdvcGFjaXR5OjAuMzsnIC8+DQoJCTxjaXJjbGUgY3g9JzcuODI4NCcgY3k9JzIuMTcxNicgcj0nMScgc3R5bGU9J29wYWNpdHk6MC4zOycgLz4NCgkJPGNpcmNsZSBjeD0nOScgY3k9JzUnIHI9JzEnIHN0eWxlPSdvcGFjaXR5OjAuMzsnIC8+DQoJCTxjaXJjbGUgY3g9JzcuODI4NCcgY3k9JzcuODI4NCcgcj0nMScgc3R5bGU9J29wYWNpdHk6MC4zOycgLz4NCgkJPGNpcmNsZSBjeD0nNScgY3k9JzknIHI9JzEnIHN0eWxlPSdvcGFjaXR5OjAuMzsnIC8+DQoJCTxjaXJjbGUgY3g9JzIuMTcxNicgY3k9JzcuODI4NCcgcj0nMScgc3R5bGU9J29wYWNpdHk6MC4zOycgLz4NCgkJPGNpcmNsZSBjeD0nMScgY3k9JzUnIHI9JzEnIHN0eWxlPSdvcGFjaXR5OjAuMzsnIC8+DQoJCTxjaXJjbGUgY3g9JzIuMTcxNicgY3k9JzIuMTcxNicgcj0nMScgc3R5bGU9J29wYWNpdHk6MC4zOycgLz4NCgk8L2c+DQo8L3N2Zz4NCg=="); }
-
-.monaco-tree-action.collapse-all {
-  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iLTEgMCAxNiAxNiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAtMSAwIDE2IDE2Ij48cGF0aCBmaWxsPSIjNDI0MjQyIiBkPSJNMTQgMXY5aC0xdi04aC04di0xaDl6bS0xMSAydjFoOHY4aDF2LTloLTl6bTcgMnY5aC05di05aDl6bS0yIDJoLTV2NWg1di01eiIvPjxyZWN0IHg9IjQiIHk9IjkiIGZpbGw9IiMwMDUzOUMiIHdpZHRoPSIzIiBoZWlnaHQ9IjEiLz48L3N2Zz4=") center center no-repeat; }
-
-.hc-black .monaco-tree-action.collapse-all,
-.vs-dark .monaco-tree-action.collapse-all {
-  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iLTEgMCAxNiAxNiIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAtMSAwIDE2IDE2Ij48cGF0aCBmaWxsPSIjQzVDNUM1IiBkPSJNMTQgMXY5aC0xdi04aC04di0xaDl6bS0xMSAydjFoOHY4aDF2LTloLTl6bTcgMnY5aC05di05aDl6bS0yIDJoLTV2NWg1di01eiIvPjxyZWN0IHg9IjQiIHk9IjkiIGZpbGw9IiM3NUJFRkYiIHdpZHRoPSIzIiBoZWlnaHQ9IjEiLz48L3N2Zz4=") center center no-repeat; }
 #color-picker {
   border: 2px solid rgba(15, 15, 15, 0.29);
   box-shadow: 0px 0px 20px 3px rgba(15, 15, 15, 0.25); }
@@ -2494,6 +1026,102 @@ pre {
     .input-group.intent-info:focus {
       box-shadow: 0 0 0 1px #f39c12, 0 0 0 3px rgba(19, 124, 189, 0.3), inset 0 1px 1px rgba(16, 22, 26, 0.2); }
 /* Intent */
+.btn {
+  border: 0;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin-left: 10px;
+  box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.2), inset 0 -1px 0 rgba(16, 22, 26, 0.1);
+  transition: background-color, 150ms ease-in-out;
+  cursor: pointer;
+  font-size: 15px; }
+  .btn.intent-none {
+    background-color: #f5f8fa;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+    color: #242424; }
+    .btn.intent-none:hover {
+      background-clip: padding-box;
+      background-color: #ebf1f5; }
+    .btn.intent-none.disabled {
+      opacity: 0.6;
+      cursor: no-drop; }
+    .btn.intent-none.minimal {
+      background: none;
+      border: 0;
+      box-shadow: none;
+      font-size: 14px; }
+      .btn.intent-none.minimal:hover {
+        background-color: #e0e6e7;
+        background-image: 0; }
+  .btn.intent-primary {
+    background-color: #2980b9;
+    background-image: none;
+    color: #fff; }
+    .btn.intent-primary:hover {
+      background-color: #1e7ab8; }
+    .btn.intent-primary.disabled {
+      opacity: 0.6;
+      cursor: no-drop; }
+    .btn.intent-primary.minimal {
+      background: none;
+      border: 0;
+      color: #1e7ab8;
+      box-shadow: none;
+      font-size: 14px; }
+      .btn.intent-primary.minimal:hover {
+        background-color: #c1ddf0; }
+  .btn.intent-danger {
+    background-color: #e74c3c;
+    background-image: none;
+    color: #fff; }
+    .btn.intent-danger:hover {
+      background-color: #cf3625; }
+    .btn.intent-danger.disabled {
+      opacity: 0.6;
+      cursor: no-drop; }
+    .btn.intent-danger.minimal {
+      background: none;
+      border: 0;
+      color: #cf3625;
+      box-shadow: none;
+      font-size: 14px; }
+      .btn.intent-danger.minimal:hover {
+        background-color: #f1c4bf; }
+  .btn.intent-success {
+    background-color: #27ae60;
+    background-image: none;
+    color: #fff; }
+    .btn.intent-success:hover {
+      background-color: #1daa58; }
+    .btn.intent-success.disabled {
+      opacity: 0.6;
+      cursor: no-drop; }
+    .btn.intent-success.minimal {
+      background: none;
+      border: 0;
+      color: #1daa58;
+      box-shadow: none;
+      font-size: 14px; }
+      .btn.intent-success.minimal:hover {
+        background-color: #b6f0ce; }
+  .btn.intent-info {
+    background-color: #f39c12;
+    background-image: none;
+    color: #fff; }
+    .btn.intent-info:hover {
+      background-color: #d88f19; }
+    .btn.intent-info.disabled {
+      opacity: 0.6;
+      cursor: no-drop; }
+    .btn.intent-info.minimal {
+      background: none;
+      border: 0;
+      color: #d88f19;
+      box-shadow: none;
+      font-size: 14px; }
+      .btn.intent-info.minimal:hover {
+        background-color: #f1e1c8; }
+/* Intent */
 .checkbox > input {
   position: absolute;
   opacity: 0; }
@@ -2816,3 +1444,617 @@ pre {
     transform: rotate(0deg); }
   100% {
     transform: rotate(360deg); } }
+/* BASICS */
+.CodeMirror {
+  /* Set height, width, borders, and global font properties here */
+  font-family: monospace;
+  height: 300px;
+  color: black;
+  direction: ltr; }
+
+/* PADDING */
+.CodeMirror-lines {
+  padding: 4px 0;
+  /* Vertical padding around content */ }
+
+.CodeMirror pre {
+  padding: 0 4px;
+  /* Horizontal padding of content */ }
+
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+  background-color: white;
+  /* The little square between H and V scrollbars */ }
+
+/* GUTTER */
+.CodeMirror-gutters {
+  border-right: 1px solid #ddd;
+  background-color: #f7f7f7;
+  white-space: nowrap; }
+
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 20px;
+  text-align: right;
+  color: #999;
+  white-space: nowrap; }
+
+.CodeMirror-guttermarker {
+  color: black; }
+
+.CodeMirror-guttermarker-subtle {
+  color: #999; }
+
+/* CURSOR */
+.CodeMirror-cursor {
+  border-left: 1px solid black;
+  border-right: none;
+  width: 0; }
+
+/* Shown when moving in bi-directional text */
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid silver; }
+
+.cm-fat-cursor .CodeMirror-cursor {
+  width: auto;
+  border: 0 !important;
+  background: #7e7; }
+
+.cm-fat-cursor div.CodeMirror-cursors {
+  z-index: 1; }
+
+.cm-fat-cursor-mark {
+  background-color: rgba(20, 255, 20, 0.5);
+  -webkit-animation: blink 1.06s steps(1) infinite;
+  -moz-animation: blink 1.06s steps(1) infinite;
+  animation: blink 1.06s steps(1) infinite; }
+
+.cm-animate-fat-cursor {
+  width: auto;
+  border: 0;
+  -webkit-animation: blink 1.06s steps(1) infinite;
+  -moz-animation: blink 1.06s steps(1) infinite;
+  animation: blink 1.06s steps(1) infinite;
+  background-color: #7e7; }
+
+@-moz-keyframes blink {
+  0% { }
+  50% {
+    background-color: transparent; }
+  100% { } }
+
+@-webkit-keyframes blink {
+  0% { }
+  50% {
+    background-color: transparent; }
+  100% { } }
+
+@keyframes blink {
+  0% { }
+  50% {
+    background-color: transparent; }
+  100% { } }
+
+/* Can style cursor different in overwrite (non-insert) mode */
+.cm-tab {
+  display: inline-block;
+  text-decoration: inherit; }
+
+.CodeMirror-rulers {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -50px;
+  bottom: -20px;
+  overflow: hidden; }
+
+.CodeMirror-ruler {
+  border-left: 1px solid #ccc;
+  top: 0;
+  bottom: 0;
+  position: absolute; }
+
+/* DEFAULT THEME */
+.cm-s-default .cm-header {
+  color: blue; }
+
+.cm-s-default .cm-quote {
+  color: #090; }
+
+.cm-negative {
+  color: #d44; }
+
+.cm-positive {
+  color: #292; }
+
+.cm-header, .cm-strong {
+  font-weight: bold; }
+
+.cm-em {
+  font-style: italic; }
+
+.cm-link {
+  text-decoration: underline; }
+
+.cm-strikethrough {
+  text-decoration: line-through; }
+
+.cm-s-default .cm-keyword {
+  color: #708; }
+
+.cm-s-default .cm-atom {
+  color: #219; }
+
+.cm-s-default .cm-number {
+  color: #164; }
+
+.cm-s-default .cm-def {
+  color: #00f; }
+
+.cm-s-default .cm-variable-2 {
+  color: #05a; }
+
+.cm-s-default .cm-variable-3, .cm-s-default .cm-type {
+  color: #085; }
+
+.cm-s-default .cm-comment {
+  color: #a50; }
+
+.cm-s-default .cm-string {
+  color: #a11; }
+
+.cm-s-default .cm-string-2 {
+  color: #f50; }
+
+.cm-s-default .cm-meta {
+  color: #555; }
+
+.cm-s-default .cm-qualifier {
+  color: #555; }
+
+.cm-s-default .cm-builtin {
+  color: #30a; }
+
+.cm-s-default .cm-bracket {
+  color: #997; }
+
+.cm-s-default .cm-tag {
+  color: #170; }
+
+.cm-s-default .cm-attribute {
+  color: #00c; }
+
+.cm-s-default .cm-hr {
+  color: #999; }
+
+.cm-s-default .cm-link {
+  color: #00c; }
+
+.cm-s-default .cm-error {
+  color: #f00; }
+
+.cm-invalidchar {
+  color: #f00; }
+
+.CodeMirror-composing {
+  border-bottom: 2px solid; }
+
+/* Default styles for common addons */
+div.CodeMirror span.CodeMirror-matchingbracket {
+  color: #0b0; }
+
+div.CodeMirror span.CodeMirror-nonmatchingbracket {
+  color: #a22; }
+
+.CodeMirror-matchingtag {
+  background: rgba(255, 150, 0, 0.3); }
+
+.CodeMirror-activeline-background {
+  background: #e8f2ff; }
+
+/* STOP */
+/* The rest of this file contains styles related to the mechanics of
+   the editor. You probably shouldn't touch them. */
+.CodeMirror {
+  position: relative;
+  overflow: hidden;
+  background: white; }
+
+.CodeMirror-scroll {
+  overflow: scroll !important;
+  /* Things will break if this is overridden */
+  /* 30px is the magic margin used to hide the element's real scrollbars */
+  /* See overflow: hidden in .CodeMirror */
+  margin-bottom: -30px;
+  margin-right: -30px;
+  padding-bottom: 30px;
+  height: 100%;
+  outline: none;
+  /* Prevent dragging from highlighting the element */
+  position: relative; }
+
+.CodeMirror-sizer {
+  position: relative;
+  border-right: 30px solid transparent; }
+
+/* The fake, visible scrollbars. Used to force redraw during scrolling
+   before actual scrolling happens, thus preventing shaking and
+   flickering artifacts. */
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+  position: absolute;
+  z-index: 6;
+  display: none; }
+
+.CodeMirror-vscrollbar {
+  right: 0;
+  top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll; }
+
+.CodeMirror-hscrollbar {
+  bottom: 0;
+  left: 0;
+  overflow-y: hidden;
+  overflow-x: scroll; }
+
+.CodeMirror-scrollbar-filler {
+  right: 0;
+  bottom: 0; }
+
+.CodeMirror-gutter-filler {
+  left: 0;
+  bottom: 0; }
+
+.CodeMirror-gutters {
+  position: absolute;
+  left: 0;
+  top: 0;
+  min-height: 100%;
+  z-index: 3; }
+
+.CodeMirror-gutter {
+  white-space: normal;
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: -30px; }
+
+.CodeMirror-gutter-wrapper {
+  position: absolute;
+  z-index: 4;
+  background: none !important;
+  border: none !important; }
+
+.CodeMirror-gutter-background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 4; }
+
+.CodeMirror-gutter-elt {
+  position: absolute;
+  cursor: default;
+  z-index: 4; }
+
+.CodeMirror-gutter-wrapper ::selection {
+  background-color: transparent; }
+
+.CodeMirror-gutter-wrapper ::-moz-selection {
+  background-color: transparent; }
+
+.CodeMirror-lines {
+  cursor: text;
+  min-height: 1px;
+  /* prevents collapsing before first draw */ }
+
+.CodeMirror pre {
+  /* Reset some styles that the rest of the page might have set */
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  border-width: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  white-space: pre;
+  word-wrap: normal;
+  line-height: inherit;
+  color: inherit;
+  z-index: 2;
+  position: relative;
+  overflow: visible;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-variant-ligatures: contextual;
+  font-variant-ligatures: contextual; }
+
+.CodeMirror-wrap pre {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: normal; }
+
+.CodeMirror-linebackground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 0; }
+
+.CodeMirror-linewidget {
+  position: relative;
+  z-index: 2;
+  padding: 0.1px;
+  /* Force widget margins to stay inside of the container */ }
+
+.CodeMirror-rtl pre {
+  direction: rtl; }
+
+.CodeMirror-code {
+  outline: none; }
+
+/* Force content-box sizing for the elements where we expect it */
+.CodeMirror-scroll,
+.CodeMirror-sizer,
+.CodeMirror-gutter,
+.CodeMirror-gutters,
+.CodeMirror-linenumber {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box; }
+
+.CodeMirror-measure {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden; }
+
+.CodeMirror-cursor {
+  position: absolute;
+  pointer-events: none; }
+
+.CodeMirror-measure pre {
+  position: static; }
+
+div.CodeMirror-cursors {
+  visibility: hidden;
+  position: relative;
+  z-index: 3; }
+
+div.CodeMirror-dragcursors {
+  visibility: visible; }
+
+.CodeMirror-focused div.CodeMirror-cursors {
+  visibility: visible; }
+
+.CodeMirror-selected {
+  background: #d9d9d9; }
+
+.CodeMirror-focused .CodeMirror-selected {
+  background: #d7d4f0; }
+
+.CodeMirror-crosshair {
+  cursor: crosshair; }
+
+.CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection {
+  background: #d7d4f0; }
+
+.CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection {
+  background: #d7d4f0; }
+
+.cm-searching {
+  background-color: #ffa;
+  background-color: rgba(255, 255, 0, 0.4); }
+
+/* Used to force a border model for a node */
+.cm-force-border {
+  padding-right: .1px; }
+
+@media print {
+  /* Hide the cursor when printing */
+  .CodeMirror div.CodeMirror-cursors {
+    visibility: hidden; } }
+
+/* See issue #2901 */
+.cm-tab-wrap-hack:after {
+  content: ''; }
+
+/* Help users use markselection to safely style text background */
+span.CodeMirror-selectedtext {
+  background: none; }
+/*
+
+    Name:       dracula
+    Author:     Michael Kaminsky (http://github.com/mkaminsky11)
+
+    Original dracula color scheme by Zeno Rocha (https://github.com/zenorocha/dracula-theme)
+
+*/
+.cm-s-dracula.CodeMirror, .cm-s-dracula .CodeMirror-gutters {
+  background-color: #282a36 !important;
+  color: #f8f8f2 !important;
+  border: none; }
+
+.cm-s-dracula .CodeMirror-gutters {
+  color: #282a36; }
+
+.cm-s-dracula .CodeMirror-cursor {
+  border-left: solid thin #f8f8f0; }
+
+.cm-s-dracula .CodeMirror-linenumber {
+  color: #6D8A88; }
+
+.cm-s-dracula .CodeMirror-selected {
+  background: rgba(255, 255, 255, 0.1); }
+
+.cm-s-dracula .CodeMirror-line::selection, .cm-s-dracula .CodeMirror-line > span::selection, .cm-s-dracula .CodeMirror-line > span > span::selection {
+  background: rgba(255, 255, 255, 0.1); }
+
+.cm-s-dracula .CodeMirror-line::-moz-selection, .cm-s-dracula .CodeMirror-line > span::-moz-selection, .cm-s-dracula .CodeMirror-line > span > span::-moz-selection {
+  background: rgba(255, 255, 255, 0.1); }
+
+.cm-s-dracula span.cm-comment {
+  color: #6272a4; }
+
+.cm-s-dracula span.cm-string, .cm-s-dracula span.cm-string-2 {
+  color: #f1fa8c; }
+
+.cm-s-dracula span.cm-number {
+  color: #bd93f9; }
+
+.cm-s-dracula span.cm-variable {
+  color: #50fa7b; }
+
+.cm-s-dracula span.cm-variable-2 {
+  color: white; }
+
+.cm-s-dracula span.cm-def {
+  color: #50fa7b; }
+
+.cm-s-dracula span.cm-operator {
+  color: #ff79c6; }
+
+.cm-s-dracula span.cm-keyword {
+  color: #ff79c6; }
+
+.cm-s-dracula span.cm-atom {
+  color: #bd93f9; }
+
+.cm-s-dracula span.cm-meta {
+  color: #f8f8f2; }
+
+.cm-s-dracula span.cm-tag {
+  color: #ff79c6; }
+
+.cm-s-dracula span.cm-attribute {
+  color: #50fa7b; }
+
+.cm-s-dracula span.cm-qualifier {
+  color: #50fa7b; }
+
+.cm-s-dracula span.cm-property {
+  color: #66d9ef; }
+
+.cm-s-dracula span.cm-builtin {
+  color: #50fa7b; }
+
+.cm-s-dracula span.cm-variable-3, .cm-s-dracula span.cm-type {
+  color: #ffb86c; }
+
+.cm-s-dracula .CodeMirror-activeline-background {
+  background: rgba(255, 255, 255, 0.1); }
+
+.cm-s-dracula .CodeMirror-matchingbracket {
+  text-decoration: underline;
+  color: white !important; }
+.arrow-tail {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  border: 10px solid;
+  border-color: transparent transparent transparent #ffffff; }
+  .arrow-tail.arrow-tail-top {
+    border-color: transparent transparent #ffffff transparent; }
+  .arrow-tail.arrow-tail-right {
+    border-color: transparent transparent transparent #ffffff; }
+  .arrow-tail.arrow-tail-bottom {
+    border-color: #ffffff transparent transparent transparent; }
+  .arrow-tail.arrow-tail-left {
+    border-color: transparent #ffffff transparent transparent; }
+
+.arrow-tail-shadow {
+  background-color: transparent;
+  width: 2px;
+  height: 2px;
+  position: absolute;
+  /* z-index: -10; */
+  box-shadow: 0px 0px 5px 1px black;
+  bottom: -6px;
+  transform: translate(9px, 0px); }
+
+.arrow-tail-glow {
+  width: 0px;
+  height: 0px;
+  border: 10px solid;
+  position: absolute; }
+  .arrow-tail-glow.arrow-tail-top {
+    border-color: transparent transparent #73a7f0 transparent; }
+  .arrow-tail-glow.arrow-tail-right {
+    border-color: transparent transparent transparent #73a7f0; }
+  .arrow-tail-glow.arrow-tail-bottom {
+    border-color: #73a7f0 transparent transparent transparent; }
+  .arrow-tail-glow.arrow-tail-left {
+    border-color: transparent #73a7f0 transparent transparent; }
+.popover-content {
+  position: absolute;
+  background-color: #fff;
+  padding: 18px;
+  border-radius: 4px;
+  top: -14em;
+  max-width: 38em;
+  min-width: 20em;
+  left: -100%; }
+
+.popover-container {
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 4px;
+  min-width: 22em; }
+
+/*
+
+    width: 0px;
+    height: 0px;
+    border: 10px solid;
+    border-color: #d42020 transparent transparent transparent;
+    position: absolute;
+    right: -20px; 
+    bottom: 19px; 
+    z-index: 99;
+
+*/
+.CodeMirror {
+  min-height: 27em;
+  max-height: 33em; }
+
+.CodeMirror-hscrollbar {
+  overflow-x: hidden;
+  overflow-y: hidden; }
+
+.CodeMirror-vscrollbar {
+  overflow-x: hidden;
+  overflow-y: hidden; }
+
+#code-editor {
+  width: 100%; }
+
+figure {
+  margin: 0; }
+
+pre {
+  background-color: #3c4e5f;
+  color: #fff;
+  /* font-size: 14px; */
+  padding: 15px;
+  padding-left: 10px;
+  /* font-family: Oxygen, sans-serif; */
+  border-radius: 4px; }
+
+.code-container {
+  position: relative; }
+  .code-container .edit-btn {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: #aba8a8cf;
+    /* background-color: #fff; */
+    padding: 2px;
+    cursor: pointer; }
+    .code-container .edit-btn:hover {
+      color: #42576b;
+      background-color: #d7d7d8; }
+
+.language-select-container {
+  display: flex;
+  /*#language-select {
+    
+  }*/ }

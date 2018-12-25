@@ -120,10 +120,6 @@ export class ColorPicker extends Plugin<ColorPickerProps, ColorPickerState> {
     let initialColor: RGBAColor = this.picker.getPickedColor();
     if (!this.props.editorState.getSelection().isCollapsed()) {
       //Color REGEX Pattern
-      console.log(
-        "Inline Sty7le: ",
-        this.props.editorState.getCurrentInlineStyle()
-      );
       let colorStyleRgx = /CUSTOM_COLOR_rgba?\((\d+)\s?,\s?(\d+)\s?,\s?(\d+)\s?,\s?(\d+)\s?\)/;
       let useInitialColor = false;
       this.props.editorState.getCurrentInlineStyle().map((val, key) => {
@@ -145,14 +141,12 @@ export class ColorPicker extends Plugin<ColorPickerProps, ColorPickerState> {
               colorStyleRgx.exec(val)[4] || colorStyleRgx.exec(key)[4]
             )
           };
-          console.log("Current COLOR: ", initialColor);
           this.picker.setColor(initialColor);
         }
       });
     }
 
     //Preview (RGBA)
-    console.log("CURRENT: ", initialColor);
     this.previewContainer.style.backgroundColor = `rgba(${initialColor.r}, ${
       initialColor.g
     }, ${initialColor.b}, ${this.state.opacityValue})`;
@@ -289,7 +283,7 @@ export class ColorPicker extends Plugin<ColorPickerProps, ColorPickerState> {
         isDisabled={isDisabled}
         usePortal={false}
         icon={icon}
-        didOpen={this.init.bind(this)}
+        onDidOpen={this.init.bind(this)}
         ref={popup => (this.popup = popup)}
         editorState={this.props.editorState}
         updateEditorState={this.props.updateEditorState}
@@ -369,7 +363,6 @@ class Picker {
           colorData.data[1] == rangeColor.g &&
           colorData.data[2] == rangeColor.b
         ) {
-          console.log(colorData);
           //Change Circle Picker Position to the Set Color Position
           this.pickerCirlce.x = x;
           this.pickerCirlce.y = y;
