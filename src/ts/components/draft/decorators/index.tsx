@@ -1,25 +1,23 @@
 /* All Needed Decorators for the Rich Draft Editor need to be registered here in the Fly */
-import * as React from "react";
 import { CompositeDecorator, ContentBlock, ContentState } from "draft-js";
-
-//Decorators Styles
-import "./style.scss";
-
-//Icons
-import Icon from "../../toolBar/icon";
-
-//Prims Code Highlighter
-import * as Prism from "prismjs";
-//Prism CUSTOM CSS Style
-import "./atomDarkStyle.css";
-
-//Main App State
-import { AppState } from "../../../store";
 //Events
 import { EventEmitter } from "events";
-//Image Type
-import ImageReader, { IImage } from "../../../utils/imageReader";
+//Prims Code Highlighter
+import * as Prism from "prismjs";
+import * as React from "react";
+//Main App State
+import { AppState } from "../../../store";
+//Icons
+import Icon from "../../toolBar/icon";
+//Prism CUSTOM CSS Style
+import "./atomDarkStyle.css";
 import { renderCodeWithPrismJSX } from "./codeHighlighter";
+//Decorators Styles
+import "./style.scss";
+import styled from "styled-components";
+
+//SubDecorators
+import { ImageDecoratorStartegy, ImageDecoratorComp } from "./imageDecorator";
 
 //Export a Function with Emit & On Dependecies for Easilly Emitting and Listening for Editor Events
 export default function(
@@ -106,11 +104,18 @@ export default function(
   };
 
   const CodeEditorDecoratorComp = (props: any) => {
-    const { code, language, isImportedCode } = props.contentState
-      .getEntity(props.entityKey)
-      .getData();
+    const {
+      code,
+      language,
+      isImportedCode,
+      remove
+    } = props.contentState.getEntity(props.entityKey).getData();
     let highlightedCode: React.ReactElement<any> = null;
     let codeLines: string[] = null;
+
+    //Current Code Snippet needs to be removed
+    if (remove) return null;
+
     //Tokenize the Code using Prism or Simply don't use Code Highlighter if language is invalid or doesn't exist in the support list
     if (
       language &&
@@ -142,7 +147,7 @@ export default function(
           codeLines.map((code, idx) => {
             if (!isImportedCode)
               return (
-                <pre>
+                <pre key={idx} data-language={language}>
                   <code>
                     <span key={idx}>{code}</span>
                   </code>
@@ -150,7 +155,7 @@ export default function(
               );
             else
               return (
-                <code>
+                <code key={idx} data-language={language}>
                   <span key={idx}>{code}</span>
                 </code>
               );
@@ -159,53 +164,6 @@ export default function(
           <Icon icon={"edit"} size={12} />
         </span>
       </div>
-    );
-  };
-
-  /* Image Decorator */
-  const ImageDecoratorStartegy = (
-    contentBlock: ContentBlock,
-    callback: (start: number, end: number) => void,
-    contentState: ContentState
-  ) => {
-    contentBlock.findEntityRanges(character => {
-      const entityKey = character.getEntity();
-      return (
-        entityKey != null &&
-        contentState.getEntity(entityKey).getType() == "IMAGE"
-      );
-    }, callback);
-  };
-
-  const ImageDecoratorComp = (props: any) => {
-    const image: IImage = props.contentState
-      .getEntity(props.entityKey)
-      .getData();
-    //Normalize width and height
-    const width = image.width ? image.width + "px" : "120px";
-    const height = image.height ? image.height + "px" : "100px";
-    //If Image URL presents (Use URL instead of Base64 Data, for performance Reasons)
-    let compatibleImgDataOrURL = null;
-    if (image.URL) {
-      compatibleImgDataOrURL = image.URL;
-    } else if (image.data) {
-      //Check & convert Image Data if not Compatible with Web APIs (does the base64 encoded image data has pre-delimiter (data:image/png))
-      //We only need the start portion of the string, for optimizing the Regex test we only get 30 chars
-      compatibleImgDataOrURL = ImageReader.convertToValidBase64Data(
-        image.data.toString()
-      );
-    }
-
-    //Do not Render IMAGE if data or URL is not valid
-    if (!compatibleImgDataOrURL) return null;
-
-    return (
-      <span style={{ width, height, display: "inline-flex" }}>
-        <img
-          src={compatibleImgDataOrURL}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </span>
     );
   };
 
@@ -225,30 +183,11 @@ export default function(
     },
     {
       strategy: ImageDecoratorStartegy,
-      component: ImageDecoratorComp
+      component: ImageDecoratorComp(emit)
     }
   ]);
 
-  //All Decorators Combined (DeepDraft and ThirdParty)
-  /*const Decorators = new MultiDecorators([
-  //The Last Decorator Will Have more prioraty
-  //deepDraftDecorators,
-  new PrismDecorator({ prism: Prism, filter:  })
-]);*/
-
-  //import CodeDecorator from "./codeDecorator";
-
   const Decorators = deepDraftDecorators;
-
-  /* All Registered Decorators */
-
-  //export default new CodeDecorator();
-
-  /*export default new PrismDecorator({
-  prism: Prism, 
-  defaultSyntax: "javascript",
-  filter: (block: ContentBlock) => block.getType() == "code-block"
-});*/
 
   //FINAL EXPORTED MODULE
   return Decorators;

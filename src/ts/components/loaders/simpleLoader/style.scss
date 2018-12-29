@@ -4,6 +4,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  & > *:focus {
+    outline: none;
+  }
 }
 
 //Simple Loader
@@ -16,13 +19,11 @@
     box-sizing: border-box;
     display: block;
     position: absolute;
-    width: 24px;
-    height: 24px;
-    margin: 6px;
-    border: 2px solid #fff;
+    margin: 4px;
+    border: 1.6px solid #fff;
     border-radius: 50%;
     animation: ip-simple-loader-anim 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #3d4c5a transparent transparent transparent;
+    border-color: #50667a transparent transparent transparent;
   }
   div:nth-child(1) {
     animation-delay: -0.45s;

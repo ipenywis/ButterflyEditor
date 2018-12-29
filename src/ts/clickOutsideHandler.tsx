@@ -73,14 +73,16 @@ export default class OutsideClickHandler extends React.Component<
     const { useCapture, discaredElmentsClassNames } = this.props;
 
     let isDiscaredElement = false;
-    //Loop on Discared ClassNames
-    for (const className of discaredElmentsClassNames) {
-      //Check if className matches any target's classNames
-      const targetClassNames = (e.target as HTMLElement).classList;
-      //See if current className is included on the target element
-      if (includes(targetClassNames, className)) {
-        isDiscaredElement = true;
-        break; ///< stop! we found it
+    if (discaredElmentsClassNames) {
+      //Loop on Discared ClassNames
+      for (const className of discaredElmentsClassNames) {
+        //Check if className matches any target's classNames
+        const targetClassNames = (e.target as HTMLElement).classList;
+        //See if current className is included on the target element
+        if (includes(targetClassNames, className)) {
+          isDiscaredElement = true;
+          break; ///< stop! we found it
+        }
       }
     }
 
@@ -101,16 +103,17 @@ export default class OutsideClickHandler extends React.Component<
   // touch devices.
   onMouseUp(e: React.MouseEvent) {
     const { onOutsideClick, discaredElmentsClassNames } = this.props;
-
     let isDiscaredElement = false;
-    //Loop on Discared ClassNames
-    for (const className of discaredElmentsClassNames) {
-      //Check if className matches any target's classNames
-      const targetClassNames = (e.target as HTMLElement).classList;
-      //See if current className is included on the target element
-      if (includes(targetClassNames, className)) {
-        isDiscaredElement = true;
-        break; ///< stop! we found it
+    if (discaredElmentsClassNames) {
+      //Loop on Discared ClassNames
+      for (const className of discaredElmentsClassNames) {
+        //Check if className matches any target's classNames
+        const targetClassNames = (e.target as HTMLElement).classList;
+        //See if current className is included on the target element
+        if (includes(targetClassNames, className)) {
+          isDiscaredElement = true;
+          break; ///< stop! we found it
+        }
       }
     }
 

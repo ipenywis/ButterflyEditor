@@ -18,7 +18,8 @@ export interface InputGroupProps {
   placeholder?: string;
   intent?: Intent;
   defaultValue?: string;
-
+  /**If value is provided the Input will act in Controlled Mode */
+  value?: string;
   type?: InputType;
 
   onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void;
@@ -54,8 +55,10 @@ export default class InputGroup extends React.Component<
       defaultValue,
       onChange,
       onKeyPress,
-      inputRef
+      inputRef,
+      value
     } = this.props;
+
 
     return (
       <SafeWrapper style={{ display: "block" }}>
@@ -68,6 +71,7 @@ export default class InputGroup extends React.Component<
           onChange={onChange}
           onKeyPress={onKeyPress}
           ref={inputRef}
+          value={value || value === "" ? value : undefined}
         />
       </SafeWrapper>
     );

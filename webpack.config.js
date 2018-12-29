@@ -154,6 +154,10 @@ let config = {
             }
           }
         ]
+      },
+      {
+        test: /\.html$/,
+        loader: "ignore-loader"
       }
     ]
   },

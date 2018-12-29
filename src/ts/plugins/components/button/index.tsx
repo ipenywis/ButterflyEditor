@@ -1,5 +1,8 @@
 import * as React from "react";
 import { Intent } from "../intent";
+import SimpleLoader, {
+  ILoaderPosition
+} from "../../../components/loaders/simpleLoader";
 
 import "./button.scss";
 
@@ -13,6 +16,7 @@ interface ButtonProps {
   minimal?: boolean;
   intent?: Intent;
   disabled?: boolean;
+  isLoading?: boolean;
 
   innerRef?: RefHandler;
 
@@ -28,7 +32,8 @@ export default class Button extends React.Component<ButtonProps, ButtonState> {
     intent: Intent.NONE,
     type: "button",
     minimal: false,
-    disabled: false
+    disabled: false,
+    isLoading: false
   };
 
   constructor(props: ButtonProps) {
@@ -45,7 +50,8 @@ export default class Button extends React.Component<ButtonProps, ButtonState> {
       onClick,
       children,
       disabled,
-      innerRef
+      innerRef,
+      isLoading
     } = this.props;
 
     return (
@@ -58,11 +64,18 @@ export default class Button extends React.Component<ButtonProps, ButtonState> {
           (disabled ? " disabled " : " ") +
           className
         }
-        onClick={onClick}
+        onClick={!isLoading && !disabled ? onClick : undefined}
         disabled={disabled}
         ref={innerRef}
       >
-        {text || children}
+        {!isLoading && (text || children)}
+        <SimpleLoader
+          className="loader"
+          isActive={isLoading}
+          renderInContainer={true}
+          position={ILoaderPosition.RELATIVE}
+          size={20}
+        />
       </button>
     );
   }

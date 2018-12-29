@@ -31,7 +31,7 @@ import Toaster from "../components/toast/toaster";
 import axios, { AxiosResponse } from "axios";
 
 //Image
-import ImageReader, { IImage } from "../../utils/imageReader";
+import ImageReader, { IImage, IImageType } from "../../utils/imageReader";
 
 //Icons
 import Icon from "../../components/toolBar/icon";
@@ -44,9 +44,14 @@ import { find, filter } from "lodash";
 import SimpleLoader from "../../components/loaders/simpleLoader";
 
 //Apply Entity
-import { applyAtomicEntity } from "../../components/draft/entity";
+import {
+  applyAtomicEntity,
+  mergeEntityData,
+  removeEntity
+} from "../../components/draft/entity";
 import { validateURL } from "../../utils";
 import { addEntityImportRule } from "../../components/draft/importOptions";
+import decorators from "../../components/draft/decorators";
 
 interface ImageUploaderProps {
   editorState: EditorState;
@@ -75,11 +80,16 @@ interface ImageUploaderProps {
 interface ImageUploaderState {
   isAdvancedActive: boolean;
   currentAdvancedTab: string;
+  currentImageEntityKey: string;
   imgURL: string;
   imgWidth: number;
   imgHeight: number;
+  imgWidthError: string;
+  imgHeightError: string;
   error: string;
   isImageLoading: boolean;
+  isEditMode: boolean;
+  didImgDataChange: boolean;
 }
 
 export class ImageUploader extends React.Component<
@@ -105,37 +115,40 @@ export class ImageUploader extends React.Component<
       imgURL: null, ///< stays NULL if user selected/uploaded an image instead of a URL
       imgWidth: 120,
       imgHeight: 100,
+      imgWidthError: null,
+      imgHeightError: null,
       error: null,
-      isImageLoading: false
+      isImageLoading: false,
+      isEditMode: false,
+      didImgDataChange: false,
+      currentImageEntityKey: null
     };
     //Init Image Reader
     this.imageReader = new ImageReader();
   }
 
-  showError(err: string) {
+  private showError(err: string) {
     this.setState({ error: err });
   }
 
-  hideErrors() {
+  private hideErrors() {
     //Hide/Remove All Errors
     this.setState({ error: null });
   }
 
-  startLoading() {
+  private startLoading() {
     this.setState({ isImageLoading: true });
   }
 
-  stopLoading() {
+  private stopLoading() {
     this.setState({ isImageLoading: false });
   }
 
-  onPopupOpen() {}
-
-  hidePopup() {
+  private hidePopup() {
     this.popup.closePopup();
   }
 
-  onPopupClose() {
+  private onPopupClose() {
     //Clear Component Cache (Errors, activeStates...)
     this.setState({
       isAdvancedActive: false,
@@ -143,31 +156,58 @@ export class ImageUploader extends React.Component<
       error: null,
       imgURL: null,
       isImageLoading: false,
+      isEditMode: false,
+      didImgDataChange: false,
+      currentImageEntityKey: null,
       imgWidth: 120,
       imgHeight: 100
     });
   }
 
-  onAdvancedUploaderClick() {
+  private onAdvancedUploaderClick() {
     this.setState({ isAdvancedActive: true });
   }
 
-  handleKeyPress(e: React.KeyboardEvent) {
+  private handleKeyPress(e: React.KeyboardEvent) {
     if (e.key == "Enter") this.onURLImagePlace();
   }
 
-  onImageURLChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ imgURL: e.target.value });
+  private onImageURLChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ imgURL: e.target.value, didImgDataChange: true });
+  }
+
+  private onImageWidthChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const numiricValue = parseInt(e.target.value);
+    //Validate Numiric Value
+    if (isNaN(numiricValue))
+      this.setState({ imgWidthError: "this is not a valid Width Number!" });
+    else if (this.state.imgWidthError) this.setState({ imgWidthError: null });
+    this.setState({
+      imgWidth: numiricValue ? numiricValue : 0,
+      didImgDataChange: true
+    });
+  }
+
+  private onImageHeightChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const numiricValue = parseInt(e.target.value);
+    //Validate Numiric Value
+    if (isNaN(numiricValue))
+      this.setState({ imgHeightError: "this is not a valid Height Number!" });
+    else if (this.state.imgHeightError) this.setState({ imgHeightError: null });
+    this.setState({
+      imgHeight: numiricValue ? numiricValue : 0,
+      didImgDataChange: true
+    });
   }
 
   //Create and Places and Image as a Base64 Image Encoded Data as <img src={base64DATA}/>
   //Use this method only when you have a server that is capable of receiving your base64 image data, uploading it and then providing you with the Target Image URL
   //Do not try to use base64 data directlly into image, since it will compromize the experience and makes the editor lagging and non-responding
-  async onURLImagePlaceBase64() {
+  private async onURLImagePlaceBase64() {
     const { editorState, updateEditorState } = this.props;
     const { imgURL, imgWidth, imgHeight } = this.state;
     //Start Loading
-    this.setState({ isImageLoading: true });
+    this.startLoading();
     //Load Image Loader (await Promise)
     let image = await this.imageReader
       .readFromURLCORS(imgURL, imgWidth, imgHeight)
@@ -195,13 +235,21 @@ export class ImageUploader extends React.Component<
   }
 
   //Creates and Places an img with URL <img src={url}/>
-  onURLImagePlace() {
+  private onURLImagePlace() {
     const { editorState, updateEditorState } = this.props;
-    const { imgURL, imgWidth, imgHeight } = this.state;
+    const {
+      imgURL,
+      imgWidth,
+      imgHeight,
+      imgWidthError,
+      imgHeightError
+    } = this.state;
+    //Validate Width & Height
+    if (imgWidthError || imgHeightError) return;
     //Validate URL
     if (!validateURL(imgURL)) return this.showError("Invalid Link(URL)");
     //Start Loading State
-    this.setState({ isImageLoading: true });
+    this.startLoading();
     let img = new Image();
     img.src = imgURL;
     //Wait for image loading
@@ -217,21 +265,87 @@ export class ImageUploader extends React.Component<
       );
       //Update Editor State
       updateEditorState(newEditorState);
-      //Stop Loading
       this.stopLoading();
-      //Hide Popup
       this.hidePopup();
     };
     img.onabort = img.onerror = () => {
-      //Stop Loading
       this.stopLoading();
       //Show Error
       this.showError("Cannot Load Image from URL, Please Try Again!");
     };
   }
 
-  onAdvancedTabChange(tabID: string) {
+  private onAdvancedTabChange(tabID: string) {
     this.setState({ currentAdvancedTab: tabID });
+  }
+
+  private openImageEdit(
+    url: string,
+    width: number,
+    height: number,
+    imageEntityKey: string
+  ) {
+    this.popup.openPopup();
+    this.setState({
+      imgURL: url,
+      imgWidth: width,
+      imgHeight: height,
+      isEditMode: true,
+      currentImageEntityKey: imageEntityKey
+    });
+  }
+
+  private onImageUpdate() {
+    const {
+      currentImageEntityKey,
+      imgURL,
+      imgWidth,
+      imgHeight,
+      imgWidthError,
+      imgHeightError
+    } = this.state;
+    const { editorState, emit, on, updateEditorState } = this.props;
+    //Validate Width & Height
+    if (imgWidthError || imgHeightError) return;
+    //Validate URL
+    if (!validateURL(imgURL)) return this.showError("Invalid Link(URL)");
+    //Start Loading State
+    this.startLoading();
+    let img = new Image();
+    img.src = imgURL;
+    //Wait for image loading
+    img.onload = () => {
+      //Image (From URL)
+      const image = ImageReader.createFromURL(imgURL, imgWidth, imgHeight);
+      //Update IMAGE Entity
+      const newEditorState = mergeEntityData(
+        editorState,
+        decorators(emit, on),
+        currentImageEntityKey,
+        image
+      );
+      updateEditorState(newEditorState);
+      this.stopLoading();
+      this.hidePopup();
+    };
+    img.onabort = img.onerror = () => {
+      this.stopLoading();
+      this.showError("Cannot Load Image from URL, Please Try Again!");
+    };
+  }
+
+  private async onImageRemove(imageEntityKey: string) {
+    const { editorState, updateEditorState, emit, on } = this.props;
+    const newEditorState = await removeEntity(
+      editorState,
+      imageEntityKey,
+      decorators(emit, on)
+    ).catch(err =>
+      console.error("ButterFly Editor Error: Cannot Remove Image from Editor!")
+    );
+    //Set Current Entity Key for later use
+    this.setState({ currentImageEntityKey: imageEntityKey });
+    if (newEditorState) updateEditorState(newEditorState);
   }
 
   componentWillMount() {
@@ -247,6 +361,23 @@ export class ImageUploader extends React.Component<
         };
       }
     );
+  }
+
+  componentDidMount() {
+    const { on } = this.props;
+    //Register Component's External Events
+    //Image Update
+    on("EditImage", (appState, data) =>
+      //Event emitter sends data as args so it is wrapped on an array
+      this.openImageEdit(
+        data[0].url,
+        data[0].width,
+        data[0].height,
+        data[0].entityKey
+      )
+    );
+    //Remove Image
+    on("RemoveImage", (appSate, data) => this.onImageRemove(data[0].entityKey));
   }
 
   render() {
@@ -265,8 +396,13 @@ export class ImageUploader extends React.Component<
       currentAdvancedTab,
       error,
       isImageLoading,
+      isEditMode,
+      didImgDataChange,
+      imgURL,
       imgWidth,
-      imgHeight
+      imgHeight,
+      imgWidthError,
+      imgHeightError
     } = this.state;
 
     //Image Uploader Icon
@@ -291,6 +427,7 @@ export class ImageUploader extends React.Component<
           <InputGroup
             id="image-url-input"
             placeholder="URL"
+            value={imgURL ? imgURL : ""}
             intent={error ? Intent.DANGER : Intent.PRIMARY}
             inputRef={input => (this.imageURLInput = input)}
             onKeyPress={this.handleKeyPress.bind(this)}
@@ -300,34 +437,28 @@ export class ImageUploader extends React.Component<
         <FormGroup
           label="Image Width"
           labelFor="image-width-input"
-          intent={Intent.PRIMARY}
+          intent={imgWidthError ? Intent.DANGER : Intent.PRIMARY}
+          helperText={imgWidthError ? imgWidthError : undefined}
         >
           <InputGroup
-            //allowNumericCharactersOnly={true}
-            //buttonPosition="right"
-            //fill={false}
+            intent={imgWidthError ? Intent.DANGER : Intent.PRIMARY}
             placeholder="Width"
-            onChange={e =>
-              this.setState({ imgWidth: parseInt(e.currentTarget.value) })
-            }
-            //onValueChange={value => this.setState({ imgWidth: value })}
+            value={String(imgWidth)}
+            onChange={this.onImageWidthChange.bind(this)}
           />
           {/* TODO: Add Better Image Width and Height Controllers and Inputs for ensuring a valid number instead of a string */}
         </FormGroup>
         <FormGroup
           label="Image Height"
           labelFor="image-height-input"
-          intent={Intent.PRIMARY}
+          intent={imgHeightError ? Intent.DANGER : Intent.PRIMARY}
+          helperText={imgHeightError ? imgHeightError : undefined}
         >
           <InputGroup
-            //allowNumericCharactersOnly={true}
-            //buttonPosition="right"
-            //fill={false}
+            intent={imgHeightError ? Intent.DANGER : Intent.PRIMARY}
             placeholder="Height"
-            onChange={e =>
-              this.setState({ imgHeight: parseInt(e.currentTarget.value) })
-            }
-            //onValueChange={value => this.setState({ imgWidth: value })}
+            value={String(imgHeight)}
+            onChange={this.onImageHeightChange.bind(this)}
           />
         </FormGroup>
       </div>
@@ -337,10 +468,16 @@ export class ImageUploader extends React.Component<
     const inlineFooter = (
       <div className="footer-container">
         <Button
-          text="Place Image"
+          text={isEditMode ? "Update" : "Place Image"}
           minimal={true}
           intent={Intent.SUCCESS}
-          onClick={this.onURLImagePlace.bind(this)}
+          onClick={
+            isEditMode
+              ? this.onImageUpdate.bind(this)
+              : this.onURLImagePlace.bind(this)
+          }
+          isLoading={isImageLoading}
+          disabled={!didImgDataChange}
         />
         <Button
           text="Advanced"
@@ -374,40 +511,6 @@ export class ImageUploader extends React.Component<
         />
       </div>
     );
-
-    {
-      /*<Tabs
-        id="uploader-tabs"
-        className="tabs-container"
-        onChange={tabID =>
-          this.setState({ currentAdvancedTab: tabID.toString() })
-        }
-        selectedTabId={currentAdvancedTab}
-        renderActiveTabPanelOnly={false}
-      >
-        {useImageBrowser && (
-          <Tab id="browser" title="Browser" panel={imageBrowser} />
-        )}
-        <Tab id="uploader" title="Upload" panel={uploader} />
-        <Tabs.Expander />
-        </Tabs>*/
-    }
-
-    /*
-            <Tabs
-        defaultActiveKey={currentAdvancedTab}
-        onChange={this.onAdvancedTabChange.bind(this)}
-        renderTabBar={() => <ScrollableInkTabBar />}
-        renderTabContent={() => <TabContent />}
-      >
-        <TabPane tab="Browser" key="borwser">
-          {imageBrowser}
-        </TabPane>
-        <TabPane tab="Upload" key="uploader">
-          {uploader}
-        </TabPane>
-      </Tabs>
-    */
 
     //Order Matter for react-tabs to know which one to render first and their indecies
     const tabs = ["browser", "uploader"];
@@ -458,7 +561,6 @@ export class ImageUploader extends React.Component<
         header={isInline ? inlineHeader : advancedHeader}
         container={isInline ? inlineContainer : advancedContainer}
         footer={isInline ? inlineFooter : advancedFooter}
-        onDidOpen={this.onPopupOpen.bind(this)}
         onClose={this.onPopupClose.bind(this)}
         ref={popup => (this.popup = popup)}
       />

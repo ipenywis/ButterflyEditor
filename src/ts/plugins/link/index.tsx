@@ -189,7 +189,6 @@ export class Link extends React.Component<LinkProps, LinkState> {
 
     //Button Icon
     const icon = <Icon icon={"link"} />;
-    console.warn("State: ", this.state);
     //Header
     const header = current == "link" ? "Set Link" : "Manage Link";
     //Container

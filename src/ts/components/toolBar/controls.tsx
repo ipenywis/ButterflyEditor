@@ -25,7 +25,7 @@ import createStyle, {
 } from "./inlineStyle";
 import { EventEmitter } from "events";
 import { EDITOR_TOOLBAR_LABELS } from "./common";
-import { isInWithRegx, genUniqElementKey } from "../../utils";
+import { isInWithRegx } from "../../utils";
 
 //DropDown Item
 export interface ToolbarDropDownItem {
@@ -83,6 +83,7 @@ export interface ControlsProps {
     newEditorState: EditorState,
     callback?: () => void
   ) => void;
+  getUniqueElementKey: (alias?: string) => string;
 
   //Events
   on?: (
@@ -175,6 +176,7 @@ export default class Controls extends React.Component<ControlsProps> {
           appState={this.props.appState}
           updateEditorState={this.updateEditorState.bind(this)}
           setAppState={this.props.setAppState}
+          getUniqueElementKey={this.props.getUniqueElementKey}
           on={this.props.on}
           emit={this.props.emit}
         />
@@ -187,6 +189,7 @@ export default class Controls extends React.Component<ControlsProps> {
           appState={this.props.appState}
           updateEditorState={this.updateEditorState.bind(this)}
           setAppState={this.props.setAppState}
+          getUniqueElementKey={this.props.getUniqueElementKey}
           on={this.props.on}
           emit={this.props.emit}
         />
@@ -205,6 +208,7 @@ interface InlineStylesProps {
   setAppState: (newState: any, callback?: () => void) => void;
   toggleStyle: (style: string) => void;
   updateEditorState: (newEditorState: EditorState) => void;
+  getUniqueElementKey: (alias?: string) => string;
 
   //Events
   on?: (
@@ -226,6 +230,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
     updateEditorState,
     setAppState,
     appState,
+    getUniqueElementKey,
     on,
     emit
   } = props;
@@ -394,7 +399,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
     <SafeWrapper>
       {itemGroups.map((groupID, gidx) => {
         return (
-          <SafeWrapper key={genUniqElementKey(gidx.toString())}>
+          <SafeWrapper key={getUniqueElementKey()}>
             {inlineStyles.map((item, idx) => {
               if (item.groupID == groupID && !item.popup && item.dropDown)
                 return (
@@ -406,15 +411,13 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
                     icon={item.icon}
                     editorState={props.appState.editorState}
                     activeItems={dropDownActiveStyles}
-                    key={genUniqElementKey(idx.toString())}
+                    key={getUniqueElementKey()}
                   >
                     {item.groupID == groupID &&
                       item.dropDown.items.map((dropItem, dIdx) => {
                         if (dropItem.icon)
                           return (
-                            <SafeWrapper
-                              key={genUniqElementKey(dIdx.toString())}
-                            >
+                            <SafeWrapper key={getUniqueElementKey()}>
                               {dropItem.icon} <span>{dropItem.label}</span>
                             </SafeWrapper>
                           );
@@ -447,7 +450,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
                         editor={props.appState.editor}
                         on={on}
                         emit={emit}
-                        key={genUniqElementKey(idx.toString())}
+                        key={getUniqueElementKey()}
                       />
                     );
                   else if (
@@ -461,7 +464,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
                       item.popup.standAlone,
                       {
                         isDisabled: isDisabled(item),
-                        key: genUniqElementKey(idx.toString())
+                        key: getUniqueElementKey()
                       }
                     );
                   } else return null;
@@ -481,7 +484,7 @@ let RenderInlineStyles: React.SFC<InlineStylesProps> = (
                           ? "toggle"
                           : "")
                       }
-                      key={genUniqElementKey(idx.toString())}
+                      key={getUniqueElementKey()}
                       onMouseDown={e => {
                         //Do not Apply Style when disabled
                         if (isDisabled(item)) return;
@@ -514,6 +517,7 @@ interface BlockTypesProps {
   setAppState: (newState: any, callback?: () => void) => void;
   toggleBlock: (style: string) => void;
   updateEditorState: (newEditorState: EditorState) => void;
+  getUniqueElementKey: (alias?: string) => string;
 
   //Events
   on?: (
@@ -533,6 +537,7 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
     updateEditorState,
     setAppState,
     appState,
+    getUniqueElementKey,
     on,
     emit
   } = props;
@@ -691,7 +696,7 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
     <SafeWrapper>
       {itemGroups.map((groupID, gidx) => {
         return (
-          <SafeWrapper key={genUniqElementKey(gidx.toString())}>
+          <SafeWrapper key={getUniqueElementKey()}>
             {blockTypes.map((item, idx) => {
               if (item.groupID == groupID && !item.popup && item.dropDown)
                 return (
@@ -703,15 +708,13 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
                     icon={item.icon}
                     editorState={appState.editorState}
                     activeItems={dropDownActiveStyles}
-                    key={genUniqElementKey(idx.toString())}
+                    key={getUniqueElementKey()}
                   >
                     {item.groupID == groupID &&
                       item.dropDown.items.map((dropItem, dIdx) => {
                         if (dropItem.icon) {
                           return (
-                            <SafeWrapper
-                              key={genUniqElementKey(dIdx.toString())}
-                            >
+                            <SafeWrapper key={getUniqueElementKey()}>
                               {dropItem.icon} <span>{dropItem.label}</span>
                             </SafeWrapper>
                           );
@@ -744,7 +747,7 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
                       editor={props.appState.editor}
                       on={on}
                       emit={emit}
-                      key={genUniqElementKey(idx.toString())}
+                      key={getUniqueElementKey()}
                     />
                   );
                 else if (
@@ -756,7 +759,7 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
                   //Clone Popup Element overwritting the IsDisabled by checking it on current toolbar item
                   return React.cloneElement<PopupProps>(item.popup.standAlone, {
                     isDisabled: isDisabled(item),
-                    key: genUniqElementKey(idx.toString())
+                    key: getUniqueElementKey()
                   });
                 } else return null;
               })}
@@ -774,7 +777,7 @@ let RenderBlockTypes: React.SFC<BlockTypesProps> = (props: BlockTypesProps) => {
                           ? "toggle"
                           : "")
                       }
-                      key={genUniqElementKey(idx.toString())}
+                      key={getUniqueElementKey()}
                       onMouseDown={e => {
                         //Do not Apply Style when disabled
                         if (isDisabled(item)) return;

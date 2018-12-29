@@ -1,24 +1,18 @@
+import { Editor, EditorState } from "draft-js";
+import { EventEmitter } from "events";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-
-//Icon
-import Icon from "../components/toolBar/icon";
-
-//Safe Wrapper
-import { SafeWrapper } from "./common";
-
-//Outside Click Handler from Lovelly Airbnb
-//TODO: BAD BOY ==> import OutsideClickHandler from "react-outside-click-handler";
-
-import createStyle, { IStyle, ICreateStyle } from "./toolBar/inlineStyle";
-import { EditorState, Editor } from "draft-js";
-
-//Main App State
-import { AppState } from "../store";
-import { EventEmitter } from "events";
-
 //Click outside handler (Not Airbnb)
 import ClickOutsideHandler from "../clickOutsideHandler";
+//Icon
+import Icon from "../components/toolBar/icon";
+//Main App State
+import { AppState } from "../store";
+//Safe Wrapper
+import { SafeWrapper } from "./common";
+//Outside Click Handler from Lovelly Airbnb
+//TODO: BAD BOY ==> import OutsideClickHandler from "react-outside-click-handler";
+import createStyle, { ICreateStyle, IStyle } from "./toolBar/inlineStyle";
 
 export interface PopupProps {
   label?: string;
@@ -163,10 +157,6 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
       topPos: toggleBtnBoundingBox.top + toggleBtnBoundingBox.height + 14,
       leftPos: toggleBtnBoundingBox.left - 5
     });
-  }
-
-  componentWillUnmount() {
-    console.log("Popup is Unmouting OMG Good bye!");
   }
 
   componentDidUpdate() {

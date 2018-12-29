@@ -11,6 +11,11 @@
   cursor: pointer;
   font-size: 15px;
 
+  //Disabled Anoying focus
+  &:focus {
+    outline: none;
+  }
+
   &.intent-none {
     background-color: #f5f8fa;
     background-image: linear-gradient(

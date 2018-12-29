@@ -44,14 +44,3 @@ export const isInWithRegx = (list: string[], item: string): boolean => {
   }
   return found;
 };
-
-/**
- * Generates a Unique Key for React Element (ex: BFly-alias-548965) using Date.getTime() and Math.random() to ensure uniqueness
- * @param alias?
- */
-export const genUniqElementKey = (alias?: string): string => {
-  const randNum = Math.floor(new Date().getTime() * Math.random())
-    .toString()
-    .substr(7);
-  return "BFly-" + (alias ? alias + "-" : "") + randNum;
-};

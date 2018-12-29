@@ -26,6 +26,9 @@ export default class Store extends React.Component {
   private eventEmitter: EventEmitter;
   storedEvents: any;
 
+  //Unique Element Key index
+  static elementKeyIdx = 0;
+
   constructor(props: AppProps) {
     super(props);
 
@@ -86,11 +89,24 @@ export default class Store extends React.Component {
     this.setState(callback);
   }
 
+  componentWillUpdate() {
+    //Clear & Reset React key index
+    Store.elementKeyIdx = 0;
+  }
+
   componentDidMount() {
     //Create Portal Container a.k.a React Portal Container
     let portalContainer = document.createElement("div");
     portalContainer.id = "bfe-portal";
     document.body.appendChild(portalContainer);
+  }
+
+  /**
+   * Get a Unique React Component Key
+   * @param alias
+   */
+  getUniqueElementKey(alias?: string): string {
+    return "BFly-" + (alias ? alias + "-" : "") + Store.elementKeyIdx++;
   }
 
   render() {
@@ -102,7 +118,8 @@ export default class Store extends React.Component {
             setAppState: this.setAppState,
             setAppStateClb: this.setAppStateClb,
             on: this.on.bind(this),
-            emit: this.emit.bind(this)
+            emit: this.emit.bind(this),
+            getUniqueElementKey: this.getUniqueElementKey.bind(this)
           });
         })}
       </div>

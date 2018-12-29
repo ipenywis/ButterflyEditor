@@ -1,6 +1,7 @@
 import {
   EditorState,
   ContentState,
+  SelectionState,
   DraftEntityMutability,
   AtomicBlockUtils,
   Modifier
@@ -130,4 +131,47 @@ export const mergeEntityData = (
     contentStateWithUpdatedEntity,
     decorators
   );
+};
+
+/**
+ * Removes an Entity from the ContentState by finding the EntityKey and Selecting the range of characters that belongs to this Entity
+ * in order to detirmine the ContentBlock to get Completely deleted from the ContentState (Async)
+ * @param editorState
+ * @param entityKey
+ * @param decorators
+ * @returns Promise<EditorState>
+ */
+export const removeEntity = (
+  editorState: EditorState,
+  entityKey: string,
+  decorators: any
+): Promise<EditorState> => {
+  return new Promise<EditorState>((rs, rj) => {
+    const contentState = editorState.getCurrentContent();
+    contentState.getBlockMap().map(block => {
+      block.findEntityRanges(
+        character => {
+          return character.getEntity() === entityKey;
+        },
+        (start: number, end: number) => {
+          const selection = SelectionState.createEmpty(block.getKey());
+          //Create a selection fro the range of the entity
+          const autoSelectedCodeRange = selection.merge({
+            anchorOffset: 0,
+            focusOffset: block.getText().length
+          });
+          const newContentState = Modifier.applyEntity(
+            contentState,
+            autoSelectedCodeRange as SelectionState,
+            null
+          );
+          const newEditorState: EditorState = EditorState.createWithContent(
+            newContentState,
+            decorators
+          );
+          return rs(newEditorState);
+        }
+      );
+    });
+  });
 };

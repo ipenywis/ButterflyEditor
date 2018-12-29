@@ -18,7 +18,8 @@ export interface DropDownProps {
   className?: string;
   container?: string;
   outsideClickCanClose?: boolean;
-  icon: typeof Icon | Object;
+  icon?: typeof Icon | Object;
+  label?: string;
   editorState: EditorState; ///< Temp
 
   activeItems?: string[];
@@ -26,6 +27,8 @@ export interface DropDownProps {
 
   //is DropDown Disabled
   isDisabled?: boolean;
+  //Show currently active selection on the Dropdown
+  showActiveOption?: boolean;
 
   isItemActive?: (label: string) => boolean;
   onChange?: (blockLabel: string) => void;
@@ -34,6 +37,7 @@ export interface DropDownProps {
 
 interface DropDownState {
   isOpen: boolean;
+  currentlyActiveOption: string;
 }
 
 export default class DropDown extends React.Component<DropDownProps> {
@@ -41,7 +45,8 @@ export default class DropDown extends React.Component<DropDownProps> {
   public static defaultProps = {
     container: "select",
     outsideClickCanClose: true,
-    isDisabled: false
+    isDisabled: false,
+    showActiveOption: false
   };
 
   dropDownBtn: HTMLButtonElement;
@@ -49,7 +54,8 @@ export default class DropDown extends React.Component<DropDownProps> {
   constructor(props: DropDownProps) {
     super(props);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      currentlyActiveOption: null
     };
   }
 
@@ -63,7 +69,8 @@ export default class DropDown extends React.Component<DropDownProps> {
   }
 
   render() {
-    const { isDisabled } = this.props;
+    const { isDisabled, label, showActiveOption } = this.props;
+    const { currentlyActiveOption } = this.state;
 
     //Container by default is select
     let renderContainer = "select";
@@ -92,6 +99,7 @@ export default class DropDown extends React.Component<DropDownProps> {
     // Check if item is active (use item label to check for the current item it's
     // active)
     const isActive = (label: string, alias?: string) => {
+      if (!activeItems || activeItems == []) return false;
       // If defined use provided callback for deciding weather the current item is
       // active or not
       if (this.props.isItemActive) return this.props.isItemActive(label);
@@ -157,8 +165,12 @@ export default class DropDown extends React.Component<DropDownProps> {
               onClick={this.toggleDropDown.bind(this)}
               onMouseDown={e => e.preventDefault()}
             >
-              <span className="btn-icon">{icon}</span>
-              {false && <span className="btn-text">DropDown</span>}
+              {icon && <span className="btn-icon">{icon}</span>}
+              {(currentlyActiveOption || label) && (
+                <span className="btn-text">
+                  {currentlyActiveOption || label}
+                </span>
+              )}
               <span
                 style={{
                   marginTop: "2px"
@@ -191,6 +203,10 @@ export default class DropDown extends React.Component<DropDownProps> {
                               key={idx}
                               onMouseDown={e => {
                                 e.preventDefault();
+                                if (showActiveOption)
+                                  this.setState({
+                                    currentlyActiveOption: child
+                                  });
                                 this.props.onChange(child.toString());
                               }}
                             >

@@ -19,6 +19,7 @@ export interface EditorProps {
 
   setAppState?: (newState: any, callback?: () => void) => void;
   setAppStateClb?: (callback: (prevState: AppState) => void) => void;
+  getUniqueElementKey?: (alias?: string) => string;
   //Events
   on?: (
     eventName: string,
@@ -139,6 +140,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
           emit={this.props.emit}
           expandEditor={this.expandEditor.bind(this)}
           allowEditorExpand={config.allowEditorFullExpand}
+          getUniqueElementKey={this.props.getUniqueElementKey}
         />
         <Draft
           appState={this.props.appState}

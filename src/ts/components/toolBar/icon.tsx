@@ -94,8 +94,8 @@ const Icon: React.SFC<IconProps> = (props: IconProps) => {
   //Get SVG Element from Source
   const SVGHtml: SVGElement = getSVGFromSource(currentIconSVG);
   SVGHtml.setAttribute("fill", "currentColor");
-  SVGHtml.setAttribute("width", "inherit");
-  SVGHtml.setAttribute("height", "inherit");
+  SVGHtml.setAttribute("width", size + "px");
+  SVGHtml.setAttribute("height", size + "px");
   //Custom Style & Applying Rotation to SVG
   SVGHtml.setAttribute(
     "style",

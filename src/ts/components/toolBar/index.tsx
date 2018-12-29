@@ -12,6 +12,8 @@ export interface ToolBarProps {
 
   setAppState?: (newState: any, callback?: () => void) => void;
   setAppStateClb?: (callback: (prevState: AppState) => void) => void;
+  getUniqueElementKey: (alias?: string) => string;
+
   //Events
   on?: (
     eventName: string,
@@ -89,6 +91,7 @@ export default class ToolBar extends React.Component<ToolBarProps> {
           inlineStyles={inlineStyles}
           blockTypes={blockTypes}
           updateEditorState={this.updateEditorState.bind(this)}
+          getUniqueElementKey={this.props.getUniqueElementKey}
           on={this.props.on}
           emit={this.props.emit}
         />{" "}
@@ -103,8 +106,5 @@ export default class ToolBar extends React.Component<ToolBarProps> {
         )}
       </div>
     );
-
-    // Loading Error! Dont' Render Editor Toolbar console.error("Cannot Render
-    // Toolbar!, Please Refresh & Try Again");
   }
 }

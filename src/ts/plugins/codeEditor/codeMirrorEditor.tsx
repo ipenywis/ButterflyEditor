@@ -8,23 +8,36 @@ import Icon from "../../components/toolBar/icon";
 import { SafeWrapper } from "../../components/common";
 import Popover from "../components/popover";
 import Button from "../components/button";
+import DropDown from "../../components/toolBar/dropDown";
 import { Intent } from "../components/intent";
 import Popup from "../../components/popup";
-import { EditorState, Editor } from "draft-js";
+import {
+  EditorState,
+  Editor,
+  ContentState,
+  SelectionState,
+  Modifier
+} from "draft-js";
 import { AppState } from "../../store";
 import { EventEmitter } from "events";
 import styled from "styled-components";
 import Decorators from "../../components/draft/decorators";
-
 import "./codeMirrorStyle.scss";
 import {
   applyAtomicEntity,
   mergeEntityData
 } from "../../components/draft/entity";
 import { addEntityImportRule } from "../../components/draft/importOptions";
-
+import * as Prism from "prismjs";
+//CodeMirror Config
+import {
+  CODE_EDITOR_LANGUAGES,
+  loadCodeMirrorLanguages,
+  getCodeMirrorLanguages,
+  getCodeMirrorLanguage
+} from "./codeMirrorConfig";
 /**CodeMirror language Modes */
-require("codemirror/mode/javascript/javascript.js");
+loadCodeMirrorLanguages(getCodeMirrorLanguages(CODE_EDITOR_LANGUAGES));
 
 const CodeMirrorStyled = styled(CodeMirror)`
   width: 100%;
@@ -33,6 +46,30 @@ const CodeMirrorStyled = styled(CodeMirror)`
 const SafeWrapperStyled = styled(SafeWrapper)`
   max-width: 60em;
   min-width: 50em;
+  flex-direction: column;
+`;
+
+const LanguageSelectContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  & > label {
+    font-size: 20px;
+    color: rgba(15, 15, 15, 0.9);
+    margin-right: 10px;
+  }
+`;
+
+const Select = styled.select`
+  box-shadow: 0px 0px 2px 0.7px rgba(60, 134, 222, 0.73);
+  min-width: 8em;
+  max-width: 12em;
+  height: 22px;
+  font-size: 12px;
+  color: #1b1a1a;
+  border: 0;
+  border-radius: 3px;
 `;
 
 interface CodeMirrorEditorProps {
@@ -56,7 +93,9 @@ interface CodeMirrorEditorProps {
 interface CodeMirrorEditorState {
   code: string;
   isWarningPopupOpen: boolean;
+  isDeleteCodePopupOpen: boolean;
   isEditMode: boolean;
+  didCodeChange: boolean; ///< works in update mode to know if code has been changed or not
   codeEditorEntityKey: string;
   currentLanguage: string;
 }
@@ -80,27 +119,25 @@ export default class CodeMirrorEditor extends React.Component<
       code: null,
       isWarningPopupOpen: false,
       isEditMode: false,
+      didCodeChange: false,
       codeEditorEntityKey: null,
-      currentLanguage: "javascript"
+      currentLanguage: "javascript",
+      isDeleteCodePopupOpen: false
     };
   }
 
   popupDidOpen() {
     this.codeEditorInstance = (this.codeEditorRef as any).getCodeMirror();
-    this.codeEditorInstance.on("change", () => {
-      console.log("Code changed");
-    });
+    /*this.codeEditorInstance.on("change", () => {
+    });*/
   }
 
   componentWillMount() {
     //Listen For Code Editing Event from a Code Snippet Decorator
     this.props.on("EditCode", (appState, data) => {
-      console.log("Edit Code requested... ", this.popup);
       //Open Popup WITH CODE (Event is being emitted from the Decorator)
       this.OpenWithCode(data[0], data[1]);
     });
-
-    console.log("Popup: ", this.popup);
 
     //Add Code Snippet Import Rule (for importing (<pre> <code>) from HTML)
     addEntityImportRule(
@@ -125,11 +162,7 @@ export default class CodeMirrorEditor extends React.Component<
     );
   }
 
-  componentWillUnmount() {
-    console.log("Code editor is unmouting...");
-  }
-
-  render() {
+  public render() {
     const {
       editor,
       editorState,
@@ -137,21 +170,41 @@ export default class CodeMirrorEditor extends React.Component<
       isDisabled,
       autoFocus
     } = this.props;
-    const { code, isWarningPopupOpen } = this.state;
+    const {
+      code,
+      isWarningPopupOpen,
+      isDeleteCodePopupOpen,
+      isEditMode,
+      didCodeChange,
+      currentLanguage
+    } = this.state;
 
     const icon = <Icon icon={"codeEditor"} />;
 
     const header = "Code Mirror Editor";
 
     const editorOptions: CodeMirror.EditorConfiguration = {
-      mode: "javascript",
+      mode: currentLanguage,
       theme: "dracula"
     };
 
-    const isCodeValid = code && code.trim() !== "";
-
     const container = (
       <SafeWrapperStyled>
+        <LanguageSelectContainer className="language-select-container">
+          <label htmlFor="language-select">Current Language: </label>
+          <DropDown
+            className={"t-dropDown"}
+            label="Language"
+            showActiveOption={true}
+            onChange={this.updateCurrentLanguage.bind(this)}
+            container="button"
+            editorState={editorState}
+          >
+            {CODE_EDITOR_LANGUAGES.map(lang => {
+              return lang;
+            })}
+          </DropDown>
+        </LanguageSelectContainer>
         <CodeMirrorStyled
           value={code}
           onChange={this.updateCode.bind(this)}
@@ -166,48 +219,85 @@ export default class CodeMirrorEditor extends React.Component<
       <div className="footer-container">
         <Button
           className="btn"
-          text={"Add"}
+          text={isEditMode ? "Update" : "Add"}
           intent={Intent.SUCCESS}
-          disabled={!isCodeValid}
-          onClick={this.onCodeSnippetAdd.bind(this)}
+          disabled={!didCodeChange}
+          onClick={
+            isEditMode
+              ? this.onCodeSnippetUpdate.bind(this)
+              : this.onCodeSnippetAdd.bind(this)
+          }
         />
-        {
+        <Popover
+          popoverClassName="bp3-popover-content-sizing"
+          isOpen={isWarningPopupOpen}
+          targetBtn={
+            <Button
+              className="btn"
+              intent={Intent.DANGER}
+              onClick={this.onDiscardCodeClick.bind(this)}
+            >
+              Discard
+            </Button>
+          }
+        >
+          <div style={{ zIndex: 1000 }}>
+            <h4>Are you sure you want to Discard Code?</h4>
+            <p>All Code Will be Lost!</p>
+            <div className="footer-container">
+              {" "}
+              <Button
+                className="btn"
+                intent={Intent.DANGER}
+                onClick={this.closeCodeEditor.bind(this)}
+              >
+                OK
+              </Button>
+              <Button
+                className="btn"
+                intent={Intent.PRIMARY}
+                onClick={this.hideDiscardWarning.bind(this)}
+              >
+                No, Continue
+              </Button>{" "}
+            </div>
+          </div>
+        </Popover>
+        {isEditMode && (
           <Popover
-            popoverClassName="bp3-popover-content-sizing"
-            isOpen={isWarningPopupOpen}
+            isOpen={isDeleteCodePopupOpen}
             targetBtn={
               <Button
                 className="btn"
                 intent={Intent.DANGER}
-                onClick={this.onDiscardCodeClick.bind(this)}
+                onClick={this.onDeleteCodePopupClick.bind(this)}
               >
-                Discard
+                Remove Snippet
               </Button>
             }
           >
             <div style={{ zIndex: 1000 }}>
-              <h4>Are you sure you want to Discard Code?</h4>
-              <p>All Code Will be Lost!</p>
+              <h4>Are you sure you want to Delete this Code Snippet?</h4>
+              <p>The Snippet will be completely removed!</p>
               <div className="footer-container">
-                {" "}
                 <Button
                   className="btn"
                   intent={Intent.DANGER}
-                  onClick={this.closeCodeEditor.bind(this)}
+                  onClick={this.deleteCodeSnippet.bind(this)}
                 >
-                  OK
+                  Remove
                 </Button>
                 <Button
                   className="btn"
                   intent={Intent.PRIMARY}
-                  onClick={this.hideDiscardWarning.bind(this)}
+                  onClick={this.hideDeleteCodePopup.bind(this)}
                 >
-                  No, Continue
+                  Cancel
                 </Button>{" "}
               </div>
             </div>
           </Popover>
-        }
+        )}
       </div>
     );
 
@@ -238,31 +328,44 @@ export default class CodeMirrorEditor extends React.Component<
         }}
         onCloseCross={this.onDiscardCodeClick.bind(this)}
         //onDidOpen={this.popupDidOpen.bind(this)}
-        //onClose={this.cleanupEditor.bind(this)}
-        ref={popup => {
-          console.log("Popup Ref passed: ", popup);
-          this.popup = popup;
-        }}
+        onClose={this.cleanupEditor.bind(this)}
+        ref={popup => (this.popup = popup)}
       />
     );
   }
 
   private updateCode(newCode: string) {
-    this.setState({ code: newCode });
+    const { didCodeChange } = this.state;
+    if (!didCodeChange) this.setState({ code: newCode, didCodeChange: true });
+    else this.setState({ code: newCode });
+  }
+
+  private updateCurrentLanguage(language: string) {
+    this.setState({ currentLanguage: getCodeMirrorLanguage(language) });
   }
 
   private cleanupEditor() {
-    this.setState({ code: null });
+    this.setState({
+      code: null,
+      isWarningPopupOpen: false,
+      isEditMode: false,
+      didCodeChange: false,
+      currentLanguage: "javascript"
+    });
   }
 
   private onDiscardCodeClick() {
-    const { code } = this.state;
-    if (code && code.trim() !== "") this.showDiscardWarning();
+    const { didCodeChange } = this.state;
+    if (didCodeChange) this.showDiscardWarning();
     else this.closeCodeEditor();
   }
 
+  private onDeleteCodePopupClick() {
+    const { code, isEditMode } = this.state;
+    if (code && code.trim() !== "" && isEditMode) this.showDeleteCodePopup();
+  }
+
   private showDiscardWarning() {
-    const { code } = this.state;
     this.setState({ isWarningPopupOpen: true });
   }
 
@@ -270,12 +373,54 @@ export default class CodeMirrorEditor extends React.Component<
     this.setState({ isWarningPopupOpen: false });
   }
 
+  private showDeleteCodePopup() {
+    this.setState({ isDeleteCodePopupOpen: true });
+  }
+
+  private hideDeleteCodePopup() {
+    this.setState({ isDeleteCodePopupOpen: false });
+  }
+
   private closeCodeEditor() {
     this.popup.closePopup();
   }
 
+  private deleteCodeSnippet() {
+    const { editorState, updateEditorState } = this.props;
+    const { codeEditorEntityKey } = this.state;
+
+    const contentState = editorState.getCurrentContent();
+    contentState.getBlockMap().map(block => {
+      block.findEntityRanges(
+        character => {
+          return character.getEntity() === codeEditorEntityKey;
+        },
+        (start: number, end: number) => {
+          const entity = block.getEntityAt(start);
+          const selection = SelectionState.createEmpty(block.getKey());
+          //Create a selection fro the range of the entity
+          const autoSelectedCodeRange = selection.merge({
+            anchorOffset: 0,
+            focusOffset: block.getText().length
+          });
+          const newContentState = Modifier.applyEntity(
+            contentState,
+            autoSelectedCodeRange as SelectionState,
+            null
+          );
+          const newEditorState = EditorState.createWithContent(
+            newContentState,
+            Decorators(this.props.emit, this.props.on)
+          );
+          updateEditorState(newEditorState);
+          this.closeCodeEditor();
+        }
+      );
+    });
+  }
+
   //Open Code Editor with Code to Edit & Current Code Snippet Entity Key for Updating Entity Data
-  OpenWithCode(entityKey: string, codeText: string) {
+  private OpenWithCode(entityKey: string, codeText: string) {
     //Set Default Editor's Code Text Value
     this.setState({
       code: codeText,
@@ -311,7 +456,6 @@ export default class CodeMirrorEditor extends React.Component<
 
   //Update Code Snippet (when edit a snippet code)
   private onCodeSnippetUpdate() {
-    //const newEntityInstance = Entity.mergeData("je", { data: "nme" });
     const { editorState, updateEditorState } = this.props;
     const { codeEditorEntityKey, currentLanguage, code } = this.state;
     //Update Entity data by merging it
