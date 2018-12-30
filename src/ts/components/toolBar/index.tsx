@@ -1,6 +1,6 @@
 import * as React from "react";
 import { AppState } from "../../store";
-import { initToolbarItemsSync } from "./toolConfig";
+import { initToolbarItemsSync } from "./config";
 import Controls, { InlineStyle, BlockType } from "./controls";
 import { EditorState } from "draft-js";
 import { EventEmitter } from "events";

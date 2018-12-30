@@ -42,7 +42,7 @@ export default class Checkbox extends React.Component<
           type="checkbox"
           checked={checked}
           value={String(checked)}
-          onInput={e =>
+          onChange={e =>
             onChange(e.currentTarget.value === "true" ? false : true)
           }
         />

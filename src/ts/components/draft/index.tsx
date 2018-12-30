@@ -3,7 +3,7 @@
 import * as React from "react";
 
 //Draftjs
-import { Editor, EditorState } from "draft-js";
+import { Editor as DraftEditor, EditorState } from "draft-js";
 
 import { AppState } from "../../store";
 
@@ -67,8 +67,9 @@ export interface DraftState {
 
 export default class Draft extends React.Component<DraftProps, DraftState> {
   state: DraftState;
-  editor: Editor;
+  editor: DraftEditor;
   draftEditor: HTMLDivElement;
+  onTextChangeCallback: (newText: string, HTML: string) => void = null;
 
   static defaultProps = {
     isEditorResizable: true,
@@ -87,8 +88,15 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   }
 
   updateDraftEditor(newEditorState: EditorState) {
-    //Update Editor State
-    this.props.setAppState({ editorState: newEditorState });
+    //Update Editor State & Run the onChange Callback (text, HTML) if it does exist
+    this.props.setAppState({ editorState: newEditorState }, () =>
+      this.onTextChangeCallback
+        ? this.onTextChangeCallback(
+            newEditorState.getCurrentContent().getPlainText(),
+            this.getHTML()
+          )
+        : undefined
+    );
   }
 
   componentDidMount() {
@@ -205,6 +213,10 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
       : "HTML EXPORT IS DISABLED!";
   }
 
+  public onTextChange(callback: (newText: string, HTML: string) => void) {
+    this.onTextChangeCallback = callback;
+  }
+
   private exportHTML(): string {
     //export HTML into State
     const { appState } = this.props;
@@ -243,7 +255,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
         >
           {!appState.showDraftHTML && (
             <div id="main-draft-container" className="draft-container">
-              <Editor
+              <DraftEditor
                 customStyleFn={createStyle.customStyleFn}
                 blockRenderMap={customBlockRenderMap}
                 editorState={appState.editorState}

@@ -43,6 +43,7 @@ const Container = styled.i<ContainerProps>`
   width: ${({ size }: any) => size}px;
   height: ${({ size }: any) => size}px;
   fill: currentColor;
+  line-height: 0;
 `;
 
 //Width: inherit height: inherit

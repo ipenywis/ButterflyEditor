@@ -1,4 +1,4 @@
-export const CODE_EDITOR_LANGUAGES: string[] = [
+/*export const CODE_EDITOR_LANGUAGES: string[] = [
   "javascript",
   "CSS",
   "SCSS",
@@ -19,7 +19,9 @@ export const CODE_EDITOR_LANGUAGES: string[] = [
   "HTTP",
   "GO",
   "Dart"
-];
+];*/
+
+export const CODE_EDITOR_LANGUAGES: string[] = ["javascript"];
 
 export const loadCodeMirrorLanguages = (
   languages: string | string[]

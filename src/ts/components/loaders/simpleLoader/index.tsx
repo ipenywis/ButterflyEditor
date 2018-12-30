@@ -67,9 +67,12 @@ export default class SimpleLoader extends React.Component<
           <div className={"ip-simple-loader " + className} style={ldStyle}>
             {Array(4)
               .fill("")
-              .map(() => {
+              .map((val, idx) => {
                 return (
-                  <div style={{ width: size + "px", height: size + "px" }} />
+                  <div
+                    style={{ width: size + "px", height: size + "px" }}
+                    key={idx}
+                  />
                 );
               })}
           </div>

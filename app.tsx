@@ -1,16 +1,10 @@
 //Main Style
 import "./src/sass/app.scss";
 //Main Renderer
-import { renderToDOM, BFlyEditor, EditorInstance } from "./src/ts/renderer";
-
+import { renderToDOM, BFlyEditor, EditorInstance } from "./src/ts/BFlyEditor";
 import { EditorConfig } from "./src/ts/editorConfig";
-
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import Editor from "./src/ts/editor";
-import Store from "./src/ts/store";
-
-//const Editor = import("./src/ts/editor");
 
 //Editor Interface
 export default class EditorCreator {
@@ -60,14 +54,4 @@ export default class EditorCreator {
 //For React we export the Editor Component
 export const EditorComponent = BFlyEditor;
 
-//QUICK TEMP TEST
-ReactDOM.render(
-  <BFlyEditor
-    config={{
-      allowHTMLExport: true,
-      allowEditorFullExpand: true,
-      allowResize: true
-    }}
-  />,
-  document.getElementById("root")
-);
+ReactDOM.render(<BFlyEditor />, document.getElementById("root"));

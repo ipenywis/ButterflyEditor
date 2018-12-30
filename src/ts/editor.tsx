@@ -117,8 +117,8 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
     this.draft.setEditorHeight(height);
   }
 
-  componentDidMount() {
-    //const { config } = this.props;
+  public onChange(callback: (newText: string, HTML: string) => void) {
+    this.draft.onTextChange(callback);
   }
 
   //TODO: Add MARKUP Export Support

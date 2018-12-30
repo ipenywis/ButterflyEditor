@@ -1,7 +1,5 @@
 //Import Main Editor (Imports an EditorCrea)
-alert("shit ghahaha WHAT");
-import EditorCreator from "../../dist/app.js";
-//const EditorCreator = require("../../dist/app");
+import EditorCreator from "../../dist/index";
 
 const editorContainer = document.getElementById("editor-root-container");
 
@@ -12,5 +10,3 @@ EditorCreator.createEditor("editor-root-container").then(editorInstance => {
     editorInstance.getExportedHTML()
   );
 });
-
-console.log("testy ANOTHER ONE eee");

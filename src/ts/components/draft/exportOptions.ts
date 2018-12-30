@@ -94,7 +94,9 @@ export default {
           element: "img",
           attributes: {
             id: entityData.name ? entityData.name : null,
-            src: entityData.URL
+            src: entityData.URL,
+            width: entityData.width ? entityData.width : 120,
+            height: entityData.height ? entityData.height : 100
           }
         };
     }

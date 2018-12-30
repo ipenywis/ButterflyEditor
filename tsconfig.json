@@ -7,10 +7,10 @@
     "target": "es6",
     "jsx": "react",
     "experimentalDecorators": true
-    //"typeRoots": ["../draft-js-utils/packages/draft-js-import-html/typings"]
   },
   "exclude": [
     "node_modules/**/*",
+    "dist",
     "node_modules/@types/styled-components/index.d.ts"
   ]
 }

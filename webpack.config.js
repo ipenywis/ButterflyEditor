@@ -4,16 +4,8 @@ let ExtractTextWebpackPlugin = require("extract-text-webpack-plugin");
 
 let path = require("path");
 
-//Monaco Code Editor Plugin
-//const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
-//Monaco Editor Config
-//const MonacoWebpackConfig = require("./monacoEditorConfig");
-
 //Webpack Extract Text Plugin
-let ExtractText = new ExtractTextWebpackPlugin("app.css");
-
-//Mini CSS Extract Plugin
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+let ExtractText = new ExtractTextWebpackPlugin("style.css");
 
 //Webpack Analyzer
 const WebpacBundleAnalyzer = require("webpack-bundle-analyzer")
@@ -27,14 +19,15 @@ const styledComponentsTransformer = createStyledComponentsTransformer();
 //Webpack Uglifyjs Plugin
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 
-const devMode = true;
+const devMode = false;
 const useMonacoCodeEditor = false;
+const enableSplitCSS = false;
 
 let config = {
   entry: path.resolve("./app.tsx"),
   mode: devMode ? "development" : "production",
   output: {
-    filename: "app.js",
+    filename: "index.js",
     path: path.resolve("./dist"),
     chunkFilename: "[name].js",
     library: "opentok-ux-components",
@@ -89,35 +82,10 @@ let config = {
 			},*/
       {
         test: /\.(sa|sc|c)ss$/,
-        use: devMode
-          ? ExtractTextWebpackPlugin.extract({
-              fallback: "style-loader",
-              use: ["css-loader", "sass-loader"]
-            })
-          : [
-              MiniCssExtractPlugin.loader,
-              {
-                loader: "css-loader",
-                options: {
-                  minimize: {
-                    safe: true
-                  }
-                }
-              },
-              /*{
-				loader: "postcss-loader"
-				/*options: {
-				  autoprefixer: {
-					browsers: ["last 2 versions"]
-				  },
-				  plugins: () => [autoprefixer]
-				}
-	  },*/
-              {
-                loader: "sass-loader",
-                options: {}
-              }
-            ]
+        use: ExtractTextWebpackPlugin.extract({
+          fallback: "style-loader",
+          use: ["css-loader", "sass-loader"]
+        })
       },
       {
         test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
@@ -185,14 +153,8 @@ let config = {
 	},*/
 
   plugins: [
-    //new WebpacBundleAnalyzer(),
-    !devMode
-      ? new MiniCssExtractPlugin({
-          filename: devMode ? "[name].css" : "[name].[hash].css",
-          chunkFilename: devMode ? "[id].css" : "[id].[hash].css"
-        })
-      : ExtractText
-    // new MonacoWebpackPlugin(MonacoWebpackConfig)
+    new WebpacBundleAnalyzer(),
+    ExtractText
   ]
 };
 

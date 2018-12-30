@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as CodeMirror from "react-codemirror";
+import { Controlled as CodeMirror, ICodeMirror } from "react-codemirror2";
 //CodeMirror Style
 import "codemirror/lib/codemirror.css";
 //CodeMirror Dracula Theme
@@ -11,13 +11,7 @@ import Button from "../components/button";
 import DropDown from "../../components/toolBar/dropDown";
 import { Intent } from "../components/intent";
 import Popup from "../../components/popup";
-import {
-  EditorState,
-  Editor,
-  ContentState,
-  SelectionState,
-  Modifier
-} from "draft-js";
+import { EditorState, Editor, SelectionState, Modifier } from "draft-js";
 import { AppState } from "../../store";
 import { EventEmitter } from "events";
 import styled from "styled-components";
@@ -28,7 +22,6 @@ import {
   mergeEntityData
 } from "../../components/draft/entity";
 import { addEntityImportRule } from "../../components/draft/importOptions";
-import * as Prism from "prismjs";
 //CodeMirror Config
 import {
   CODE_EDITOR_LANGUAGES,
@@ -37,7 +30,7 @@ import {
   getCodeMirrorLanguage
 } from "./codeMirrorConfig";
 /**CodeMirror language Modes */
-loadCodeMirrorLanguages(getCodeMirrorLanguages(CODE_EDITOR_LANGUAGES));
+//loadCodeMirrorLanguages(getCodeMirrorLanguages(CODE_EDITOR_LANGUAGES));
 
 const CodeMirrorStyled = styled(CodeMirror)`
   width: 100%;
@@ -107,7 +100,7 @@ export default class CodeMirrorEditor extends React.Component<
   public state: CodeMirrorEditorState;
   popup: Popup;
   private codeEditorRef: React.Component<any>;
-  private codeEditorInstance: CodeMirror.Editor;
+  private codeEditorInstance: ICodeMirror;
 
   static defaultProps = {
     autoFocus: true
@@ -183,7 +176,7 @@ export default class CodeMirrorEditor extends React.Component<
 
     const header = "Code Mirror Editor";
 
-    const editorOptions: CodeMirror.EditorConfiguration = {
+    const editorOptions: any = {
       mode: currentLanguage,
       theme: "dracula"
     };
@@ -207,8 +200,7 @@ export default class CodeMirrorEditor extends React.Component<
         </LanguageSelectContainer>
         <CodeMirrorStyled
           value={code}
-          onChange={this.updateCode.bind(this)}
-          autoFocus={autoFocus}
+          onBeforeChange={this.updateCode.bind(this)}
           options={editorOptions}
           ref={ref => (this.codeEditorRef = ref)}
         />
@@ -334,7 +326,7 @@ export default class CodeMirrorEditor extends React.Component<
     );
   }
 
-  private updateCode(newCode: string) {
+  private updateCode(editor: ICodeMirror, data: any, newCode: string) {
     const { didCodeChange } = this.state;
     if (!didCodeChange) this.setState({ code: newCode, didCodeChange: true });
     else this.setState({ code: newCode });

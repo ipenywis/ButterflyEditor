@@ -169,7 +169,9 @@ export class ImageUploader extends React.Component<
   }
 
   private handleKeyPress(e: React.KeyboardEvent) {
-    if (e.key == "Enter") this.onURLImagePlace();
+    const { isEditMode } = this.state;
+    if (e.key == "Enter")
+      isEditMode ? this.onImageUpdate() : this.onURLImagePlace();
   }
 
   private onImageURLChange(e: React.ChangeEvent<HTMLInputElement>) {
