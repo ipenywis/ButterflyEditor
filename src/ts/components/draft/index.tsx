@@ -42,6 +42,7 @@ export interface DraftProps {
   allowHTMLExport?: boolean;
 
   height?: string;
+  maxHeight?: string;
 
   setAppState?: (newState: any, callback?: () => void) => void;
 
@@ -120,7 +121,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   }
 
   componentWillMount() {
-    /* Resize Editor */
+    /* Resize Editor Events */
     document.addEventListener("mousemove", this.onResizeMouseMove.bind(this));
     document.addEventListener("mouseup", this.onResizeMouseUp.bind(this));
   }
@@ -168,24 +169,28 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     this.setState({ isResizeMouseDown: false });
   }
 
-  setEditorHeight(newHeight: string) {
+  public setEditorHeight(newHeight: string) {
     //Set Editor's height
     this.draftEditor.style.height = newHeight;
   }
 
-  enableEditorResize() {
+  public setEditorMaxHeight(maxHeight: string) {
+    this.draftEditor.style.maxHeight = maxHeight;
+  }
+
+  public enableEditorResize() {
     this.setState({ allowEditorResize: true });
   }
 
-  disableEditorResize() {
+  public disableEditorResize() {
     this.setState({ allowEditorResize: false });
   }
 
-  onEditorFocus() {
+  private onEditorFocus() {
     this.props.setAppState({ editorHasFocus: true });
   }
 
-  onEditorBlur() {
+  private onEditorBlur() {
     this.props.setAppState({ editorHasFocus: false });
   }
   //HTML Text Area (Insertion or Update) (Convert HTML to EditorState)
@@ -213,6 +218,11 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
       : "HTML EXPORT IS DISABLED!";
   }
 
+  public getText(): string {
+    //Plain Text
+    return this.props.appState.editorState.getCurrentContent().getPlainText();
+  }
+
   public onTextChange(callback: (newText: string, HTML: string) => void) {
     this.onTextChangeCallback = callback;
   }
@@ -234,14 +244,9 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     return html;
   }
 
-  componentDidUpdate() {
-    //const { showDraftHTML } = this.props.appState;
-    //this.setState({ html: showDraftHTML ? this.exportHTML() : "<p></p>" });
-  }
-
   render() {
     //Quick Extract
-    const { appState, allowHTMLExport } = this.props;
+    const { appState, allowHTMLExport, maxHeight } = this.props;
     //export HTML into State
     const html = appState.showDraftHTML ? this.getHTML() : "<p></p>";
 
@@ -250,7 +255,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
         <div
           className="draft ip-scrollbar-v2"
           onClick={() => !appState.showDraftHTML && this.editor.focus()}
-          style={{ height: this.state.height }}
+          style={{ height: this.state.height, maxHeight }}
           ref={draft => (this.draftEditor = draft)}
         >
           {!appState.showDraftHTML && (

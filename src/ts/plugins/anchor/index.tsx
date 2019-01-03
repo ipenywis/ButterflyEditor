@@ -43,10 +43,12 @@ interface AnchorProps {
 interface AnchorState {
   anchor: string;
   error: string;
+  isEditMode: boolean;
 }
 
 export class Anchor extends React.Component<AnchorProps, AnchorState> {
-  state: AnchorState; ///< Comp State
+  state: AnchorState;
+  DEFAULT_STATE: AnchorState;
   popup: Popup;
   anchorInput: HTMLInputElement;
   //Entity Type
@@ -54,10 +56,12 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
 
   constructor(props: AnchorProps) {
     super(props);
-    this.state = {
-      anchor: null,
-      error: null
+    this.DEFAULT_STATE = {
+      anchor: "",
+      error: null,
+      isEditMode: false
     };
+    this.state = { ...this.DEFAULT_STATE };
   }
 
   onAnchorChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -72,11 +76,16 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
     this.setState({ error: null });
   }
 
+  isAnchorValid(anchor: string): boolean {
+    if (anchor) return anchor.trim() !== "";
+    return false;
+  }
+
   onAnchorSubmit() {
     //Validate Anchor Input
     const { editorState, updateEditorState } = this.props;
     const { anchor } = this.state;
-    if (!anchor) {
+    if (!this.isAnchorValid(anchor)) {
       this.setError("Please Specify Anchor Name");
       return;
     }
@@ -93,7 +102,6 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
     );
     //Update Editor State
     updateEditorState(newEditorState);
-    alert("Here");
     //Hide Link Popup
     this.popup.closePopup();
   }
@@ -151,6 +159,13 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
   onPopupOpen() {
     //Auto focus on Anchor Input (timeout to 0 to make sure it focuses)
     setTimeout(() => this.anchorInput.focus(), 0);
+    //Get Current Selected text's Anchor if any!
+    const anchor = this.getCurrentTextAnchor();
+    if (anchor) this.setState({ anchor, isEditMode: true });
+  }
+
+  onPopupClose() {
+    this.setState({ ...this.DEFAULT_STATE });
   }
 
   render() {
@@ -162,26 +177,19 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
       updateEditorState,
       isDisabled
     } = this.props;
-    const { error } = this.state;
-
-    let current = "anchor";
-    const anchorName = this.getCurrentTextAnchor();
-    if (anchorName) {
-      //Change current mode to unAnchor (Remove Anchor)
-      current = "unanchor";
-    }
+    const { anchor, error, isEditMode } = this.state;
 
     //Icon
     const icon = <Icon icon={"anchor"} />;
 
     //Header
-    const header = current == "anchor" ? "Set Anchor" : "Edit Anchor";
+    const header = isEditMode ? "Edit Anchor" : "Set Anchor";
     //Container
     const container = (
       <div className="inner-container">
         <FormGroup
           label="Anchor Text"
-          helperText={error ? error : "Choose a valid name for Anchors"}
+          helperText={error ? error : "Spaces will be replaced with dashes -"}
           labelInfo="required"
           intent={error ? Intent.DANGER : Intent.PRIMARY}
         >
@@ -189,44 +197,27 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
             placeholder="Text"
             intent={error ? Intent.DANGER : Intent.PRIMARY}
             onChange={this.onAnchorChange.bind(this)}
+            value={anchor}
             onKeyPress={this.handleKeyPress.bind(this)}
             inputRef={input => (this.anchorInput = input)}
           />
         </FormGroup>
-
-        {/*<FormGroup
-          helperText={error ? error : "Choose a valid name for Anchors"}
-          label="Set an Anchor"
-          labelFor="anchor-input" 
-          labelInfo="required"
-          intent={error ? Intent.DANGER : Intent.PRIMARY}
-        >
-          <InputGroup
-            id="anchor-input"
-            placeholder="Name"
-            intent={error ? Intent.DANGER : Intent.PRIMARY}
-            inputRef={input => (this.anchorInput = input)}
-            defaultValue={anchorName}
-            onChange={this.onAnchorChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-          />
-        </FormGroup>*/}
       </div>
     );
     //Footer
     const footer = (
       <div className="footer-container">
         <Button
-          text={current == "anchor" ? "set" : "remove"}
+          text={isEditMode ? "remove" : "set"}
           minimal={true}
           onClick={
-            current == "anchor"
-              ? this.onAnchorSubmit.bind(this)
-              : this.onUnanchorSubmit.bind(this)
+            isEditMode
+              ? this.onUnanchorSubmit.bind(this)
+              : this.onAnchorSubmit.bind(this)
           }
           intent={Intent.PRIMARY}
         />
-        {anchorName && (
+        {isEditMode && (
           <Button
             type="submit"
             text="update"
@@ -252,7 +243,7 @@ export class Anchor extends React.Component<AnchorProps, AnchorState> {
         container={container}
         footer={footer}
         onDidOpen={this.onPopupOpen.bind(this)}
-        onClose={this.clearErrors.bind(this)}
+        onClose={this.onPopupClose.bind(this)}
         ref={popup => (this.popup = popup)}
       />
     );

@@ -25,12 +25,9 @@ import { addEntityImportRule } from "../../components/draft/importOptions";
 //CodeMirror Config
 import {
   CODE_EDITOR_LANGUAGES,
-  loadCodeMirrorLanguages,
   getCodeMirrorLanguages,
   getCodeMirrorLanguage
 } from "./codeMirrorConfig";
-/**CodeMirror language Modes */
-//loadCodeMirrorLanguages(getCodeMirrorLanguages(CODE_EDITOR_LANGUAGES));
 
 const CodeMirrorStyled = styled(CodeMirror)`
   width: 100%;

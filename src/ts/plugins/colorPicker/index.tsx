@@ -1,8 +1,5 @@
 import * as React from "react";
 
-//Plugin
-import Plugin from "../plugin";
-
 //Icon
 import Icon from "../../components/toolBar/icon";
 
@@ -50,7 +47,10 @@ interface ColorPickerState {
   colorBackground: boolean;
 }
 
-export class ColorPicker extends Plugin<ColorPickerProps, ColorPickerState> {
+export class ColorPicker extends React.Component<
+  ColorPickerProps,
+  ColorPickerState
+> {
   state: ColorPickerState;
   //Picker
   private picker: Picker;

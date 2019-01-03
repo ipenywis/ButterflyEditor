@@ -12,8 +12,6 @@ import Icon from "../../toolBar/icon";
 //Prism CUSTOM CSS Style
 import "./atomDarkStyle.css";
 import { renderCodeWithPrismJSX } from "./codeHighlighter";
-//Decorators Styles
-import "./style.scss";
 import styled from "styled-components";
 
 //SubDecorators
@@ -50,13 +48,29 @@ export default function(
     const { url, target } = props.contentState
       .getEntity(props.entityKey)
       .getData();
+
+    const LinkContainer = styled("a")`
+      display: inline-block;
+      width: fit-content;
+      padding: 5px;
+      color: #3498db;
+      font-weight: 600;
+      //border: 1px solid;
+      font-size: 20px;
+    `;
+
+    const IconContainer = styled("span")`
+      display: inline-block;
+      margin-right: 7px;
+    `;
+
     return (
-      <a href={url} target={target} className="dc-container">
-        <span className="dc-icon">
+      <LinkContainer href={url} target={target} className="dc-container">
+        <IconContainer className="dc-icon">
           <Icon icon={"link"} size={17} />
-        </span>
+        </IconContainer>
         {props.children}
-      </a>
+      </LinkContainer>
     );
   };
 

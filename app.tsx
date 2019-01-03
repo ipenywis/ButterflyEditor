@@ -3,6 +3,7 @@ import "./src/sass/app.scss";
 //Main Renderer
 import { renderToDOM, BFlyEditor, EditorInstance } from "./src/ts/BFlyEditor";
 import { EditorConfig } from "./src/ts/editorConfig";
+export { EditorConfig } from "./src/ts/editorConfig";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
@@ -52,6 +53,4 @@ export default class EditorCreator {
 }
 
 //For React we export the Editor Component
-export const EditorComponent = BFlyEditor;
-
-ReactDOM.render(<BFlyEditor />, document.getElementById("root"));
+export const ButterflyEditor = BFlyEditor;

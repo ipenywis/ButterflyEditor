@@ -53,14 +53,14 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
   expandEditor() {
     /*
     DEFAULT Sizes: 
-    maxWidth: 1100px
+    maxWidth: 760px
     minHeight: 200px
     */
-
+    //Editor Expand is Disabled!
     if (!this.props.config.allowEditorFullExpand) return;
 
     //Default initial Editor Sizes
-    const DEFAULTS = { width: "auto", height: 200 };
+    const DEFAULTS = { width: 760, height: 200 };
 
     this.setState(prevState => {
       if (prevState.isEditorExpanded) {
@@ -83,6 +83,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
         //EXPAND EDITOR
         //Fixed Position for document Overlay
         this.editorContainer.style.position = "fixed";
+        this.editorContainer.style.maxHeight = this.editorContainer.style.maxWidth = undefined;
         this.editorContainer.style.top = this.editorContainer.style.right = this.editorContainer.style.bottom = this.editorContainer.style.left =
           "0";
         //Set EditorContainer Height & Width
@@ -102,8 +103,12 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
     });
   }
 
-  public getHTML() {
+  public getHTML(): string {
     return this.draft.getHTML();
+  }
+
+  public getText(): string {
+    return this.draft.getText();
   }
 
   public setInitialHeight(height: string) {
@@ -115,6 +120,10 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
     this.draft.disableEditorResize();
     //Set Height
     this.draft.setEditorHeight(height);
+  }
+
+  public setMaxHeight(maxHeight: string) {
+    this.draft.setEditorMaxHeight(maxHeight);
   }
 
   public onChange(callback: (newText: string, HTML: string) => void) {
@@ -157,6 +166,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
           height={
             config.fixedHeight ? config.fixedHeight : config.initialHeight
           }
+          maxHeight={config.maxHeight}
         />
       </div>
     );

@@ -59,7 +59,6 @@ export default class InputGroup extends React.Component<
       value
     } = this.props;
 
-
     return (
       <SafeWrapper style={{ display: "block" }}>
         {false && <span className="input-group icon" />}
@@ -72,6 +71,7 @@ export default class InputGroup extends React.Component<
           onKeyPress={onKeyPress}
           ref={inputRef}
           value={value || value === "" ? value : undefined}
+          defaultValue={defaultValue ? defaultValue : undefined}
         />
       </SafeWrapper>
     );

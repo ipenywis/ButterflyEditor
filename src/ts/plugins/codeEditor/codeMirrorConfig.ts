@@ -1,4 +1,4 @@
-/*export const CODE_EDITOR_LANGUAGES: string[] = [
+export const CODE_EDITOR_LANGUAGES: string[] = [
   "javascript",
   "CSS",
   "SCSS",
@@ -19,21 +19,23 @@
   "HTTP",
   "GO",
   "Dart"
-];*/
+];
 
-export const CODE_EDITOR_LANGUAGES: string[] = ["javascript"];
+//Codemirror Languages
+//require("codemirror/mode/javascript/javascript");
 
 export const loadCodeMirrorLanguages = (
   languages: string | string[]
 ): boolean => {
-  if (typeof languages === "string")
+  /*if (typeof languages === "string")
     require(`codemirror/mode/${languages}/${languages}`);
   else {
     if (!languages || languages === []) return false;
     languages.map(lang => {
       require(`codemirror/mode/${lang}/${lang}`);
     });
-  }
+  }*/
+  return false;
 };
 
 export const getCodeMirrorLanguage = (language: string): string => {

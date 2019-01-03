@@ -14,9 +14,13 @@ export class EditorInstance {
   constructor(editorRef: Editor) {
     this.editorRef = editorRef;
   }
-
-  getExportedHTML() {
+  /**Get Text exported HTML */
+  getExportedHTML(): string {
     return this.editorRef.getHTML();
+  }
+  /**Get current Text */
+  getText(): string {
+    return this.editorRef.getText();
   }
 
   onChange(callback: (newText: string, html: string) => void) {
@@ -31,7 +35,7 @@ export class EditorInstance {
   }
 
   setEditorMaxHeight(height: string) {
-    //TODO: Add Height Limitation
+    this.editorRef.setMaxHeight(height);
   }
 
   //TODO: Add Markdown Export support
@@ -62,7 +66,7 @@ export const renderToDOM = (
 export interface BFlyEditorProps {
   config?: Partial<EditorConfig>;
 
-  ref?: (ref: Editor | null) => void;
+  editorRef?: (ref: Editor | null) => void;
 }
 export class BFlyEditor extends React.Component<BFlyEditorProps> {
   constructor(props: BFlyEditorProps) {
@@ -70,11 +74,11 @@ export class BFlyEditor extends React.Component<BFlyEditorProps> {
   }
 
   render() {
-    const { config, ref } = this.props;
+    const { config, editorRef } = this.props;
 
     return (
       <Store>
-        <Editor ref={ref} config={{ ...DEFAULT_CONFIG, ...config }} />
+        <Editor config={{ ...DEFAULT_CONFIG, ...config }} ref={editorRef} />
       </Store>
     );
   }

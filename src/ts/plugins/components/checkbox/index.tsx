@@ -9,6 +9,7 @@ import { isBoolean } from "util";
 interface CheckboxProps {
   label: string;
   checked?: boolean;
+  /**You can only provide one prop (either checked or defaultChecked) but not both! */
   defaultChecked?: boolean;
 
   intent?: Intent;
@@ -41,6 +42,7 @@ export default class Checkbox extends React.Component<
           id="checkbox"
           type="checkbox"
           checked={checked}
+          defaultChecked={defaultChecked ? defaultChecked : undefined}
           value={String(checked)}
           onChange={e =>
             onChange(e.currentTarget.value === "true" ? false : true)

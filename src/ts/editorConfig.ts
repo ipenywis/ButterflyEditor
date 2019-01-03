@@ -4,6 +4,7 @@ export interface EditorConfig {
   allowHTMLExport: boolean;
   allowResize: boolean;
   initialHeight: string;
+  maxHeight: string;
   fixedHeight: string;
   //TODO: Add Initial Inline Styles
 }
@@ -14,5 +15,6 @@ export const DEFAULT_CONFIG: EditorConfig = {
   allowHTMLExport: true,
   allowResize: true,
   initialHeight: "180px",
+  maxHeight: "300px",
   fixedHeight: null
 };

@@ -48,9 +48,13 @@ interface LinkState {
   url: string;
   error: string;
   openNewTab: boolean;
+  isEditMode: boolean;
 }
 
 export class Link extends React.Component<LinkProps, LinkState> {
+  state: LinkState;
+  DEFAULT_STATE: LinkState;
+
   popup: Popup;
   linkInput: HTMLInputElement;
 
@@ -59,11 +63,13 @@ export class Link extends React.Component<LinkProps, LinkState> {
 
   constructor(props: LinkProps) {
     super(props);
-    this.state = {
-      url: null,
+    this.DEFAULT_STATE = {
+      url: "",
       error: null,
-      openNewTab: false
+      openNewTab: false,
+      isEditMode: false
     };
+    this.state = { ...this.DEFAULT_STATE };
   }
 
   onURLChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -78,13 +84,18 @@ export class Link extends React.Component<LinkProps, LinkState> {
     this.setState({ error: null });
   }
 
+  isLinkValid(url: string): boolean {
+    if (url) return url.trim() !== "";
+    return false;
+  }
+
   onLinkSubmit() {
     //Validate Link
     const { url, openNewTab } = this.state;
     //let linkRegex = /(https?:?\/?\/?)?(\w+\.+\w+)/;
     let linkRegex = /(https?:\/\/)?([\w.-]+(?:\.[\w\.-]+)+[\w\-\.%_~:/?#[\]@!\$&'\(\)\*\+,;=.]+)/;
     let finalURL = "";
-    if (!url) {
+    if (!this.isLinkValid(url)) {
       this.setError("Please Enter a Valid URL");
       return;
     } else if (linkRegex.test(url)) {
@@ -129,7 +140,7 @@ export class Link extends React.Component<LinkProps, LinkState> {
     this.popup.closePopup();
   }
 
-  getCurrentTextLink(): string {
+  getSelectedLinkData(): { url: string; target: string } {
     const { editorState } = this.props;
     //Cursor start & offset keys
     const startKey = editorState.getSelection().getStartKey();
@@ -145,8 +156,8 @@ export class Link extends React.Component<LinkProps, LinkState> {
       const linkInstance = editorState.getCurrentContent().getEntity(linkKey);
       //Make sure it's a Link Entity
       if (linkInstance.getType() != Link.LINK_TYPE) return null;
-      //Grab & Return Link URL
-      if (linkInstance.getData()) return linkInstance.getData().url;
+      //Grab & Return Link DATA (URL & target)
+      if (linkInstance.getData()) return linkInstance.getData();
     }
     //No Link is Selected
     return null;
@@ -159,10 +170,27 @@ export class Link extends React.Component<LinkProps, LinkState> {
   onPopupOpen() {
     //Auto focus on Link Input (timeout to 0 to make sure it focuses)
     setTimeout(() => this.linkInput.focus(), 0);
+    //Get Selected Link Data and Update state if valid
+    const linkData = this.getSelectedLinkData();
+    if (linkData)
+      this.setState({
+        url: linkData.url,
+        openNewTab: this.isOpenInNewTabChecked(linkData.target),
+        isEditMode: true
+      });
+  }
+
+  onPopupClose() {
+    //Revert State changes back to default
+    this.setState({ ...this.DEFAULT_STATE });
   }
 
   handleOpenNewTabChange(checked: boolean) {
     this.setState({ openNewTab: checked });
+  }
+
+  private isOpenInNewTabChecked(target: string): boolean {
+    return target === "_blank";
   }
 
   render() {
@@ -174,15 +202,7 @@ export class Link extends React.Component<LinkProps, LinkState> {
       on,
       emit
     } = this.props;
-    const { error, openNewTab } = this.state;
-
-    let current = "link";
-    //Check if Current Selected Text (Cursor) is a link (to activate Edit and Remove mode)
-    let linkURL = this.getCurrentTextLink();
-    if (linkURL) {
-      //Change Mode to Unlink which also includes the Edit Mode
-      current = "unlink";
-    }
+    const { url, error, openNewTab, isEditMode } = this.state;
 
     //Popup is Inline (More like Popover)
     const isPopupInline = true;
@@ -190,7 +210,7 @@ export class Link extends React.Component<LinkProps, LinkState> {
     //Button Icon
     const icon = <Icon icon={"link"} />;
     //Header
-    const header = current == "link" ? "Set Link" : "Manage Link";
+    const header = isEditMode ? "Manage Link" : "Set Link";
     //Container
     const container = (
       <div className="inner-container">
@@ -206,12 +226,18 @@ export class Link extends React.Component<LinkProps, LinkState> {
             placeholder="URL"
             intent={error ? Intent.DANGER : Intent.PRIMARY}
             onChange={this.onURLChange.bind(this)}
-            defaultValue={linkURL ? linkURL : ""}
+            value={url}
+            //defaultValue={isEditMode && linkData ? linkData.url : null}
             onKeyPress={this.handleKeyPress.bind(this)}
             inputRef={input => (this.linkInput = input)}
           />
         </FormGroup>
         <Checkbox
+          /*defaultChecked={
+            isEditMode &&
+            linkData &&
+            this.isOpenInNewTabChecked(linkData.target)
+          }*/
           checked={openNewTab}
           onChange={this.handleOpenNewTabChange.bind(this)}
           label="Open in New Tab"
@@ -224,22 +250,18 @@ export class Link extends React.Component<LinkProps, LinkState> {
     const footer = (
       <div className="footer-container">
         <Button
-          text={current}
+          text={isEditMode ? "Update" : "Set"}
           minimal={true}
           intent={Intent.PRIMARY}
-          onClick={
-            current == "link"
-              ? this.onLinkSubmit.bind(this)
-              : this.onUnlinkSubmit.bind(this)
-          }
+          onClick={this.onLinkSubmit.bind(this)}
         />
-        {linkURL && (
+        {isEditMode && (
           <Button
             type="submit"
-            text="update"
+            text="Remove"
             minimal={true}
             intent={Intent.DANGER}
-            onClick={this.onLinkSubmit.bind(this)}
+            onClick={this.onUnlinkSubmit.bind(this)}
           />
         )}
       </div>
@@ -247,6 +269,7 @@ export class Link extends React.Component<LinkProps, LinkState> {
 
     return (
       <Popup
+        isInline={isPopupInline}
         icon={icon}
         isDisabled={isDisabled}
         editorState={editorState}
@@ -258,7 +281,7 @@ export class Link extends React.Component<LinkProps, LinkState> {
         container={container}
         footer={footer}
         onDidOpen={this.onPopupOpen.bind(this)}
-        onClose={this.clearErrors.bind(this)}
+        onClose={this.onPopupClose.bind(this)}
         ref={popup => (this.popup = popup)}
       />
     );

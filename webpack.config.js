@@ -16,12 +16,7 @@ const createStyledComponentsTransformer = require("typescript-plugin-styled-comp
   .default;
 const styledComponentsTransformer = createStyledComponentsTransformer();
 
-//Webpack Uglifyjs Plugin
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-
 const devMode = false;
-const useMonacoCodeEditor = false;
-const enableSplitCSS = false;
 
 let config = {
   entry: path.resolve("./app.tsx"),
@@ -34,7 +29,7 @@ let config = {
     libraryTarget: "umd",
     umdNamedDefine: true
   },
-  //devtool: "source-map",
+  devtool: devMode ? "source-map" : undefined,
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"]
   },
@@ -153,7 +148,7 @@ let config = {
 	},*/
 
   plugins: [
-    new WebpacBundleAnalyzer(),
+    //new WebpacBundleAnalyzer(),
     ExtractText
   ]
 };
