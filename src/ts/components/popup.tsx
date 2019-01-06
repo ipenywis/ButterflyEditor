@@ -149,14 +149,24 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
     this.props.onClose ? this.props.onClose() : null;
   }
 
-  componentDidMount() {
+  updatePopupBoundingBox() {
+    //NOTE: This should only be called once (when componentDidMount or somewhere where you are sure about calling it only once)
     //Calculate ToggleBtn window relative Top and Left Position for using it with the Popup if the Portal is Active.
     const toggleBtnBoundingBox = this.toggleBtn.getBoundingClientRect();
+    //Calculate VIEWPORT Scroll Offset
+    const scrollLeft =
+        window.pageXOffset || document.documentElement.scrollLeft,
+      scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     //Offset the Top & Left position a littel bit
     this.setState({
-      topPos: toggleBtnBoundingBox.top + toggleBtnBoundingBox.height + 14,
-      leftPos: toggleBtnBoundingBox.left - 5
+      topPos:
+        toggleBtnBoundingBox.top + toggleBtnBoundingBox.height + 14 + scrollTop,
+      leftPos: toggleBtnBoundingBox.left - 5 + scrollLeft
     });
+  }
+
+  componentDidMount() {
+    this.updatePopupBoundingBox();
   }
 
   componentDidUpdate() {
@@ -192,7 +202,7 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
 
     //Calculate Popup Style (Only if its using Portal)
     const popupStyle: React.CSSProperties = usePortal
-      ? { position: "fixed", width: "auto", top: topPos, left: leftPos }
+      ? { position: "absolute", width: "auto", top: topPos, left: leftPos }
       : null;
 
     //Popup Element
@@ -203,7 +213,7 @@ export default class Popup extends React.Component<PopupProps, PopupState> {
           discaredElmentsClassNames={outsideClkDiscaredElem}
           style={
             isInline
-              ? { width: "100%", height: "100%", display: "flex" }
+              ? null
               : {
                   width: "auto",
                   height: "auto",

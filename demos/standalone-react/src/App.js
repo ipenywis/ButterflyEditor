@@ -1,6 +1,6 @@
 import React from "react";
-
 import EditorCreator, { ButterflyEditor } from "butterfly-editor";
+//make sure to import Editor style
 import "butterfly-editor/dist/style.css";
 
 export default class App extends React.Component {
@@ -21,7 +21,14 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center"
+        }}
+      >
         <h3>Butterfly Editor Demo on React (react-creat-app)</h3>
         <ButterflyEditor
           config={this.editorConfig}

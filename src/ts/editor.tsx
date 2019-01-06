@@ -65,6 +65,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
     this.setState(prevState => {
       if (prevState.isEditorExpanded) {
         //EDITOR IS ALREADY EXPANDED (TOGGLE IT)
+        this.draft.setEditorMaxHeight(this.props.config.maxHeight);
         //Revert Position from fixed
         this.editorContainer.style.position = "initial";
         this.editorContainer.style.top = this.editorContainer.style.right = this.editorContainer.style.bottom = this.editorContainer.style.left = undefined;
@@ -81,6 +82,8 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
         this.draft.setEditorHeight(DEFAULTS.height + "px");
       } else {
         //EXPAND EDITOR
+        //NO MaxHeight for Draft Editor
+        this.draft.setEditorMaxHeight(null);
         //Fixed Position for document Overlay
         this.editorContainer.style.position = "fixed";
         this.editorContainer.style.maxHeight = this.editorContainer.style.maxWidth = undefined;
@@ -88,8 +91,8 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
           "0";
         //Set EditorContainer Height & Width
         this.editorContainer.style.maxWidth = window.innerWidth + "px";
-        this.editorContainer.style.width = window.innerWidth + "px";
-        this.editorContainer.style.height = window.innerHeight + "px";
+        this.editorContainer.style.width = window.innerWidth - 10 + "px";
+        this.editorContainer.style.height = window.innerHeight - 5 + "px";
         this.editorContainer.style.padding = "3px";
         //NOTE: Editor's width is auto fit the contaniner
         //Set Editor's Height
@@ -167,6 +170,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
             config.fixedHeight ? config.fixedHeight : config.initialHeight
           }
           maxHeight={config.maxHeight}
+          minHeight={config.initialHeight}
         />
       </div>
     );

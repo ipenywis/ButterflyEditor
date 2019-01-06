@@ -20,7 +20,7 @@ const devMode = false;
 
 let config = {
   entry: path.resolve("./app.tsx"),
-  mode: devMode ? "development" : "production",
+  //mode: devMode ? "development" : "production",
   output: {
     filename: "index.js",
     path: path.resolve("./dist"),

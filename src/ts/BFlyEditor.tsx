@@ -66,7 +66,7 @@ export const renderToDOM = (
 export interface BFlyEditorProps {
   config?: Partial<EditorConfig>;
 
-  editorRef?: (ref: Editor | null) => void;
+  editorRef?: (ref: EditorInstance | null) => void;
 }
 export class BFlyEditor extends React.Component<BFlyEditorProps> {
   constructor(props: BFlyEditorProps) {
@@ -78,7 +78,10 @@ export class BFlyEditor extends React.Component<BFlyEditorProps> {
 
     return (
       <Store>
-        <Editor config={{ ...DEFAULT_CONFIG, ...config }} ref={editorRef} />
+        <Editor
+          config={{ ...DEFAULT_CONFIG, ...config }}
+          ref={editor => editorRef(new EditorInstance(editor))}
+        />
       </Store>
     );
   }

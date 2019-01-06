@@ -1,0 +1,17 @@
+src/
+tests/
+demos/
+.vscode/
+__mocks__/
+.env
+.gitignore
+.npmignore
+app.tsx
+GruntFile.js
+jest.config.js
+monacoEditorConfig.js
+package-lock.json
+tsconfig.json
+untyped-modules.d.ts
+webpack.config.js
+yarn.lock

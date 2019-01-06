@@ -41,6 +41,7 @@
   //max-width: 1100px;
   max-width: 760px;
   overflow: hidden;
+  z-index: 99;
 }
 
 .toolbar {
@@ -65,7 +66,10 @@
   box-shadow: 0px 0px 15px 0px rgba(15, 15, 15, 0.3);
   background-color: #fff;
   overflow-y: auto;
-  min-height: 200px;
+  //min-height: 200px;
+  color: #111;
+  font-weight: 400;
+  font-size: 15px;
   .draft-container {
     width: 100%;
     padding: 10px;
@@ -101,12 +105,15 @@
 //Resize Icon
 .draft-resizer {
   position: absolute;
-  right: -6px;
-  bottom: -6px;
+  right: 5px;
+  bottom: 2px;
+  -webkit-transform: rotate(-39deg);
   transform: rotate(-39deg);
   color: rgba(101, 101, 101, 0.68);
   color: #42576bc4;
   cursor: se-resize;
+  width: 11px;
+  height: 9px;
 }
 
 //Tool bar Group
@@ -204,6 +211,8 @@
   }
   span {
     margin-right: 4px;
+    display: flex;
+    justify-content: center;
   }
   span:last-child {
     margin-right: 0;
@@ -244,7 +253,7 @@
 //POPUP
 .popup {
   position: fixed;
-  z-index: 20;
+  z-index: 101;
   background-color: rgba(15, 15, 15, 0.4);
   width: 100%;
   height: 100%;
@@ -282,13 +291,10 @@
       padding: 6px;
     }
     .footer {
-      /* flex: 0.25; */
       flex-direction: row-reverse;
       display: flex;
-      //margin-top: 11px;
       width: 100%;
       padding: 7;
-      height: 3em;
     }
   }
 }
@@ -308,14 +314,12 @@
 
 .inline-popup {
   position: absolute;
-  z-index: 10;
+  z-index: 100;
   background-color: #ffffff;
   box-shadow: 0px 0px 20px 4px rgba(15, 15, 15, 0.2);
   top: 50px;
   left: -8px;
-  min-width: 18em;
-  max-height: 25em;
-  width: 100%;
+  max-height: 40em;
   display: flex;
   border-radius: 4px;
   justify-content: center;
@@ -324,8 +328,6 @@
     width: 100%;
   }
   .popup-container {
-    width: 100%;
-    height: 100%;
     padding: 5px;
     color: #333435;
     display: flex;
@@ -362,6 +364,7 @@
   cursor: pointer;
   margin-left: 15px;
   transition: background-color, 150ms ease-in-out;
+  font-size: 16px;
   &:focus {
     border: 0;
     outline: 0;

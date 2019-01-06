@@ -256,7 +256,7 @@ export class ColorPicker extends React.Component<
     );
     //Popup Footer
     let footer = (
-      <SafeWrapper style={{ flexDirection: "row-reverse" }}>
+      <SafeWrapper style={{ display: "block" }}>
         <button
           className="popup-btn success"
           onClick={this.applyPickedColor.bind(this)}

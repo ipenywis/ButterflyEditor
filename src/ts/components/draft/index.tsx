@@ -35,6 +35,7 @@ import importOptions, { customBlockRenderMap } from "./importOptions";
 import Decorators from "./decorators";
 
 import { parseSizeStr } from "../../utils/";
+import { DEFAULT_CONFIG } from "../../editorConfig";
 
 export interface DraftProps {
   appState?: AppState;
@@ -43,6 +44,7 @@ export interface DraftProps {
 
   height?: string;
   maxHeight?: string;
+  minHeight?: string;
 
   setAppState?: (newState: any, callback?: () => void) => void;
 
@@ -80,7 +82,9 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   constructor(props: DraftProps) {
     super(props);
     this.state = {
-      height: props.height ? parseSizeStr(props.height) : 180,
+      height: props.height
+        ? parseSizeStr(props.height)
+        : parseSizeStr(DEFAULT_CONFIG.initialHeight),
       isResizeMouseDown: false,
       allowEditorResize: true,
       mouseOffsetY: 0,
@@ -126,26 +130,16 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
     document.addEventListener("mouseup", this.onResizeMouseUp.bind(this));
   }
 
-  onResizeEditor(e: React.MouseEvent) {
-    const currentHeight: number = parseInt(
-      this.draftEditor.style.height.slice(
-        0,
-        this.draftEditor.style.height.indexOf("px")
-      )
-    );
-    let height = e.clientY - currentHeight;
-
-    this.draftEditor.style.height = height + "px";
-  }
-
   onResizeMouseDown(e: React.MouseEvent) {
     this.setState({
       isResizeMouseDown: true,
-      mouseOffsetY: (e.currentTarget as HTMLElement).offsetTop - e.clientY
+      mouseOffsetY:
+        e.clientY - (e.currentTarget as HTMLElement).getBoundingClientRect().top
     });
   }
 
   onResizeMouseMove(e: React.MouseEvent) {
+    const { minHeight } = this.props;
     e.preventDefault();
     //Mouse is Down and Editor is Resizble
     if (
@@ -159,8 +153,13 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
           this.draftEditor.style.height.indexOf("px")
         )
       );
-      let height = e.clientY + this.state.mouseOffsetY;
-
+      //Offset from the document (needed when having y-overflow)
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      //Calculate new Height with some custom offset
+      let height = e.clientY - this.state.mouseOffsetY - 130 + scrollTop;
+      //Make sure than height doesn't go below the minHeight (initialHeight)
+      if (minHeight && height < parseSizeStr(minHeight)) return;
       this.draftEditor.style.height = height + "px";
     }
   }
@@ -175,6 +174,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
   }
 
   public setEditorMaxHeight(maxHeight: string) {
+    if (!maxHeight || maxHeight == "") return;
     this.draftEditor.style.maxHeight = maxHeight;
   }
 
@@ -246,7 +246,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
 
   render() {
     //Quick Extract
-    const { appState, allowHTMLExport, maxHeight } = this.props;
+    const { appState, allowHTMLExport, maxHeight, minHeight } = this.props;
     //export HTML into State
     const html = appState.showDraftHTML ? this.getHTML() : "<p></p>";
 
@@ -255,7 +255,7 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
         <div
           className="draft ip-scrollbar-v2"
           onClick={() => !appState.showDraftHTML && this.editor.focus()}
-          style={{ height: this.state.height, maxHeight }}
+          style={{ height: this.state.height, maxHeight, minHeight: minHeight }}
           ref={draft => (this.draftEditor = draft)}
         >
           {!appState.showDraftHTML && (
@@ -304,14 +304,14 @@ export default class Draft extends React.Component<DraftProps, DraftState> {
           {appState.showDraftHTML && (
             <div style={{ marginLeft: "17px" }}>(HTML View)</div>
           )}
+          <span
+            className="draft-resizer"
+            onMouseDown={this.onResizeMouseDown.bind(this)}
+            onMouseUp={this.onResizeMouseUp.bind(this)}
+          >
+            <Icon icon={"minimalArrow"} size={19} rotation={"80deg"} />
+          </span>
         </div>
-        <span
-          className="draft-resizer"
-          onMouseDown={this.onResizeMouseDown.bind(this)}
-          onMouseUp={this.onResizeMouseUp.bind(this)}
-        >
-          <Icon icon={"minimalArrow"} size={17} rotation={"80deg"} />
-        </span>
       </SafeWrapper>
     );
   }

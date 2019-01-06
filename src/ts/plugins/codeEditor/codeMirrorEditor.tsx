@@ -205,7 +205,7 @@ export default class CodeMirrorEditor extends React.Component<
     );
 
     const footer = (
-      <div className="footer-container">
+      <div style={{ padding: "8px" }}>
         <Button
           className="btn"
           text={isEditMode ? "Update" : "Add"}

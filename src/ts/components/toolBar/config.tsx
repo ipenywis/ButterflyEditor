@@ -286,12 +286,6 @@ export const initToolbarItemsSync = (
       icon: <Icon icon={"underline"} />
     },
     {
-      label: "strike through",
-      type: "STRIKE-THROUGH",
-      groupID: 0,
-      icon: <Icon icon={"bold"} />
-    },
-    {
       label: "Font Familly",
       groupID: 1,
       icon: <Icon icon={"fontFamily"} />,

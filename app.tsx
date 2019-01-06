@@ -45,11 +45,6 @@ export default class EditorCreator {
       return rs(editorInstance as EditorInstance);
     });
   }
-
-  //Get BFlyEditor Component
-  static getReactComponent() {
-    return BFlyEditor;
-  }
 }
 
 //For React we export the Editor Component

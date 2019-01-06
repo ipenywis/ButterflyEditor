@@ -14,7 +14,7 @@ export const DEFAULT_CONFIG: EditorConfig = {
   allowEditorFullExpand: true,
   allowHTMLExport: true,
   allowResize: true,
-  initialHeight: "180px",
-  maxHeight: "300px",
+  initialHeight: "200px",
+  maxHeight: null,
   fixedHeight: null
 };
