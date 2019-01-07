@@ -2,7 +2,7 @@
 
 ButterflyEditor is an Extensible Rich Text Editor `WYSIWYG` with nice and smooth UI. Built on top of Draftjs and React for high performance.
 
-    ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+[![Screenshot of ButterflyEditor](https://github.com/ipenywis/ButterflyEditor/blob/master/demos/screenshots/butterflyEditor%20v1.0.0%20Screenshot.png)](https://ipenywis.github.io/ButterflyEditor)
 
 - Made for React and Vanilla javascript Apps
 - Support Extensible plugins
