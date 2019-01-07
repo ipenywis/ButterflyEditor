@@ -1,13 +1,15 @@
 {
   "name": "butterfly-editor",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Full Rich Text Editor Easy, Flexible and Elegent made on using React and Draftjs which is a Fast and Reliable Draft Text Editing Framework",
+  "homepage": "https://ipenywis.github.io/ButterflyEditor",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "watch": "webpack --watch --mode=development",
     "build": "webpack --mode=production",
-    "test": "jest"
+    "test": "jest",
+    "deployDocs": "gh-pages --remote github -d docs-website"
   },
   "keywords": [
     "CMS",
@@ -92,7 +94,6 @@
     "events": "^3.0.0",
     "immutable": "^3.8.2",
     "popper.js": "^1.14.6",
-    "preact": "^8.4.2",
     "preact-compat": "^3.18.4",
     "prismjs": "^1.15.0",
     "rc-slider": "^8.6.4",

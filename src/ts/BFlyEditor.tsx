@@ -80,7 +80,9 @@ export class BFlyEditor extends React.Component<BFlyEditorProps> {
       <Store>
         <Editor
           config={{ ...DEFAULT_CONFIG, ...config }}
-          ref={editor => editorRef(new EditorInstance(editor))}
+          ref={editor =>
+            editorRef ? editorRef(new EditorInstance(editor)) : undefined
+          }
         />
       </Store>
     );

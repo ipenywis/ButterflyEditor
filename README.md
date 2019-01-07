@@ -144,7 +144,7 @@ import "butterfly-editor/dist/style.css";
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    this.editorConfig = {
+    this.editorConfig = { 
       allowEditorFullExpand: true,
       allowHTMLExport: false
     };

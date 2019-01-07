@@ -1,5 +1,5 @@
 import React from "react";
-import EditorCreator, { ButterflyEditor } from "butterfly-editor";
+import { ButterflyEditor } from "butterfly-editor";
 //make sure to import Editor style
 import "butterfly-editor/dist/style.css";
 
@@ -8,7 +8,7 @@ export default class App extends React.Component {
     super(props);
     this.editorConfig = {
       allowEditorFullExpand: true,
-      allowHTMLExport: false
+      allowHTMLExport: true
     };
   }
 

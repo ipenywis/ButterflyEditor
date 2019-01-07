@@ -3,6 +3,7 @@ tests/
 demos/
 .vscode/
 __mocks__/
+docs-website/
 .env
 .gitignore
 .npmignore
