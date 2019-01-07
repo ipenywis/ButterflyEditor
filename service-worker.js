@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/ButterflyEditor/precache-manifest.8e468ec67fec5026c6cb88068f5ffc83.js"
+  "/ButterflyEditor/precache-manifest.5973139d79ea7f62e2b9ff0adf4ee63c.js"
 );
 
 workbox.clientsClaim();
