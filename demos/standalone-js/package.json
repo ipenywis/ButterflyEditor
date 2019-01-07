@@ -24,5 +24,7 @@
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "butterfly-editor": "^0.2.1"
+  }
 }

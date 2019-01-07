@@ -1,6 +1,6 @@
 {
   "name": "butterfly-editor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Full Rich Text Editor Easy, Flexible and Elegent made on using React and Draftjs which is a Fast and Reliable Draft Text Editing Framework",
   "homepage": "https://ipenywis.github.io/ButterflyEditor",
   "main": "dist/index.js",
@@ -29,6 +29,9 @@
   "files": [
     "dist/"
   ],
+  "repository": {
+    "url": "https://github.com/ipenywis/ButterflyEditor"
+  },
   "devDependencies": {
     "@types/codemirror": "0.0.71",
     "@types/color": "^3.0.0",
